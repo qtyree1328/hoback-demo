@@ -3,330 +3,1044 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hoback Club | Jackson Hole, Wyoming</title>
-<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+<title>Public Home - Hoback Club</title>
+<meta name="description" content="Hoback Club - A Lifestyle Unlike Any Other">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Lato', sans-serif; color: #272f36; line-height: 1.6; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  color: #272f36;
+  background: #fff;
+  overflow-x: hidden;
+}
+
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
 
-/* NAV */
-.nav { background: #1e2d3a; padding: 0; position: relative; z-index: 100; }
-.nav-top { display: flex; align-items: center; justify-content: space-between; padding: 8px 40px; font-size: 11px; color: rgba(255,255,255,0.6); border-bottom: 1px solid rgba(255,255,255,0.08); }
-.nav-main { display: flex; align-items: center; justify-content: center; padding: 18px 40px; position: relative; }
-.nav-left, .nav-right { display: flex; gap: 32px; flex: 1; }
-.nav-left { justify-content: flex-end; padding-right: 50px; }
-.nav-right { justify-content: flex-start; padding-left: 50px; }
-.nav-main a { color: #fff; font-size: 12px; font-weight: 400; letter-spacing: 2.5px; text-transform: uppercase; transition: opacity 0.3s; }
-.nav-main a:hover { opacity: 0.7; }
-.nav-logo { flex-shrink: 0; }
-.nav-logo img { height: 55px; width: auto; }
-.nav-weather { color: rgba(255,255,255,0.8); font-size: 12px; letter-spacing: 1px; }
+/* ===== NAVIGATION ===== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: background 0.3s;
+}
 
-/* HERO */
-.hero { position: relative; height: 85vh; min-height: 550px; overflow: hidden; }
-.hero img { width: 100%; height: 100%; object-fit: cover; }
-.hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 80px 60px 60px; background: linear-gradient(transparent, rgba(0,0,0,0.55)); }
-.hero h1 { color: #fff; font-size: 58px; font-weight: 300; letter-spacing: 8px; text-transform: uppercase; line-height: 1.15; }
-.scroll-arrow { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); color: #fff; font-size: 28px; animation: bounce 2s infinite; opacity: 0.7; }
-@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(10px)} }
+header.scrolled {
+  background: #1e2d3a;
+}
 
-/* WEATHER BAR */
-.weather-bar { display: flex; align-items: center; justify-content: space-between; padding: 20px 60px; background: #f8f8f8; border-bottom: 1px solid #e8e8e8; }
-.weather-bar h4 { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #272f36; }
-.forecast { display: flex; gap: 30px; }
-.forecast-day { text-align: center; font-size: 13px; color: #555; }
-.forecast-day .temp { font-size: 18px; font-weight: 300; color: #272f36; display: block; margin-top: 2px; }
-.btn-webcam { background: #1e2d3a; color: #fff; padding: 10px 28px; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; border: none; cursor: pointer; font-family: 'Lato', sans-serif; transition: background 0.3s; }
-.btn-webcam:hover { background: #365e75; }
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 40px;
+  background: rgba(30, 45, 58, 0.85);
+  backdrop-filter: blur(4px);
+}
 
-/* CONTENT PANEL */
-.content-panel { padding: 80px 60px; max-width: 1300px; margin: 0 auto; }
-.tagline { font-size: 22px; font-weight: 300; font-style: italic; text-align: center; max-width: 800px; margin: 0 auto 60px; line-height: 1.7; color: #4a5568; }
-.three-col { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 30px; align-items: start; }
-.three-col img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
-.col-left img { height: 320px; }
-.col-middle img { height: 450px; }
-.col-right { padding: 30px 10px; }
-.col-right h3 { font-size: 20px; font-weight: 300; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; }
-.col-right p { font-size: 15px; line-height: 1.8; color: #5a6577; }
+.nav-left, .nav-right {
+  display: flex;
+  gap: 30px;
+  flex: 1;
+}
 
-/* CALLOUTS */
-.callouts { background: #1e2d3a; padding: 80px 60px; display: flex; align-items: center; gap: 60px; }
-.callouts-text { flex: 0 0 35%; }
-.callouts-text h2 { color: #fff; font-size: 48px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; line-height: 1.2; margin-bottom: 30px; }
-.dots { display: flex; gap: 8px; margin-bottom: 20px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.3); }
-.dot.active { background: #fff; }
-.carousel-arrows { display: flex; gap: 12px; }
-.carousel-arrows button { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.4); background: transparent; color: #fff; font-size: 18px; cursor: pointer; transition: all 0.3s; }
-.carousel-arrows button:hover { background: rgba(255,255,255,0.1); }
-.carousel-track { flex: 1; overflow: hidden; }
-.carousel-inner { display: flex; gap: 20px; transition: transform 0.5s ease; }
-.card { flex: 0 0 calc(50% - 10px); position: relative; height: 380px; border-radius: 3px; overflow: hidden; cursor: pointer; }
-.card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-.card:hover img { transform: scale(1.05); }
-.card-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 25px 20px; background: linear-gradient(transparent, rgba(0,0,0,0.7)); }
-.card-label span { color: #fff; font-size: 13px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; }
+.nav-right { justify-content: flex-end; }
 
-/* MOUNTAIN CAMS */
-.mountain-cams { background: linear-gradient(#1e2d3a, #162530); padding: 80px 60px; }
-.mountain-cams .section-header { text-align: center; margin-bottom: 50px; }
-.mountain-cams h2 { color: #fff; font-size: 48px; font-weight: 300; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 12px; }
-.mountain-cams .subtitle { color: rgba(255,255,255,0.5); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
-.cam-row { display: grid; gap: 20px; margin-bottom: 20px; }
-.cam-row.featured { grid-template-columns: 1fr 1fr; }
-.cam-row.pano { grid-template-columns: 1fr 1fr; }
-.cam-row.static-grid { grid-template-columns: 1fr 1fr 1fr; }
-.cam-item { position: relative; border-radius: 4px; overflow: hidden; background: #0d1a24; border: 1px solid rgba(255,255,255,0.06); }
-.cam-item iframe { width: 100%; aspect-ratio: 16/9; display: block; border: none; }
-.cam-item img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
-.cam-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 16px; background: rgba(15,25,35,0.8); backdrop-filter: blur(4px); }
-.cam-label span { color: rgba(255,255,255,0.85); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 400; }
-.cam-label .live-dot { display: inline-block; width: 6px; height: 6px; background: #e74c3c; border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-.row-label { color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; margin-top: 15px; }
+nav a {
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: opacity 0.3s;
+}
 
-/* MEMBERSHIP */
-.membership { position: relative; min-height: 500px; display: flex; align-items: center; overflow: hidden; }
-.membership-bg { position: absolute; inset: 0; z-index: 0; }
-.membership-bg img { width: 100%; height: 100%; object-fit: cover; }
-.membership-bg::after { content: ''; position: absolute; inset: 0; background: rgba(30,45,58,0.6); }
-.membership-content { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 80px 60px; gap: 60px; }
-.membership-left { flex: 1; }
-.membership-left h2 { color: #fff; font-size: 48px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; line-height: 1.2; margin-bottom: 30px; }
-.btn-learn { display: inline-block; background: #365e75; color: #fff; padding: 14px 40px; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; font-family: 'Lato', sans-serif; border: none; cursor: pointer; transition: background 0.3s; }
-.btn-learn:hover { background: #4a7a94; }
-.membership-right { flex: 0 0 45%; }
-.membership-right img { width: 100%; border-radius: 3px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+nav a:hover { opacity: 0.7; }
 
-/* FOOTER */
-.footer { background: #1e2d3a; padding: 60px 60px 30px; text-align: center; }
-.footer-logo img { height: 50px; margin: 0 auto 25px; }
-.footer-contact { color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 15px; letter-spacing: 1px; }
-.footer-links { margin-bottom: 20px; }
-.footer-links a { color: rgba(255,255,255,0.6); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin: 0 15px; transition: color 0.3s; }
+.nav-logo {
+  margin: 0 40px;
+  flex-shrink: 0;
+}
+
+.nav-logo img {
+  height: 60px;
+  width: auto;
+}
+
+.weather-badge {
+  position: absolute;
+  right: 40px;
+  top: 60px;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+/* ===== HERO BANNER ===== */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+}
+
+.hero-slides {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.hero-slide.active { opacity: 1; }
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(30,45,58,0.6), transparent);
+  pointer-events: none;
+}
+
+.hero-text {
+  position: absolute;
+  bottom: 80px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 2;
+}
+
+.hero-text h1 {
+  color: #fff;
+  font-size: 3.2rem;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.scroll-down {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  color: #fff;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.scroll-down span {
+  display: inline-block;
+  width: 1px;
+  height: 30px;
+  background: #fff;
+  animation: scrollPulse 2s infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ===== WEATHER BAR ===== */
+.weather-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px 60px;
+  background: #f7f5f2;
+  border-bottom: 1px solid #e8e4df;
+}
+
+.weather-bar h3 {
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #272f36;
+}
+
+.forecast {
+  display: flex;
+  gap: 35px;
+  align-items: center;
+}
+
+.forecast-day {
+  text-align: center;
+}
+
+.forecast-day .day {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.forecast-day .date {
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: #272f36;
+  margin-bottom: 4px;
+}
+
+.forecast-day .temp {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.webcam-btn {
+  display: inline-block;
+  padding: 14px 30px;
+  background: #1e2d3a;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  transition: background 0.3s;
+}
+
+.webcam-btn:hover { background: #365e75; }
+
+/* ===== PANEL 1 ===== */
+.panel-1 {
+  padding: 80px 60px;
+}
+
+.panel-1-tagline {
+  max-width: 600px;
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: #272f36;
+  margin-bottom: 50px;
+}
+
+.panel-1-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 350px;
+  gap: 30px;
+  align-items: start;
+}
+
+.panel-1-left img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+.panel-1-middle img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+.panel-1-right {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: #555;
+  padding-top: 20px;
+}
+
+/* ===== SLIDING CALLOUTS ===== */
+.callouts {
+  background: #1e2d3a;
+  padding: 80px 60px;
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+}
+
+.callouts-left {
+  flex: 0 0 300px;
+}
+
+.callouts-left h2 {
+  color: #fff;
+  font-size: 3.2rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  margin-bottom: 30px;
+}
+
+.callouts-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.callouts-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.callouts-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.callouts-dots span.active {
+  background: #fff;
+  border-color: #fff;
+}
+
+.callouts-arrows {
+  display: flex;
+  gap: 15px;
+}
+
+.callouts-arrows button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.callouts-arrows button:hover { opacity: 1; }
+
+.callouts-right {
+  flex: 1;
+  overflow: hidden;
+}
+
+.cards-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.5s ease;
+}
+
+.card {
+  flex: 0 0 calc(50% - 10px);
+  position: relative;
+  height: 420px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+
+.card:hover .card-bg {
+  transform: scale(1.05);
+}
+
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 25px;
+  background: linear-gradient(to top, rgba(30,45,58,0.8), transparent);
+}
+
+.card-overlay a {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+  padding-bottom: 4px;
+}
+
+/* ===== MOUNTAIN CAMS ===== */
+.mountain-cams {
+  background: linear-gradient(180deg, #1e2d3a 0%, #162330 40%, #1a2b38 100%);
+  padding: 80px 60px 100px;
+}
+
+.cams-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.cams-header h2 {
+  color: #fff;
+  font-size: 2.8rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+}
+
+.cams-header p {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cams-section-label {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 15px;
+  margin-top: 40px;
+}
+
+.cams-section-label:first-of-type { margin-top: 0; }
+
+.cams-livestream {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.cam-card {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #0d1a24;
+}
+
+.cam-card iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: block;
+  border: none;
+}
+
+.cam-card img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s;
+}
+
+.cam-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  background: linear-gradient(to top, rgba(15,25,35,0.9), transparent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cam-label span {
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cam-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.cams-pano {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.pano-card {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #0d1a24;
+}
+
+.pano-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.cams-static {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.static-cam {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #0d1a24;
+}
+
+.static-cam img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===== MEMBERSHIP PANEL ===== */
+.panel-2 {
+  position: relative;
+  min-height: 550px;
+  overflow: hidden;
+}
+
+.panel-2-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.panel-2-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(30,45,58,0.55);
+}
+
+.panel-2-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  min-height: 550px;
+  padding: 60px;
+  gap: 60px;
+}
+
+.panel-2-left {
+  flex: 1;
+}
+
+.panel-2-left h2 {
+  color: #fff;
+  font-size: 2.8rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  margin-bottom: 30px;
+}
+
+.btn-outline {
+  display: inline-block;
+  padding: 16px 35px;
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  transition: all 0.3s;
+}
+
+.btn-outline:hover {
+  background: #fff;
+  color: #1e2d3a;
+}
+
+.panel-2-right {
+  flex: 0 0 500px;
+}
+
+.panel-2-right img {
+  width: 100%;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: #1e2d3a;
+  padding: 60px;
+  color: #fff;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 50px;
+}
+
+.footer-logo img {
+  height: 90px;
+  width: auto;
+  opacity: 0.9;
+}
+
+.footer-info {
+  flex: 1;
+}
+
+.footer-info-top {
+  display: flex;
+  gap: 60px;
+  margin-bottom: 30px;
+}
+
+.footer-contact strong {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 10px;
+}
+
+.footer-contact a {
+  display: block;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  transition: color 0.3s;
+}
+
+.footer-contact a:hover { color: #fff; }
+
+.footer-links a {
+  display: block;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  line-height: 2.5;
+  transition: color 0.3s;
+}
+
 .footer-links a:hover { color: #fff; }
-.footer-social { margin-bottom: 25px; display: flex; justify-content: center; gap: 20px; }
-.footer-social a { color: rgba(255,255,255,0.5); font-size: 18px; transition: color 0.3s; }
-.footer-social a:hover { color: #fff; }
-.footer-copy { color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 1px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; }
+
+.footer-social {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.footer-social a:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: #fff;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.back-to-top {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #fff;
+  font-size: 1.2rem;
+  background: none;
+}
+
+.back-to-top:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: #fff;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .panel-1-grid { grid-template-columns: 1fr 1fr; }
+  .panel-1-left { display: none; }
+  .callouts { flex-direction: column; }
+  .callouts-left { flex: none; }
+  .card { flex: 0 0 calc(50% - 10px); }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 12px 20px; }
+  .nav-left, .nav-right { display: none; }
+  .hero-text h1 { font-size: 1.8rem; letter-spacing: 0.15em; }
+  .weather-bar { flex-wrap: wrap; padding: 20px 30px; gap: 15px; }
+  .panel-1 { padding: 50px 30px; }
+  .panel-1-grid { grid-template-columns: 1fr; }
+  .panel-1-right { padding-top: 0; }
+  .callouts { padding: 50px 30px; }
+  .callouts-left h2 { font-size: 2.2rem; }
+  .card { flex: 0 0 100%; height: 300px; }
+  .mountain-cams { padding: 50px 30px; }
+  .cams-livestream, .cams-pano { grid-template-columns: 1fr; }
+  .cams-static { grid-template-columns: 1fr 1fr; }
+  .panel-2-content { flex-direction: column; padding: 40px 30px; }
+  .panel-2-right { flex: none; width: 100%; }
+  .panel-2-left h2 { font-size: 2rem; }
+  footer { padding: 40px 30px; }
+  .footer-inner { flex-direction: column; }
+  .footer-info-top { flex-direction: column; gap: 20px; }
+}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-top">
-    <span></span>
-    <span class="nav-weather">Current Weather: ❄ 15º F</span>
+<!-- NAVIGATION -->
+<header id="mainHeader">
+<nav>
+  <div class="nav-left">
+    <a href="#">Discover Us</a>
+    <a href="#">Come &amp; Stay</a>
+    <a href="#">Amenities</a>
   </div>
-  <div class="nav-main">
-    <div class="nav-left">
-      <a href="#">Discover Us</a>
-      <a href="#">Come &amp; Stay</a>
-      <a href="#">Amenities</a>
-    </div>
-    <div class="nav-logo">
-      <a href="#"><img src="images/logo-nav.svg" alt="Hoback Club"></a>
-    </div>
-    <div class="nav-right">
-      <a href="#">Lifestyle</a>
-      <a href="#">Membership</a>
-      <a href="#">Contact Us</a>
-      <a href="#">Member Login</a>
-    </div>
+  <div class="nav-logo">
+    <a href="#"><img src="images/logo-nav.svg" alt="Hoback Club"></a>
+  </div>
+  <div class="nav-right">
+    <a href="#">Lifestyle</a>
+    <a href="#">Membership</a>
+    <a href="#">Contact Us</a>
+    <a href="#">Member Login</a>
   </div>
 </nav>
+<div class="weather-badge">Current Weather: ❄ 15º F</div>
+</header>
 
-<!-- HERO -->
+<!-- HERO BANNER -->
 <section class="hero">
-  <img src="images/hero-1.jpg" alt="Hoback Club Jackson Hole">
-  <div class="hero-overlay">
-    <h1>A Lifestyle Unlike<br>Any Other</h1>
+  <div class="hero-slides">
+    <div class="hero-slide active" style="background-image: url('images/hero-1.jpg')"></div>
+    <div class="hero-slide" style="background-image: url('images/hero-2.jpg')"></div>
   </div>
-  <div class="scroll-arrow">&#8964;</div>
+  <div class="hero-text">
+    <h1>A Lifestyle Unlike Any Other</h1>
+  </div>
+  <div class="scroll-down">
+    <span></span>
+  </div>
 </section>
 
 <!-- WEATHER BAR -->
-<div class="weather-bar">
-  <h4>Weather This Week</h4>
+<section class="weather-bar">
+  <h3>Weather This Week</h3>
   <div class="forecast">
-    <div class="forecast-day">Thu<span class="temp">21°F</span></div>
-    <div class="forecast-day">Fri<span class="temp">24°F</span></div>
-    <div class="forecast-day">Sat<span class="temp">31°F</span></div>
-    <div class="forecast-day">Sun<span class="temp">39°F</span></div>
-    <div class="forecast-day">Mon<span class="temp">43°F</span></div>
+    <div class="forecast-day">
+      <div class="day">Thu</div>
+      <div class="date">19</div>
+      <div class="temp">☁ 21º F</div>
+    </div>
+    <div class="forecast-day">
+      <div class="day">Fri</div>
+      <div class="date">20</div>
+      <div class="temp">⛅ 24º F</div>
+    </div>
+    <div class="forecast-day">
+      <div class="day">Sat</div>
+      <div class="date">21</div>
+      <div class="temp">☀ 31º F</div>
+    </div>
+    <div class="forecast-day">
+      <div class="day">Sun</div>
+      <div class="date">22</div>
+      <div class="temp">⛅ 39º F</div>
+    </div>
+    <div class="forecast-day">
+      <div class="day">Mon</div>
+      <div class="date">23</div>
+      <div class="temp">⛅ 43º F</div>
+    </div>
   </div>
-  <a href="#mountain-cams" class="btn-webcam">Webcam</a>
-</div>
+  <a href="#mountain-cams" class="webcam-btn">Webcam</a>
+</section>
 
-<!-- CONTENT PANEL -->
-<section class="content-panel">
-  <p class="tagline">The Jackson Hole lifestyle is unlike any other. It's a place to retreat or reconnect, with breathtaking surroundings that both ground us and inspire.</p>
-  <div class="three-col">
-    <div class="col-left">
+<!-- PANEL 1 -->
+<section class="panel-1">
+  <h4 class="panel-1-tagline">The Jackson Hole lifestyle is unlike any other. It's a place to retreat or reconnect, with breathtaking surroundings that both ground us and inspire.</h4>
+  <div class="panel-1-grid">
+    <div class="panel-1-left">
       <img src="images/panel1-left.jpg" alt="Hoback Club">
     </div>
-    <div class="col-middle">
+    <div class="panel-1-middle">
       <img src="images/panel1-middle.jpg" alt="Hoback Club Aerial">
     </div>
-    <div class="col-right">
-      <h3>Where Nature Meets Luxury</h3>
-      <p>Nestled at the base of Jackson Hole Mountain Resort, Hoback Club offers an unparalleled alpine experience. From world-class skiing to refined dining, every detail has been thoughtfully crafted for those who seek the extraordinary. Our members enjoy exclusive access to pristine mountain terrain, luxurious accommodations, and a community united by a love for the great outdoors.</p>
+    <div class="panel-1-right">
+      <p>Once in a lifetime, an opportunity arises that elevates the way we escape and explore together. The Hoback Club is that opportunity. The embodiment of refined grandeur, this private club offers the pinnacle of amenities and service – not just in Jackson Hole, but in all the ski world.</p>
     </div>
   </div>
 </section>
 
-<!-- CALLOUTS -->
+<!-- SLIDING CALLOUTS -->
 <section class="callouts">
-  <div class="callouts-text">
+  <div class="callouts-left">
     <h2>Explore Our Exclusive Club</h2>
-    <div class="dots">
-      <div class="dot active"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-    </div>
-    <div class="carousel-arrows">
-      <button onclick="slideCarousel(-1)">&#8592;</button>
-      <button onclick="slideCarousel(1)">&#8594;</button>
+    <div class="callouts-controls">
+      <div class="callouts-dots">
+        <span class="active" data-index="0"></span>
+        <span data-index="1"></span>
+        <span data-index="2"></span>
+      </div>
+      <div class="callouts-arrows">
+        <button id="prevCard">←</button>
+        <button id="nextCard">→</button>
+      </div>
     </div>
   </div>
-  <div class="carousel-track">
-    <div class="carousel-inner" id="carouselInner">
-      <div class="card"><img src="images/card-discover.jpg" alt="Discover Us"><div class="card-label"><span>Discover Us</span></div></div>
-      <div class="card"><img src="images/card-stay.jpg" alt="Come & Stay"><div class="card-label"><span>Come &amp; Stay</span></div></div>
-      <div class="card"><img src="images/card-amenities.jpg" alt="Amenities"><div class="card-label"><span>Amenities</span></div></div>
-      <div class="card"><img src="images/card-winter.jpg" alt="Winter Activities"><div class="card-label"><span>Winter Activities</span></div></div>
-      <div class="card"><img src="images/card-summer.jpg" alt="Summer Activities"><div class="card-label"><span>Summer Activities</span></div></div>
+  <div class="callouts-right">
+    <div class="cards-track" id="cardsTrack">
+      <div class="card">
+        <div class="card-bg" style="background-image: url('images/card-discover.jpg')"></div>
+        <div class="card-overlay"><a href="#">Discover Us</a></div>
+      </div>
+      <div class="card">
+        <div class="card-bg" style="background-image: url('images/card-stay.jpg')"></div>
+        <div class="card-overlay"><a href="#">Come &amp; Stay</a></div>
+      </div>
+      <div class="card">
+        <div class="card-bg" style="background-image: url('images/card-amenities.jpg')"></div>
+        <div class="card-overlay"><a href="#">Amenities</a></div>
+      </div>
+      <div class="card">
+        <div class="card-bg" style="background-image: url('images/card-winter.jpg')"></div>
+        <div class="card-overlay"><a href="#">Winter Activities</a></div>
+      </div>
+      <div class="card">
+        <div class="card-bg" style="background-image: url('images/card-summer.jpg')"></div>
+        <div class="card-overlay"><a href="#">Summer Activities</a></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- MOUNTAIN CAMS -->
 <section class="mountain-cams" id="mountain-cams">
-  <div class="section-header">
-    <h2>Live From The Mountain</h2>
-    <p class="subtitle">Real-time views from Jackson Hole Mountain Resort</p>
+  <div class="cams-header">
+    <h2>Live From the Mountain</h2>
+    <p>Real-time views from Jackson Hole Mountain Resort</p>
   </div>
 
-  <p class="row-label">Live Streams</p>
-  <div class="cam-row featured">
-    <div class="cam-item">
-      <iframe src="https://www.youtube.com/embed/wdO4LkYaXss?autoplay=1&mute=1&loop=1&playlist=wdO4LkYaXss&controls=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      <div class="cam-label"><span class="live-dot"></span><span>Corbet's Couloir</span></div>
+  <div class="cams-section-label">Live Streams</div>
+  <div class="cams-livestream">
+    <div class="cam-card">
+      <iframe src="https://www.youtube.com/embed/wdO4LkYaXss?autoplay=1&mute=1&loop=1&playlist=wdO4LkYaXss&controls=0&modestbranding=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+      <div class="cam-label">
+        <div class="cam-live-dot"></div>
+        <span>Corbet's Couloir</span>
+      </div>
     </div>
-    <div class="cam-item">
-      <iframe src="https://www.youtube.com/embed/cOcHcIDbi1o?autoplay=1&mute=1&loop=1&playlist=cOcHcIDbi1o&controls=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      <div class="cam-label"><span class="live-dot"></span><span>Snow Stake</span></div>
+    <div class="cam-card">
+      <iframe src="https://www.youtube.com/embed/cOcHcIDbi1o?autoplay=1&mute=1&loop=1&playlist=cOcHcIDbi1o&controls=0&modestbranding=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+      <div class="cam-label">
+        <div class="cam-live-dot"></div>
+        <span>Snow Stake</span>
+      </div>
     </div>
   </div>
 
-  <p class="row-label">Panoramic Views</p>
-  <div class="cam-row pano">
-    <div class="cam-item">
-      <img id="pano-summit" src="https://backend.roundshot.com/cams/12a4b2c24cd515e0a115d4a0f59ef7f8/default" alt="Summit Panorama">
+  <div class="cams-section-label">Panoramic Views</div>
+  <div class="cams-pano">
+    <div class="pano-card">
+      <img src="https://backend.roundshot.com/cams/12a4b2c24cd515e0a115d4a0f59ef7f8/default" alt="Summit Panorama" class="pano-img" data-cam="summit">
       <div class="cam-label"><span>Summit Panorama</span></div>
     </div>
-    <div class="cam-item">
-      <img id="pano-rendezvous" src="https://backend.roundshot.com/cams/6f7dc91857e22fe329e8bdeef5ee5750/default" alt="Rendezvous Lodge">
+    <div class="pano-card">
+      <img src="https://backend.roundshot.com/cams/6f7dc91857e22fe329e8bdeef5ee5750/default" alt="Rendezvous Lodge" class="pano-img" data-cam="rendezvous">
       <div class="cam-label"><span>Rendezvous Lodge</span></div>
     </div>
   </div>
 
-  <p class="row-label">Mountain Cameras</p>
-  <div class="cam-row static-grid">
-    <div class="cam-item">
-      <img class="static-cam" data-src="https://cams.jacksonhole.com/webcam/corbetscouloir.jpg" src="https://cams.jacksonhole.com/webcam/corbetscouloir.jpg" alt="Corbet's Couloir">
+  <div class="cams-section-label">Mountain Cameras</div>
+  <div class="cams-static">
+    <div class="static-cam">
+      <img src="https://cams.jacksonhole.com/webcam/corbetscouloir.jpg" alt="Corbet's Couloir" class="static-img">
       <div class="cam-label"><span>Corbet's Couloir</span></div>
     </div>
-    <div class="cam-item">
-      <img class="static-cam" data-src="https://cams.jacksonhole.com/webcam/codybowl.jpg" src="https://cams.jacksonhole.com/webcam/codybowl.jpg" alt="Cody Bowl">
+    <div class="static-cam">
+      <img src="https://cams.jacksonhole.com/webcam/codybowl.jpg" alt="Cody Bowl" class="static-img">
       <div class="cam-label"><span>Cody Bowl</span></div>
     </div>
-    <div class="cam-item">
-      <img class="static-cam" data-src="https://cams.jacksonhole.com/webcam/guncam.jpg" src="https://cams.jacksonhole.com/webcam/guncam.jpg" alt="Sublette Base">
+    <div class="static-cam">
+      <img src="https://cams.jacksonhole.com/webcam/guncam.jpg" alt="Sublette Base" class="static-img">
       <div class="cam-label"><span>Sublette Base</span></div>
     </div>
-    <div class="cam-item">
-      <img class="static-cam" data-src="https://cams.jacksonhole.com/webcam/commons.jpg" src="https://cams.jacksonhole.com/webcam/commons.jpg" alt="Tram Cam">
+    <div class="static-cam">
+      <img src="https://cams.jacksonhole.com/webcam/commons.jpg" alt="Tram Cam" class="static-img">
       <div class="cam-label"><span>Tram Cam</span></div>
     </div>
-    <div class="cam-item">
-      <img class="static-cam" data-src="https://cams.jacksonhole.com/webcam/SouthHoback.jpg" src="https://cams.jacksonhole.com/webcam/SouthHoback.jpg" alt="Mountain View">
+    <div class="static-cam">
+      <img src="https://cams.jacksonhole.com/webcam/SouthHoback.jpg" alt="Mountain View" class="static-img">
       <div class="cam-label"><span>Mountain View</span></div>
     </div>
-    <div class="cam-item">
-      <img class="static-cam" data-src="https://cams.jacksonhole.com/webcam/casperchair.jpg" src="https://cams.jacksonhole.com/webcam/casperchair.jpg" alt="Casper Chair">
+    <div class="static-cam">
+      <img src="https://cams.jacksonhole.com/webcam/casperchair.jpg" alt="Casper Chair" class="static-img">
       <div class="cam-label"><span>Casper Chair</span></div>
     </div>
   </div>
 </section>
 
-<!-- MEMBERSHIP -->
-<section class="membership">
-  <div class="membership-bg">
-    <img src="images/panel2-bg.jpg" alt="Membership Background">
-  </div>
-  <div class="membership-content">
-    <div class="membership-left">
-      <h2>Inquire to Become<br>a Member</h2>
-      <a href="#" class="btn-learn">Learn More</a>
+<!-- MEMBERSHIP PANEL -->
+<section class="panel-2">
+  <div class="panel-2-bg" style="background-image: url('images/panel2-bg.jpg')"></div>
+  <div class="panel-2-content">
+    <div class="panel-2-left">
+      <h2>Inquire to Become a Member</h2>
+      <a href="#" class="btn-outline">Learn More</a>
     </div>
-    <div class="membership-right">
+    <div class="panel-2-right">
       <img src="images/panel2-image.jpg" alt="Hoback Club Membership">
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-logo">
-    <img src="images/logo-footer.svg" alt="Hoback Club">
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="images/logo-footer.svg" alt="Hoback Club">
+    </div>
+    <div class="footer-info">
+      <div class="footer-info-top">
+        <div class="footer-contact">
+          <strong>Contact Us</strong>
+          <a href="#">P.O. Box 158, Teton Village, WY 83025</a>
+          <a href="tel:+13072491000">(307) 249-1000</a>
+        </div>
+        <div class="footer-links">
+          <a href="#">Employment Opportunities</a>
+          <a href="#">Membership Inquiries</a>
+        </div>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">ig</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color: rgba(255,255,255,0.5);">Clubessential</a></span>
+        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+      </div>
+    </div>
   </div>
-  <p class="footer-contact">P.O. Box 158, Teton Village, WY 83025 &nbsp;|&nbsp; (307) 249-1000</p>
-  <div class="footer-links">
-    <a href="#">Employment Opportunities</a>
-    <a href="#">Membership Inquiries</a>
-  </div>
-  <div class="footer-social">
-    <a href="#" aria-label="Facebook">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-    </a>
-    <a href="#" aria-label="Instagram">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-    </a>
-  </div>
-  <p class="footer-copy">&copy; 2025 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by Clubessential</p>
 </footer>
 
 <script>
-// Carousel
-let carouselPos = 0;
-const maxSlide = 3;
-function slideCarousel(dir) {
-  carouselPos = Math.max(0, Math.min(maxSlide, carouselPos + dir));
-  const inner = document.getElementById('carouselInner');
-  const cardWidth = inner.querySelector('.card').offsetWidth + 20;
-  inner.style.transform = `translateX(-${carouselPos * cardWidth}px)`;
-  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === Math.min(carouselPos, 2)));
-}
+// Hero slideshow
+(function() {
+  const slides = document.querySelectorAll('.hero-slide');
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 6000);
+})();
 
-// Panorama refresh (60s)
-setInterval(() => {
-  const t = Date.now();
-  document.getElementById('pano-summit').src = 'https://backend.roundshot.com/cams/12a4b2c24cd515e0a115d4a0f59ef7f8/default?' + t;
-  document.getElementById('pano-rendezvous').src = 'https://backend.roundshot.com/cams/6f7dc91857e22fe329e8bdeef5ee5750/default?' + t;
-}, 60000);
+// Header scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 100);
+});
 
-// Static cam refresh (30s)
+// Card carousel
+(function() {
+  const track = document.getElementById('cardsTrack');
+  const dots = document.querySelectorAll('.callouts-dots span');
+  let pos = 0;
+  const maxPos = 3; // 5 cards - 2 visible
+
+  function updateCarousel() {
+    const cardWidth = track.querySelector('.card').offsetWidth + 20;
+    track.style.transform = `translateX(-${pos * cardWidth}px)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === pos));
+  }
+
+  document.getElementById('nextCard').addEventListener('click', () => {
+    pos = (pos + 1) % (maxPos);
+    updateCarousel();
+  });
+
+  document.getElementById('prevCard').addEventListener('click', () => {
+    pos = pos <= 0 ? maxPos - 1 : pos - 1;
+    updateCarousel();
+  });
+
+  dots.forEach(d => d.addEventListener('click', () => {
+    pos = parseInt(d.dataset.index);
+    updateCarousel();
+  }));
+})();
+
+// Auto-refresh static cams every 30 seconds
 setInterval(() => {
-  const t = Date.now();
-  document.querySelectorAll('.static-cam').forEach(img => {
-    img.src = img.dataset.src + '?' + t;
+  document.querySelectorAll('.static-img').forEach(img => {
+    const base = img.src.split('?')[0];
+    img.src = base + '?t=' + Date.now();
   });
 }, 30000);
+
+// Auto-refresh panoramic cams every 60 seconds
+setInterval(() => {
+  document.querySelectorAll('.pano-img').forEach(img => {
+    const base = img.src.split('?')[0];
+    img.src = base + '?t=' + Date.now();
+  });
+}, 60000);
 </script>
 
 </body>
