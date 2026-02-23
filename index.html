@@ -40,6 +40,11 @@ nav {
   align-items: center;
   justify-content: center;
   padding: 15px 40px;
+  background: transparent;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+
+header.scrolled nav {
   background: rgba(30, 45, 58, 0.85);
   backdrop-filter: blur(4px);
 }
@@ -1769,6 +1774,15 @@ footer {
 </footer>
 
 <script>
+// ===== NAVBAR SCROLL EFFECT =====
+(function() {
+  const header = document.querySelector('header');
+  function checkScroll() {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  }
+  window.addEventListener('scroll', checkScroll, { passive: true });
+  checkScroll();
+})();
 // Hero slideshow
 (function() {
   const slides = document.querySelectorAll('.hero-slide');
