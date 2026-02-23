@@ -74,24 +74,20 @@ nav a:hover { opacity: 0.7; }
   position: relative;
 }
 
-.nav-logo img {
-  height: 70px;
+.nav-logo-shield {
+  height: 80px;
   width: auto;
   transition: opacity 0.4s;
 }
 
-.nav-logo-text {
+.nav-logo-text-img {
+  height: 24px;
+  width: auto;
   display: none;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: #fff;
-  white-space: nowrap;
 }
 
-header.scrolled .nav-logo img { display: none; }
-header.scrolled .nav-logo-text { display: block; }
+header.scrolled .nav-logo-shield { display: none; }
+header.scrolled .nav-logo-text-img { display: block; }
 
 .weather-badge { display: none; }
 
@@ -1406,8 +1402,8 @@ footer {
   </div>
   <div class="nav-logo">
     <a href="#">
-      <img src="images/logo-nav.svg" alt="Hoback Club">
-      <span class="nav-logo-text">Hoback Club<br><span style="font-size:0.55rem;font-weight:400;letter-spacing:0.15em">Jackson Hole</span></span>
+      <img src="images/logo-shield.svg" alt="Hoback Club" class="nav-logo-shield">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
     </a>
   </div>
   <div class="nav-right">
