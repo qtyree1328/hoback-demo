@@ -183,6 +183,9 @@ nav a:hover { opacity: 0.7; }
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: #272f36;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .forecast {
@@ -215,7 +218,13 @@ nav a:hover { opacity: 0.7; }
   color: #555;
 }
 
-.webcam-btn {
+.weather-bar-btns {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.ski-conditions-btn {
   display: inline-block;
   padding: 14px 30px;
   background: #1e2d3a;
@@ -224,70 +233,497 @@ nav a:hover { opacity: 0.7; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
+  transition: all 0.3s;
+  cursor: pointer;
+  border: none;
+}
+
+.ski-conditions-btn:hover { background: #365e75; }
+.ski-conditions-btn .toggle-arrow { display: inline-block; transition: transform 0.3s; margin-left: 8px; }
+.ski-conditions-btn.open .toggle-arrow { transform: rotate(180deg); }
+
+.webcam-scroll-btn {
+  display: inline-block;
+  padding: 14px 30px;
+  background: transparent;
+  color: #1e2d3a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  border: 2px solid #1e2d3a;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.webcam-scroll-btn:hover { background: #1e2d3a; color: #fff; }
+
+/* ===== MOUNTAIN REPORT (EXPANDABLE) ===== */
+.mtn-report-expand {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #f7f5f2;
+  border-bottom: 1px solid #e8e4df;
+}
+
+.mtn-report-expand.open {
+  max-height: 900px;
+}
+
+.mtn-report-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 50px;
+  padding: 35px 60px 45px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s;
+}
+
+.mtn-report-expand.open .mtn-report-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mtn-report-updated {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e8e4df;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mtn-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #1e2d3a;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #1e2d3a;
+  padding-bottom: 8px;
+}
+
+.snow-table, .weather-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+.snow-table th, .weather-table th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #888;
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e8e4df;
+}
+
+.snow-table td, .weather-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ece8e3;
+  color: #272f36;
+  font-size: 1rem;
+}
+
+.snow-table td[data-count] {
+  font-weight: 700;
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.mtn-weather-desc {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-size: 1.05rem;
+  color: #272f36;
+}
+
+.mtn-weather-icon { font-size: 2.2rem; }
+
+/* Status circles */
+.mtn-status-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.status-circle {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.status-circle svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.status-circle svg circle.ring-bg {
+  stroke: #e0dcd7;
+}
+
+.status-circle svg circle.ring-fill {
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+}
+
+.status-circle .sc-big { font-size: 1.8rem; font-weight: 700; color: #1e2d3a; line-height: 1; }
+.status-circle .sc-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin-top: 3px; }
+
+.status-row { display: flex; gap: 20px; justify-content: center; }
+.status-row .status-circle { width: 100px; height: 100px; }
+.status-row .sc-big { font-size: 1.2rem; }
+
+.tram-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.tram-icon { font-size: 2rem; }
+.tram-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #1e2d3a; }
+.tram-open { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; color: #16a34a; text-transform: uppercase; }
+.tram-open-dot { width: 10px; height: 10px; border-radius: 50%; background: #16a34a; }
+
+/* Dropdown webcam preview */
+.dropdown-cam {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.dropdown-cam img {
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  display: block;
+}
+
+.dropdown-cam .cam-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 14px;
+  background: linear-gradient(to top, rgba(15,25,35,0.85), transparent);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dropdown-cam .cam-label span {
+  color: #fff;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dropdown-webcam-btn {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 14px;
+  background: #1e2d3a;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-align: center;
+  border: none;
+  cursor: pointer;
   transition: background 0.3s;
 }
 
-.webcam-btn:hover { background: #365e75; }
+.dropdown-webcam-btn:hover { background: #365e75; }
 
-/* ===== PANEL 1 ===== */
+/* ===== PANEL 1 — SPLIT LAYOUT ===== */
 .panel-1 {
-  padding: 80px 60px;
+  position: relative;
+  display: flex;
+  min-height: 750px;
+  overflow: hidden;
+  background-image: url('https://www.datocms-assets.com/50871/1654027458-20180227_es_jimryan-142-of-156-cropped-2.jpg?fit=crop&fm=webp&w=1920');
+  background-size: cover;
+  background-position: center;
 }
 
-.panel-1-tagline {
-  max-width: 600px;
-  font-size: 1.15rem;
-  font-weight: 300;
-  line-height: 1.8;
-  color: #272f36;
-  margin-bottom: 50px;
+.panel-1::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(247,245,242,0.7);
 }
 
-.panel-1-grid {
-  display: grid;
-  grid-template-columns: 200px 1fr 350px;
-  gap: 30px;
-  align-items: start;
+.panel-1-left {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 55%;
 }
 
-.panel-1-left img {
+.panel-1-carousel {
+  position: relative;
   width: 100%;
-  border-radius: 4px;
+  height: 100%;
 }
 
-.panel-1-middle img {
+.panel-1-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panel-1-slide.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.panel-1-slide.exit-left {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+
+.panel-1-slide img {
   width: 100%;
-  border-radius: 4px;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.panel-1-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+}
+
+.panel-1-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.panel-1-dots span.active {
+  background: #fff;
+  border-color: #fff;
+  transform: scale(1.2);
 }
 
 .panel-1-right {
-  font-size: 0.9rem;
+  position: relative;
+  z-index: 2;
+  flex: 0 0 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 60px 50px 80px;
+}
+
+.panel-1-tagline {
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: #1e2d3a;
+  margin-bottom: 20px;
+}
+
+.panel-1-body {
+  font-size: 1.1rem;
   line-height: 1.8;
-  color: #555;
-  padding-top: 20px;
+  color: #3a4f5e;
+}
+
+/* ===== WEBCAM SECTION TITLES ===== */
+.webcam-section-type {
+  text-align: center;
+  margin: 50px 0 20px;
+}
+
+.webcam-section-type h3 {
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 6px;
+}
+
+.webcam-section-type p {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
 /* ===== SLIDING CALLOUTS ===== */
 .callouts {
   background: #1e2d3a;
-  padding: 80px 60px;
+  background-image: url('https://static.clubessential.com/CEFED/_Axis-Website/Sites/HobackClub-2025/images/cta-slider-bg-pattern-PbHm.png');
+  background-size: cover;
+  padding: 80px 0 80px 60px;
   display: flex;
   gap: 60px;
   align-items: flex-start;
 }
 
 .callouts-left {
-  flex: 0 0 300px;
+  flex: 0 0 280px;
 }
 
 .callouts-left h2 {
   color: #fff;
-  font-size: 3.2rem;
+  font-size: 3.6rem;
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   line-height: 1.2;
   margin-bottom: 30px;
+}
+
+/* ===== LIVE CAM SPOTLIGHT ===== */
+.live-cam-spotlight {
+  background: #1e2d3a;
+  padding: 60px 60px 50px;
+  text-align: center;
+}
+
+.live-cam-spotlight h2 {
+  color: #fff;
+  font-size: 2.4rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+}
+
+.live-cam-spotlight p {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+
+.spotlight-cam {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto 30px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+.spotlight-cam img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+
+.spotlight-cam .cam-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 14px 20px;
+  background: linear-gradient(to top, rgba(15,25,35,0.9), transparent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spotlight-cam .cam-label span {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.btn-view-cams {
+  display: inline-block;
+  padding: 16px 40px;
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.btn-view-cams:hover {
+  background: #fff;
+  color: #1e2d3a;
+}
+
+/* ===== VIDEO SECTION ===== */
+.video-section {
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.video-section video {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30,45,58,0.45);
+  pointer-events: none;
+}
+
+.video-overlay h2 {
+  color: #fff;
+  font-size: 3rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+  max-width: 700px;
+  line-height: 1.3;
 }
 
 .callouts-controls {
@@ -344,7 +780,7 @@ nav a:hover { opacity: 0.7; }
 }
 
 .card {
-  flex: 0 0 calc(50% - 10px);
+  flex: 0 0 300px;
   position: relative;
   height: 420px;
   border-radius: 4px;
@@ -375,7 +811,7 @@ nav a:hover { opacity: 0.7; }
 
 .card-overlay a {
   color: #fff;
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -526,11 +962,20 @@ nav a:hover { opacity: 0.7; }
   display: block;
 }
 
+/* ===== FADE IN for cam images ===== */
+.cam-fade {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.cam-fade.loaded { opacity: 1; }
+
 /* ===== MEMBERSHIP PANEL ===== */
 .panel-2 {
   position: relative;
-  min-height: 550px;
+  min-height: 650px;
   overflow: hidden;
+  padding: 70px 40px;
+  background: #000;
 }
 
 .panel-2-bg {
@@ -538,64 +983,65 @@ nav a:hover { opacity: 0.7; }
   inset: 0;
   background-size: cover;
   background-position: center;
+  opacity: 0.5;
 }
 
-.panel-2-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(30,45,58,0.55);
-}
-
-.panel-2-content {
+.panel-2-overlay {
   position: relative;
   z-index: 2;
   display: flex;
-  align-items: center;
-  min-height: 550px;
-  padding: 60px;
-  gap: 60px;
+  align-items: stretch;
+  max-width: 1100px;
+  min-height: 500px;
+  margin: 0 auto;
 }
 
 .panel-2-left {
-  flex: 1;
+  background: #fff;
+  padding: 50px 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 0 0 40%;
 }
 
 .panel-2-left h2 {
-  color: #fff;
-  font-size: 2.8rem;
-  font-weight: 300;
+  color: #1e2d3a;
+  font-size: 2.6rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   line-height: 1.2;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .btn-outline {
   display: inline-block;
-  padding: 16px 35px;
-  border: 2px solid #fff;
-  color: #fff;
-  font-size: 0.75rem;
+  padding: 14px 30px;
+  border: 2px solid #1e2d3a;
+  color: #1e2d3a;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   transition: all 0.3s;
+  width: fit-content;
 }
 
 .btn-outline:hover {
-  background: #fff;
-  color: #1e2d3a;
+  background: #1e2d3a;
+  color: #fff;
 }
 
 .panel-2-right {
-  flex: 0 0 500px;
+  flex: 1;
 }
 
 .panel-2-right img {
   width: 100%;
-  border-radius: 4px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* ===== FOOTER ===== */
@@ -710,35 +1156,230 @@ footer {
   border-color: #fff;
 }
 
+/* ===== WEBCAM CAROUSEL ===== */
+.cam-carousel-section {
+  background: #162330;
+  padding: 0 60px 60px;
+}
+
+.cam-carousel-title {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 15px;
+}
+
+.cam-carousel-wrap {
+  position: relative;
+}
+
+.cam-carousel-main {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0d1a24;
+  cursor: pointer;
+}
+
+.cam-carousel-main img,
+.cam-carousel-main iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: none;
+}
+
+/* Smooth slide transition for carousel */
+.cam-carousel-main {
+  position: relative;
+}
+
+.cam-carousel-main .cam-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.cam-carousel-main .cam-slide.active {
+  opacity: 1;
+  position: relative;
+}
+
+.cam-carousel-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px;
+  background: linear-gradient(to top, rgba(15,25,35,0.9), transparent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cam-carousel-label span {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cam-carousel-live {
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.cam-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.4);
+  background: rgba(30,45,58,0.85);
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cam-carousel-arrow:hover {
+  background: rgba(30,45,58,1);
+  border-color: #fff;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.cam-carousel-arrow.prev { left: 16px; }
+.cam-carousel-arrow.next { right: 16px; }
+
+.cam-carousel-thumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.cam-carousel-thumb {
+  flex: 0 0 100px;
+  height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.3s, opacity 0.3s;
+  opacity: 0.6;
+  background: #0d1a24;
+}
+
+.cam-carousel-thumb.active { border-color: #4ade80; opacity: 1; }
+.cam-carousel-thumb:hover { opacity: 1; }
+.cam-carousel-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Lightbox */
+.cam-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.cam-lightbox.open { opacity: 1; pointer-events: auto; }
+
+.cam-lightbox-content {
+  width: 90vw;
+  max-width: 1200px;
+  aspect-ratio: 16/9;
+  position: relative;
+}
+
+.cam-lightbox-content img,
+.cam-lightbox-content iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border: none;
+  border-radius: 8px;
+}
+
+.cam-lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1200px) {
-  .panel-1-grid { grid-template-columns: 1fr 1fr; }
-  .panel-1-left { display: none; }
-  .callouts { flex-direction: column; }
+  .panel-1 { flex-direction: column; min-height: auto; }
+  .panel-1-left { flex: none; height: 350px; }
+  .panel-1-right { flex: none; }
+  .panel-1-right { flex: none; padding: 40px 30px 50px; }
+  .callouts { flex-direction: column; padding: 60px 30px; }
   .callouts-left { flex: none; }
-  .card { flex: 0 0 calc(50% - 10px); }
+  .card { flex: 0 0 280px; }
+  .mtn-report-inner { grid-template-columns: 1fr 1fr; gap: 30px; }
 }
 
 @media (max-width: 768px) {
+  .cam-carousel-section { padding: 0 30px 40px; }
   nav { padding: 12px 20px; }
   .nav-left, .nav-right { display: none; }
   .hero-text h1 { font-size: 1.8rem; letter-spacing: 0.15em; }
   .weather-bar { flex-wrap: wrap; padding: 20px 30px; gap: 15px; }
-  .panel-1 { padding: 50px 30px; }
-  .panel-1-grid { grid-template-columns: 1fr; }
-  .panel-1-right { padding-top: 0; }
-  .callouts { padding: 50px 30px; }
+  .mtn-report-inner { grid-template-columns: 1fr; padding: 20px 30px 30px; }
+  .panel-1-left { height: 280px; }
+  .panel-1-right { padding: 30px 20px 40px; }
+  .panel-1-tagline { font-size: 1.1rem; }
+  .panel-1-body { font-size: 0.9rem; }
+  .callouts { padding: 40px 20px; }
   .callouts-left h2 { font-size: 2.2rem; }
-  .card { flex: 0 0 100%; height: 300px; }
+  .card { flex: 0 0 calc(100vw - 60px); height: 300px; }
   .mountain-cams { padding: 50px 30px; }
   .cams-livestream, .cams-pano { grid-template-columns: 1fr; }
   .cams-static { grid-template-columns: 1fr 1fr; }
-  .panel-2-content { flex-direction: column; padding: 40px 30px; }
-  .panel-2-right { flex: none; width: 100%; }
-  .panel-2-left h2 { font-size: 2rem; }
+  .panel-2-overlay { flex-direction: column; }
+  .panel-2-left { flex: none; padding: 35px 25px; }
+  .panel-2-left h2 { font-size: 1.8rem; }
+  .panel-2-right { flex: none; height: 250px; }
   footer { padding: 40px 30px; }
   .footer-inner { flex-direction: column; }
   .footer-info-top { flex-direction: column; gap: 20px; }
+  .cam-carousel-arrow { width: 50px; height: 50px; font-size: 1.5rem; }
+  .live-cam-spotlight { padding: 40px 20px; }
+  .live-cam-spotlight h2 { font-size: 1.6rem; }
+  .video-overlay h2 { font-size: 1.6rem; letter-spacing: 0.1em; }
+  .video-section { min-height: 300px; }
+  .video-section video { min-height: 300px; }
 }
 </style>
 </head>
@@ -762,7 +1403,7 @@ footer {
     <a href="#">Member Login</a>
   </div>
 </nav>
-<div class="weather-badge">Current Weather: ❄ 15º F</div>
+<div class="weather-badge">Current Weather: ❄ 23º F</div>
 </header>
 
 <!-- HERO BANNER -->
@@ -780,51 +1421,143 @@ footer {
 </section>
 
 <!-- WEATHER BAR -->
-<section class="weather-bar">
+<section class="weather-bar" id="weatherBar">
   <h3>Weather This Week</h3>
   <div class="forecast">
     <div class="forecast-day">
+      <div class="day">Mon</div>
+      <div class="date">23</div>
+      <div class="temp">⛅ 23º F</div>
+    </div>
+    <div class="forecast-day">
+      <div class="day">Tue</div>
+      <div class="date">24</div>
+      <div class="temp">☁ 19º F</div>
+    </div>
+    <div class="forecast-day">
+      <div class="day">Wed</div>
+      <div class="date">25</div>
+      <div class="temp">❄ 16º F</div>
+    </div>
+    <div class="forecast-day">
       <div class="day">Thu</div>
-      <div class="date">19</div>
-      <div class="temp">☁ 21º F</div>
+      <div class="date">26</div>
+      <div class="temp">⛅ 22º F</div>
     </div>
     <div class="forecast-day">
       <div class="day">Fri</div>
-      <div class="date">20</div>
-      <div class="temp">⛅ 24º F</div>
-    </div>
-    <div class="forecast-day">
-      <div class="day">Sat</div>
-      <div class="date">21</div>
-      <div class="temp">☀ 31º F</div>
-    </div>
-    <div class="forecast-day">
-      <div class="day">Sun</div>
-      <div class="date">22</div>
-      <div class="temp">⛅ 39º F</div>
-    </div>
-    <div class="forecast-day">
-      <div class="day">Mon</div>
-      <div class="date">23</div>
-      <div class="temp">⛅ 43º F</div>
+      <div class="date">27</div>
+      <div class="temp">☀ 28º F</div>
     </div>
   </div>
-  <a href="#mountain-cams" class="webcam-btn">Webcam</a>
+  <div class="weather-bar-btns">
+    <button class="ski-conditions-btn" id="skiConditionsBtn">Ski Conditions <span class="toggle-arrow">▾</span></button>
+    <button class="webcam-scroll-btn" onclick="document.getElementById('mountain-cams').scrollIntoView({behavior:'smooth'})">Webcam</button>
+  </div>
 </section>
 
-<!-- PANEL 1 -->
+<!-- EXPANDABLE MOUNTAIN REPORT -->
+<div class="mtn-report-expand" id="mtnReport">
+  <div class="mtn-report-inner">
+    <div class="mtn-report-updated">
+      <span>Updated 2/23/26, 5:54 AM</span>
+      <span>⛅ Mostly Cloudy, Some Sun</span>
+    </div>
+
+    <!-- COLUMN 1: Snow & Current Weather -->
+    <div>
+      <div class="mtn-section-title">Snow Totals</div>
+      <table class="snow-table">
+        <thead><tr><th></th><th>Summit</th><th>Mid-Mountain</th></tr></thead>
+        <tbody>
+          <tr><td>Past 24 Hours</td><td data-count="0">0"</td><td data-count="0">0"</td></tr>
+          <tr><td>Season Totals</td><td data-count="269">0"</td><td data-count="183">0"</td></tr>
+          <tr><td>Snow Depth</td><td data-count="91">0"</td><td data-count="59">0"</td></tr>
+        </tbody>
+      </table>
+
+      <div class="mtn-section-title" style="margin-top:24px">Current Weather</div>
+      <table class="weather-table">
+        <thead><tr><th>Location</th><th>Temp</th><th>Wind</th></tr></thead>
+        <tbody>
+          <tr><td>Summit</td><td>23°F</td><td>18 mph</td></tr>
+          <tr><td>Mid Mountain</td><td>28°F</td><td>6 mph</td></tr>
+          <tr><td>Base</td><td>21°F</td><td>0 mph</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- COLUMN 2: Tram & Lift Status -->
+    <div class="mtn-status-col">
+      <div class="tram-status">
+        <span class="tram-icon">🚡</span>
+        <span class="tram-label">Aerial Tram</span>
+        <span class="tram-open"><span class="tram-open-dot"></span> Open</span>
+      </div>
+
+      <div class="status-circle" data-ratio="1">
+        <svg viewBox="0 0 100 100">
+          <circle class="ring-bg" cx="50" cy="50" r="46" fill="none" stroke="#e0dcd7" stroke-width="4"/>
+          <circle class="ring-fill" cx="50" cy="50" r="46" fill="none" stroke="#16a34a" stroke-width="4" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+        </svg>
+        <span class="sc-big">13/13</span>
+        <span class="sc-label">Lifts Open</span>
+      </div>
+
+      <div class="status-row">
+        <div class="status-circle" data-ratio="0.9">
+          <svg viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="46" fill="none" stroke="#e0dcd7" stroke-width="4"/>
+            <circle class="ring-fill" cx="50" cy="50" r="46" fill="none" stroke="#16a34a" stroke-width="4" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+          </svg>
+          <span class="sc-big">117/130</span>
+          <span class="sc-label">Trails Open</span>
+        </div>
+        <div class="status-circle" data-ratio="0.75">
+          <svg viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="46" fill="none" stroke="#e0dcd7" stroke-width="4"/>
+            <circle class="ring-fill" cx="50" cy="50" r="46" fill="none" stroke="#f59e0b" stroke-width="4" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+          </svg>
+          <span class="sc-big">3/4</span>
+          <span class="sc-label">Terrain Parks</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMN 3: Webcam Preview -->
+    <div>
+      <div class="mtn-section-title">Live Webcam</div>
+      <div class="dropdown-cam">
+        <img id="dropdownCam" src="https://cams.jacksonhole.com/webcam/codybowl.jpg" alt="Cody Bowl Live">
+        <div class="cam-label">
+          <div class="cam-live-dot"></div>
+          <span>Cody Bowl</span>
+        </div>
+      </div>
+      <button class="dropdown-webcam-btn" onclick="document.getElementById('mountain-cams').scrollIntoView({behavior:'smooth'})">View All Webcams ↓</button>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 1 — SPLIT LAYOUT -->
 <section class="panel-1">
-  <h4 class="panel-1-tagline">The Jackson Hole lifestyle is unlike any other. It's a place to retreat or reconnect, with breathtaking surroundings that both ground us and inspire.</h4>
-  <div class="panel-1-grid">
-    <div class="panel-1-left">
-      <img src="images/panel1-left.jpg" alt="Hoback Club">
+  <div class="panel-1-left">
+    <div class="panel-1-carousel" id="panel1Carousel">
+      <div class="panel-1-slide active">
+        <img src="images/panel1-left.jpg" alt="Hoback Club">
+      </div>
+      <div class="panel-1-slide">
+        <img src="images/panel1-middle.jpg" alt="Hoback Club Aerial">
+      </div>
     </div>
-    <div class="panel-1-middle">
-      <img src="images/panel1-middle.jpg" alt="Hoback Club Aerial">
+    <div class="panel-1-dots" id="panel1Dots">
+      <span class="active" data-slide="0"></span>
+      <span data-slide="1"></span>
     </div>
-    <div class="panel-1-right">
-      <p>Once in a lifetime, an opportunity arises that elevates the way we escape and explore together. The Hoback Club is that opportunity. The embodiment of refined grandeur, this private club offers the pinnacle of amenities and service – not just in Jackson Hole, but in all the ski world.</p>
-    </div>
+  </div>
+  <div class="panel-1-right">
+    <h4 class="panel-1-tagline">The Jackson Hole lifestyle is unlike any other. It's a place to retreat or reconnect, with breathtaking surroundings that both ground us and inspire.</h4>
+    <p class="panel-1-body">Once in a lifetime, an opportunity arises that elevates the way we escape and explore together. The Hoback Club is that opportunity. The embodiment of refined grandeur, this private club offers the pinnacle of amenities and service – not just in Jackson Hole, but in all the ski world.</p>
   </div>
 </section>
 
@@ -837,6 +1570,8 @@ footer {
         <span class="active" data-index="0"></span>
         <span data-index="1"></span>
         <span data-index="2"></span>
+        <span data-index="3"></span>
+        <span data-index="4"></span>
       </div>
       <div class="callouts-arrows">
         <button id="prevCard">←</button>
@@ -870,8 +1605,39 @@ footer {
   </div>
 </section>
 
+<!-- VIDEO SECTION -->
+<section class="video-section">
+  <video autoplay muted loop playsinline>
+    <source src="https://download-video-ak.vimeocdn.com/v3-1/playback/dd971eef-a02f-45bb-b47b-7fc1d90b6515/0ed327c8-9be66fc7?__token__=st=1771874508~exp=1771878108~acl=%2Fv3-1%2Fplayback%2Fdd971eef-a02f-45bb-b47b-7fc1d90b6515%2F0ed327c8-9be66fc7%2A~hmac=4a260042faa969796c84218208d50b56c3428226667f6f8d8f6264a979f2daa0&r=dXMtd2VzdDE%3D" type="video/mp4">
+  </video>
+  <div class="video-overlay">
+    <h2>Experience World Class Skiing &amp; Amenities</h2>
+  </div>
+</section>
+
+<!-- LIVE CAM SPOTLIGHT -->
+<section class="live-cam-spotlight">
+  <div class="webcam-section-type" style="margin-top:0">
+    <h3>Single Cam</h3>
+    <p>Featured live feed</p>
+  </div>
+  <h2>Live From Cody Bowl</h2>
+  <div class="spotlight-cam">
+    <img id="codybowlSpotlight" src="https://cams.jacksonhole.com/webcam/codybowl.jpg" alt="Cody Bowl Live">
+    <div class="cam-label">
+      <div class="cam-live-dot"></div>
+      <span>Cody Bowl — Live</span>
+    </div>
+  </div>
+  <a href="#mountain-cams" class="btn-view-cams" onclick="document.getElementById('mountain-cams').scrollIntoView({behavior:'smooth'});return false;">View All Webcams ↓</a>
+</section>
+
 <!-- MOUNTAIN CAMS -->
 <section class="mountain-cams" id="mountain-cams">
+  <div class="webcam-section-type" style="margin-top:0">
+    <h3>Camera Gallery</h3>
+    <p>Browse all mountain views</p>
+  </div>
   <div class="cams-header">
     <h2>Live From the Mountain</h2>
     <p>Real-time views from Jackson Hole Mountain Resort</p>
@@ -880,7 +1646,7 @@ footer {
   <div class="cams-section-label">Live Streams</div>
   <div class="cams-livestream">
     <div class="cam-card">
-      <iframe src="https://www.youtube.com/embed/wdO4LkYaXss?autoplay=1&mute=1&loop=1&playlist=wdO4LkYaXss&controls=0&modestbranding=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+      <iframe src="https://www.youtube.com/embed/9kK7RfM3eSc?autoplay=1&mute=1&loop=1&playlist=9kK7RfM3eSc&controls=0&modestbranding=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
       <div class="cam-label">
         <div class="cam-live-dot"></div>
         <span>Corbet's Couloir</span>
@@ -898,11 +1664,11 @@ footer {
   <div class="cams-section-label">Panoramic Views</div>
   <div class="cams-pano">
     <div class="pano-card">
-      <img src="https://backend.roundshot.com/cams/12a4b2c24cd515e0a115d4a0f59ef7f8/default" alt="Summit Panorama" class="pano-img" data-cam="summit">
+      <img src="https://backend.roundshot.com/cams/12a4b2c24cd515e0a115d4a0f59ef7f8/default" alt="Summit Panorama" class="pano-img cam-fade" data-cam="summit">
       <div class="cam-label"><span>Summit Panorama</span></div>
     </div>
     <div class="pano-card">
-      <img src="https://backend.roundshot.com/cams/6f7dc91857e22fe329e8bdeef5ee5750/default" alt="Rendezvous Lodge" class="pano-img" data-cam="rendezvous">
+      <img src="https://backend.roundshot.com/cams/6f7dc91857e22fe329e8bdeef5ee5750/default" alt="Rendezvous Lodge" class="pano-img cam-fade" data-cam="rendezvous">
       <div class="cam-label"><span>Rendezvous Lodge</span></div>
     </div>
   </div>
@@ -910,36 +1676,58 @@ footer {
   <div class="cams-section-label">Mountain Cameras</div>
   <div class="cams-static">
     <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/corbetscouloir.jpg" alt="Corbet's Couloir" class="static-img">
+      <img src="https://cams.jacksonhole.com/webcam/corbetscouloir.jpg" alt="Corbet's Couloir" class="static-img cam-fade">
       <div class="cam-label"><span>Corbet's Couloir</span></div>
     </div>
     <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/codybowl.jpg" alt="Cody Bowl" class="static-img">
+      <img src="https://cams.jacksonhole.com/webcam/codybowl.jpg" alt="Cody Bowl" class="static-img cam-fade">
       <div class="cam-label"><span>Cody Bowl</span></div>
     </div>
     <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/guncam.jpg" alt="Sublette Base" class="static-img">
+      <img src="https://cams.jacksonhole.com/webcam/guncam.jpg" alt="Sublette Base" class="static-img cam-fade">
       <div class="cam-label"><span>Sublette Base</span></div>
     </div>
     <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/commons.jpg" alt="Tram Cam" class="static-img">
+      <img src="https://cams.jacksonhole.com/webcam/commons.jpg" alt="Tram Cam" class="static-img cam-fade">
       <div class="cam-label"><span>Tram Cam</span></div>
     </div>
     <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/SouthHoback.jpg" alt="Mountain View" class="static-img">
+      <img src="https://cams.jacksonhole.com/webcam/SouthHoback.jpg" alt="Mountain View" class="static-img cam-fade">
       <div class="cam-label"><span>Mountain View</span></div>
     </div>
     <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/casperchair.jpg" alt="Casper Chair" class="static-img">
+      <img src="https://cams.jacksonhole.com/webcam/casperchair.jpg" alt="Casper Chair" class="static-img cam-fade">
       <div class="cam-label"><span>Casper Chair</span></div>
     </div>
   </div>
+
+  <!-- WEBCAM CAROUSEL -->
+  <div class="webcam-section-type">
+    <h3>Camera Carousel</h3>
+    <p>Click through or expand any view</p>
+  </div>
+  <div class="cam-carousel-section">
+    <div class="cam-carousel-title">Webcam Carousel</div>
+    <div class="cam-carousel-wrap" id="camCarousel">
+      <div class="cam-carousel-main" id="carouselMain"></div>
+      <button class="cam-carousel-arrow prev" id="carouselPrev">‹</button>
+      <button class="cam-carousel-arrow next" id="carouselNext">›</button>
+    </div>
+    <div class="cam-carousel-thumbs" id="carouselThumbs"></div>
+  </div>
 </section>
+
+<!-- LIGHTBOX -->
+<div class="cam-lightbox" id="camLightbox">
+  <div class="cam-lightbox-content" id="lightboxContent">
+    <button class="cam-lightbox-close" id="lightboxClose">✕</button>
+  </div>
+</div>
 
 <!-- MEMBERSHIP PANEL -->
 <section class="panel-2">
   <div class="panel-2-bg" style="background-image: url('images/panel2-bg.jpg')"></div>
-  <div class="panel-2-content">
+  <div class="panel-2-overlay">
     <div class="panel-2-left">
       <h2>Inquire to Become a Member</h2>
       <a href="#" class="btn-outline">Learn More</a>
@@ -973,7 +1761,7 @@ footer {
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2025 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color: rgba(255,255,255,0.5);">Clubessential</a></span>
+        <span>© 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color: rgba(255,255,255,0.5);">Clubessential</a></span>
         <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
       </div>
     </div>
@@ -997,33 +1785,69 @@ window.addEventListener('scroll', () => {
   document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 100);
 });
 
-// Card carousel
+// Card carousel with swipe support
 (function() {
   const track = document.getElementById('cardsTrack');
   const dots = document.querySelectorAll('.callouts-dots span');
+  const cards = track.querySelectorAll('.card');
   let pos = 0;
-  const maxPos = 3; // 5 cards - 2 visible
+  const maxPos = cards.length;
+
+  function getCardWidth() { return cards[0].offsetWidth + 20; }
 
   function updateCarousel() {
-    const cardWidth = track.querySelector('.card').offsetWidth + 20;
-    track.style.transform = `translateX(-${pos * cardWidth}px)`;
+    track.style.transform = `translateX(-${pos * getCardWidth()}px)`;
     dots.forEach((d, i) => d.classList.toggle('active', i === pos));
   }
 
-  document.getElementById('nextCard').addEventListener('click', () => {
-    pos = (pos + 1) % (maxPos);
-    updateCarousel();
-  });
+  window.addEventListener('resize', updateCarousel);
 
-  document.getElementById('prevCard').addEventListener('click', () => {
-    pos = pos <= 0 ? maxPos - 1 : pos - 1;
-    updateCarousel();
-  });
+  function next() { pos = (pos + 1) % maxPos; updateCarousel(); }
+  function prev() { pos = pos <= 0 ? maxPos - 1 : pos - 1; updateCarousel(); }
+
+  document.getElementById('nextCard').addEventListener('click', next);
+  document.getElementById('prevCard').addEventListener('click', prev);
 
   dots.forEach(d => d.addEventListener('click', () => {
     pos = parseInt(d.dataset.index);
     updateCarousel();
   }));
+
+  // Touch/swipe support
+  let startX = 0, startY = 0, isDragging = false;
+  const container = document.querySelector('.callouts-right');
+
+  container.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    isDragging = true;
+  }, { passive: true });
+
+  container.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  container.addEventListener('touchend', (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (dx < -40) next();
+    else if (dx > 40) prev();
+  }, { passive: true });
+
+  // Mouse drag support
+  let mouseStartX = 0;
+  container.addEventListener('mousedown', (e) => { mouseStartX = e.clientX; });
+  container.addEventListener('mouseup', (e) => {
+    const dx = e.clientX - mouseStartX;
+    if (dx < -40) next();
+    else if (dx > 40) prev();
+  });
 })();
 
 // Auto-refresh static cams every 30 seconds
@@ -1034,6 +1858,18 @@ setInterval(() => {
   });
 }, 30000);
 
+// Auto-refresh dropdown cam every 30 seconds
+setInterval(() => {
+  const dc = document.getElementById('dropdownCam');
+  if (dc) dc.src = 'https://cams.jacksonhole.com/webcam/codybowl.jpg?t=' + Date.now();
+}, 30000);
+
+// Auto-refresh Cody Bowl spotlight every 30 seconds
+setInterval(() => {
+  const spotlight = document.getElementById('codybowlSpotlight');
+  if (spotlight) spotlight.src = 'https://cams.jacksonhole.com/webcam/codybowl.jpg?t=' + Date.now();
+}, 30000);
+
 // Auto-refresh panoramic cams every 60 seconds
 setInterval(() => {
   document.querySelectorAll('.pano-img').forEach(img => {
@@ -1041,6 +1877,164 @@ setInterval(() => {
     img.src = base + '?t=' + Date.now();
   });
 }, 60000);
+
+// ===== SKI CONDITIONS EXPAND/COLLAPSE =====
+(function() {
+  const btn = document.getElementById('skiConditionsBtn');
+  const panel = document.getElementById('mtnReport');
+  let isOpen = false;
+  let countersAnimated = false;
+
+  btn.addEventListener('click', () => {
+    isOpen = !isOpen;
+    panel.classList.toggle('open', isOpen);
+    btn.classList.toggle('open', isOpen);
+
+    if (isOpen && !countersAnimated) {
+      countersAnimated = true;
+      animateCounters();
+      animateRings();
+    }
+  });
+
+  function animateCounters() {
+    document.querySelectorAll('[data-count]').forEach(td => {
+      const target = parseInt(td.dataset.count);
+      if (target === 0) { td.textContent = '0"'; return; }
+      const duration = 1200;
+      const start = performance.now();
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        // ease out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const val = Math.round(eased * target);
+        td.textContent = val + '"';
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  function animateRings() {
+    document.querySelectorAll('.status-circle[data-ratio]').forEach(circle => {
+      const ratio = parseFloat(circle.dataset.ratio);
+      const fill = circle.querySelector('.ring-fill');
+      if (!fill) return;
+      const circumference = 289;
+      const offset = circumference * (1 - ratio);
+      // Trigger animation after a frame
+      requestAnimationFrame(() => {
+        fill.style.strokeDashoffset = offset;
+      });
+    });
+  }
+})();
+
+// ===== PANEL 1 IMAGE CAROUSEL =====
+(function() {
+  const slides = document.querySelectorAll('.panel-1-slide');
+  const dots = document.querySelectorAll('#panel1Dots span');
+  let current = 0;
+  let autoTimer;
+
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit-left');
+    setTimeout(() => slides[current === 0 ? 0 : current].classList.remove('exit-left'), 800);
+    const prev = current;
+    current = idx;
+    slides[current].classList.add('active');
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    // clean up exit class after transition
+    setTimeout(() => slides[prev].classList.remove('exit-left'), 850);
+  }
+
+  dots.forEach(d => d.addEventListener('click', () => {
+    const idx = parseInt(d.dataset.slide);
+    if (idx !== current) { goTo(idx); resetAuto(); }
+  }));
+
+  function advance() { goTo((current + 1) % slides.length); }
+  function resetAuto() { clearInterval(autoTimer); autoTimer = setInterval(advance, 5000); }
+  resetAuto();
+})();
+
+// ===== FADE IN IMAGES ON LOAD =====
+document.querySelectorAll('.cam-fade').forEach(img => {
+  if (img.complete) {
+    img.classList.add('loaded');
+  } else {
+    img.addEventListener('load', () => img.classList.add('loaded'));
+  }
+});
+
+// ===== WEBCAM CAROUSEL (NO AUTO-ADVANCE) =====
+(function() {
+  const cams = [
+    { name: "Corbet's Couloir", type: 'youtube', id: '9kK7RfM3eSc', live: true, thumb: 'https://img.youtube.com/vi/9kK7RfM3eSc/mqdefault.jpg' },
+    { name: 'Snow Stake', type: 'youtube', id: 'cOcHcIDbi1o', live: true, thumb: 'https://img.youtube.com/vi/cOcHcIDbi1o/mqdefault.jpg' },
+    { name: 'Summit Panorama', type: 'img', src: 'https://backend.roundshot.com/cams/12a4b2c24cd515e0a115d4a0f59ef7f8/default', live: false },
+    { name: 'Rendezvous Lodge', type: 'img', src: 'https://backend.roundshot.com/cams/6f7dc91857e22fe329e8bdeef5ee5750/default', live: false },
+    { name: "Corbet's Couloir Cam", type: 'img', src: 'https://cams.jacksonhole.com/webcam/corbetscouloir.jpg', live: false },
+    { name: 'Cody Bowl', type: 'img', src: 'https://cams.jacksonhole.com/webcam/codybowl.jpg', live: false },
+    { name: 'Sublette Base', type: 'img', src: 'https://cams.jacksonhole.com/webcam/guncam.jpg', live: false },
+    { name: 'Tram Cam', type: 'img', src: 'https://cams.jacksonhole.com/webcam/commons.jpg', live: false },
+    { name: 'South Hoback', type: 'img', src: 'https://cams.jacksonhole.com/webcam/SouthHoback.jpg', live: false },
+    { name: 'Casper Chair', type: 'img', src: 'https://cams.jacksonhole.com/webcam/casperchair.jpg', live: false },
+  ];
+
+  let current = 0;
+  const mainEl = document.getElementById('carouselMain');
+  const thumbsEl = document.getElementById('carouselThumbs');
+  const lightbox = document.getElementById('camLightbox');
+  const lbContent = document.getElementById('lightboxContent');
+
+  function renderMain(i) {
+    const cam = cams[i];
+    let html = '';
+    if (cam.type === 'youtube') {
+      html = `<iframe src="https://www.youtube.com/embed/${cam.id}?autoplay=1&mute=1&loop=1&playlist=${cam.id}&controls=0&modestbranding=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen style="opacity:0;transition:opacity 0.5s ease;" onload="this.style.opacity=1"></iframe>`;
+    } else {
+      html = `<img src="${cam.src}?t=${Date.now()}" alt="${cam.name}" style="opacity:0;transition:opacity 0.5s ease;" onload="this.style.opacity=1">`;
+    }
+    html += `<div class="cam-carousel-label">${cam.live ? '<span class="cam-carousel-live">LIVE</span>' : ''}<span>${cam.name}</span></div>`;
+    mainEl.innerHTML = html;
+    thumbsEl.querySelectorAll('.cam-carousel-thumb').forEach((t, idx) => t.classList.toggle('active', idx === i));
+    current = i;
+  }
+
+  // Build thumbs
+  cams.forEach((cam, i) => {
+    const div = document.createElement('div');
+    div.className = 'cam-carousel-thumb' + (i === 0 ? ' active' : '');
+    const thumbSrc = cam.thumb || cam.src;
+    div.innerHTML = `<img src="${thumbSrc}" alt="${cam.name}">`;
+    div.addEventListener('click', () => renderMain(i));
+    thumbsEl.appendChild(div);
+  });
+
+  renderMain(0);
+
+  document.getElementById('carouselNext').addEventListener('click', () => renderMain((current + 1) % cams.length));
+  document.getElementById('carouselPrev').addEventListener('click', () => renderMain((current - 1 + cams.length) % cams.length));
+
+  // Lightbox
+  mainEl.addEventListener('click', () => {
+    const cam = cams[current];
+    let html = '<button class="cam-lightbox-close" onclick="document.getElementById(\'camLightbox\').classList.remove(\'open\')">✕</button>';
+    if (cam.type === 'youtube') {
+      html += `<iframe src="https://www.youtube.com/embed/${cam.id}?autoplay=1&mute=0&controls=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    } else {
+      html += `<img src="${cam.src}?t=${Date.now()}" alt="${cam.name}">`;
+    }
+    lbContent.innerHTML = html;
+    lightbox.classList.add('open');
+  });
+
+  document.getElementById('lightboxClose')?.addEventListener('click', () => lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+})();
 </script>
 
 </body>
