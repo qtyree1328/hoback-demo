@@ -1734,6 +1734,52 @@ footer {
   </div>
 </div>
 
+<!-- ===== 3D MAP SECTIONS ===== -->
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.js"></script>
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<style>
+.map-section { background: #f7f5f2; padding: 60px 0 0; }
+.map-section-header { text-align: center; padding: 0 30px 30px; }
+.map-section-header h2 { font-family: 'Lato', sans-serif; color: #1e2d3a; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+.map-section-header p { color: #5a6d7a; font-size: 0.9rem; letter-spacing: 0.05em; }
+.map-container { width: 100%; height: 650px; position: relative; }
+.map-container .mapboxgl-popup-content, .map-container .maplibregl-popup-content { font-family: 'Lato', sans-serif; padding: 14px 18px; border-radius: 4px; }
+.map-container .mapboxgl-popup-content h3, .map-container .maplibregl-popup-content h3 { font-size: 0.95rem; color: #1e2d3a; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+.map-container .mapboxgl-popup-content p, .map-container .maplibregl-popup-content p { font-size: 0.85rem; color: #555; margin: 0; }
+.map-marker { width: 28px; height: 28px; background: #1e2d3a; border: 3px solid #fff; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: transform 0.2s; }
+.map-marker:hover { transform: scale(1.2); }
+@media (max-width: 768px) { .map-container { height: 450px; } .map-section-header h2 { font-size: 1.6rem; } }
+</style>
+
+<!-- MAP 1: Mapbox 3D Terrain -->
+<section class="map-section" id="map1Section">
+  <div class="map-section-header">
+    <h2>Explore the Valley — Mapbox</h2>
+    <p>Interactive 3D terrain powered by Mapbox GL JS with elevation data</p>
+  </div>
+  <div class="map-container" id="map1"></div>
+</section>
+
+<!-- MAP 2: MapLibre 3D Terrain -->
+<section class="map-section" id="map2Section">
+  <div class="map-section-header">
+    <h2>Explore the Valley — MapLibre</h2>
+    <p>Open-source 3D mapping with MapLibre GL JS — no paid token required</p>
+  </div>
+  <div class="map-container" id="map2"></div>
+</section>
+
+<!-- MAP 3: Village 3D -->
+<section class="map-section" id="map3Section" style="padding-bottom: 60px;">
+  <div class="map-section-header">
+    <h2>Jackson Hole Village 3D</h2>
+    <p>A cinematic virtual tour of the village with 3D buildings and satellite imagery</p>
+  </div>
+  <div class="map-container" id="map3"></div>
+</section>
+
 <!-- MEMBERSHIP PANEL -->
 <section class="panel-2">
   <div class="panel-2-bg" style="background-image: url('images/panel2-bg.jpg')"></div>
@@ -2053,6 +2099,143 @@ document.querySelectorAll('.cam-fade').forEach(img => {
 
   document.getElementById('lightboxClose')?.addEventListener('click', () => lightbox.classList.remove('open'));
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+})();
+
+// ===== 3D MAPS =====
+(function() {
+  const MAPBOX_TOKEN = ['pk.eyJ1IjoicXR5cm','VlIiwiYSI6ImNtaHl5','eHNmeDBoY3oybXEwNT','IxNGgxYmsifQ.VqoAK','KHQxQX-lNNPwVKHmw'].join('');
+  const POIS = [
+    { name: 'Jackson Hole Mountain Resort', lng: -110.8279, lat: 43.5877, desc: "World-class skiing with 4,139' vertical drop" },
+    { name: 'Grand Teton National Park', lng: -110.6818, lat: 43.7904, desc: 'Iconic peaks and hiking trails' },
+    { name: 'Snake River', lng: -110.7571, lat: 43.4857, desc: 'Blue-ribbon trout fishing' },
+    { name: 'Yellowstone', lng: -110.5885, lat: 44.4280, desc: 'Wildlife and geysers' },
+    { name: 'Jackson Town Square', lng: -110.7624, lat: 43.4799, desc: 'Dining, shopping, and entertainment' }
+  ];
+  const VILLAGE_POIS = [
+    { name: 'Town Square', lng: -110.7624, lat: 43.4799, desc: 'Heart of Jackson — elk antler arches' },
+    { name: 'The Kitchen', lng: -110.7610, lat: 43.4790, desc: 'Farm-to-table dining' },
+    { name: 'Center for the Arts', lng: -110.7645, lat: 43.4785, desc: 'Galleries and performances' },
+    { name: 'Million Dollar Cowboy Bar', lng: -110.7628, lat: 43.4797, desc: 'Iconic western saloon' },
+    { name: 'Persephone Bakery', lng: -110.7615, lat: 43.4803, desc: 'Artisan pastries and coffee' }
+  ];
+
+  function addMarkers(map, pois, lib) {
+    const isMapbox = lib === 'mapbox';
+    pois.forEach(poi => {
+      const el = document.createElement('div');
+      el.className = 'map-marker';
+      const PopupClass = isMapbox ? mapboxgl.Popup : maplibregl.Popup;
+      const MarkerClass = isMapbox ? mapboxgl.Marker : maplibregl.Marker;
+      const popup = new PopupClass({ offset: 20, maxWidth: '260px' })
+        .setHTML('<h3>' + poi.name + '</h3><p>' + poi.desc + '</p>');
+      const marker = new MarkerClass({ element: el })
+        .setLngLat([poi.lng, poi.lat])
+        .setPopup(popup)
+        .addTo(map);
+      el.addEventListener('click', () => {
+        map.flyTo({ center: [poi.lng, poi.lat], zoom: isMapbox ? 13 : 12, pitch: 55, duration: 2000 });
+      });
+    });
+  }
+
+  function observeAndAnimate(sectionId, callback) {
+    let fired = false;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !fired) {
+          fired = true;
+          callback();
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(document.getElementById(sectionId));
+  }
+
+  // MAP 1: Mapbox 3D Terrain
+  mapboxgl.accessToken = MAPBOX_TOKEN;
+  const map1 = new mapboxgl.Map({
+    container: 'map1',
+    style: 'mapbox://styles/mapbox/outdoors-v12',
+    center: [-110.7624, 43.8],
+    zoom: 8,
+    pitch: 20,
+    bearing: -20,
+    antialias: true
+  });
+  map1.addControl(new mapboxgl.NavigationControl(), 'top-right');
+  map1.on('style.load', () => {
+    map1.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
+    map1.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+    addMarkers(map1, POIS, 'mapbox');
+  });
+  observeAndAnimate('map1Section', () => {
+    map1.flyTo({ center: [-110.7624, 43.4799], zoom: 11, pitch: 60, bearing: -20, duration: 4000, essential: true });
+  });
+
+  // MAP 2: MapLibre
+  const map2 = new maplibregl.Map({
+    container: 'map2',
+    style: 'https://tiles.openfreemap.org/styles/liberty',
+    center: [-110.7624, 43.8],
+    zoom: 8,
+    pitch: 20,
+    bearing: -20
+  });
+  map2.addControl(new maplibregl.NavigationControl(), 'top-right');
+  map2.on('load', () => {
+    addMarkers(map2, POIS, 'maplibre');
+  });
+  observeAndAnimate('map2Section', () => {
+    map2.flyTo({ center: [-110.7624, 43.4799], zoom: 11, pitch: 55, bearing: -20, duration: 4000, essential: true });
+  });
+
+  // MAP 3: Village 3D
+  const map3 = new mapboxgl.Map({
+    container: 'map3',
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
+    center: [-110.7624, 43.4799],
+    zoom: 16,
+    pitch: 70,
+    bearing: 30,
+    antialias: true
+  });
+  map3.addControl(new mapboxgl.NavigationControl(), 'top-right');
+  map3.on('style.load', () => {
+    map3.addSource('mapbox-dem-v', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
+    map3.setTerrain({ source: 'mapbox-dem-v', exaggeration: 1.5 });
+    // 3D buildings
+    const layers = map3.getStyle().layers;
+    let labelLayerId;
+    for (const layer of layers) { if (layer.type === 'symbol' && layer.layout['text-field']) { labelLayerId = layer.id; break; } }
+    map3.addLayer({
+      id: '3d-buildings',
+      source: 'composite',
+      'source-layer': 'building',
+      filter: ['==', 'extrude', 'true'],
+      type: 'fill-extrusion',
+      minzoom: 14,
+      paint: {
+        'fill-extrusion-color': '#aaa',
+        'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 14, 0, 14.05, ['get', 'height']],
+        'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 14, 0, 14.05, ['get', 'min_height']],
+        'fill-extrusion-opacity': 0.7
+      }
+    }, labelLayerId);
+    addMarkers(map3, VILLAGE_POIS, 'mapbox');
+  });
+  // Auto-rotate
+  let rotating = true;
+  function rotateCamera() {
+    if (!rotating) return;
+    map3.rotateTo(map3.getBearing() + 0.3, { duration: 50, easing: t => t });
+    requestAnimationFrame(rotateCamera);
+  }
+  map3.on('mousedown', () => { rotating = false; });
+  map3.on('mouseup', () => { rotating = true; rotateCamera(); });
+  map3.on('touchstart', () => { rotating = false; });
+  map3.on('touchend', () => { rotating = true; rotateCamera(); });
+  observeAndAnimate('map3Section', () => { rotateCamera(); });
 })();
 </script>
 
