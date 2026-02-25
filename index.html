@@ -2348,7 +2348,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   });
   map3.on('style.load', () => {
     map3.addSource('mapbox-dem-v', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
-    map3.setTerrain({ source: 'mapbox-dem-v', exaggeration: 1.5 });
+    map3.setTerrain({ source: 'mapbox-dem-v', exaggeration: 1.2 });
     const layers = map3.getStyle().layers;
     let labelLayerId;
     for (const layer of layers) { if (layer.type === 'symbol' && layer.layout['text-field']) { labelLayerId = layer.id; break; } }
@@ -2394,26 +2394,29 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   }
 
   const section3 = document.getElementById('map3Section');
-  let targetT = 0, currentT = 0, animating = false;
+  let targetT = 0, currentT = 0, rafId = null;
 
   window.addEventListener('scroll', () => {
     const rect = section3.getBoundingClientRect();
+    const navHeight = 80; // offset so title clears navbar
     const scrollEnd = section3.offsetHeight - window.innerHeight;
     if (scrollEnd > 0) {
-      targetT = Math.max(0, Math.min(1, -rect.top / scrollEnd));
-      if (!animating) { animating = true; dampedUpdate(); }
+      targetT = Math.max(0, Math.min(1, (-rect.top - navHeight) / scrollEnd));
+      if (!rafId) rafId = requestAnimationFrame(smoothUpdate);
     }
   }, { passive: true });
 
-  function dampedUpdate() {
+  function smoothUpdate() {
     const diff = targetT - currentT;
-    if (Math.abs(diff) < 0.0001) { currentT = targetT; animating = false; }
-    else {
-      currentT += diff * 0.12; // smooth dampening factor
-      animating = true;
-      requestAnimationFrame(dampedUpdate);
+    if (Math.abs(diff) < 0.00005) {
+      currentT = targetT;
+      rafId = null;
+    } else {
+      currentT += diff * 0.06; // very smooth — lower = smoother
+      rafId = requestAnimationFrame(smoothUpdate);
     }
-    map3.jumpTo(interpolateAt(currentT));
+    const state = interpolateAt(Math.max(0, currentT));
+    map3.easeTo({ ...state, duration: 0, easing: t => t });
   }
 })();
 
