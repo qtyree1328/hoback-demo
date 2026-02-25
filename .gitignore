@@ -1,0 +1,4 @@
+/tmp/
+*.py
+filter-openskidata.js
+enrich-data.py
