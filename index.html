@@ -1895,7 +1895,7 @@ footer {
 
 <!-- MAP 3: Jackson Hole Village — Scroll-triggered Zoom -->
 <style>
-.village-scroll-section { position: relative; height: 150vh; background: #f7f5f2; padding-top: 0; }
+.village-scroll-section { position: relative; height: 250vh; background: #f7f5f2; padding-top: 0; }
 .village-scroll-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .village-scroll-header { position: absolute; top: 30px; left: 0; right: 0; text-align: center; z-index: 5; pointer-events: none; }
 .village-scroll-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
@@ -2249,7 +2249,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   mapboxgl.accessToken = MAPBOX_TOKEN;
   const map1 = new mapboxgl.Map({
     container: 'map1',
-    style: 'mapbox://styles/mapbox/outdoors-v12',
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
     center: [-110.75, 43.65],
     zoom: 9,
     pitch: 40,
@@ -2260,7 +2260,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   map1.on('style.load', () => {
     map1.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
     map1.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
-    map1.setFog({ color: 'rgba(186,210,235,0.5)', 'high-color': 'rgba(36,92,223,0.4)', 'horizon-blend': 0.02, 'space-color': 'rgba(11,11,25,1)', 'star-intensity': 0.6 });
+    map1.setFog({ color: 'rgba(186,210,235,0.4)', 'high-color': 'rgba(36,92,223,0.3)', 'horizon-blend': 0.02, 'space-color': 'rgba(11,11,25,1)', 'star-intensity': 0.1 });
   });
 
   // Valley panel accordion + flyTo
@@ -2313,7 +2313,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     }, labelLayerId);
   });
 
-  // Scroll-driven animation
+  // Scroll-driven animation — starts when full section is in viewport
   function lerp(a, b, t) { return a + (b - a) * t; }
   const section3 = document.getElementById('map3Section');
   let ticking = false;
@@ -2324,11 +2324,14 @@ document.querySelectorAll('.cam-fade').forEach(img => {
         const rect = section3.getBoundingClientRect();
         const sectionH = section3.offsetHeight;
         const viewH = window.innerHeight;
+        // Animation starts when section top reaches top of viewport (fully visible)
+        // and ends when section bottom reaches bottom of viewport
+        const scrollStart = 0; // rect.top == 0 means section top at viewport top
+        const scrollEnd = sectionH - viewH;
         const scrolled = -rect.top;
-        const scrollRange = sectionH - viewH;
-        if (scrollRange > 0) {
-          const t = Math.max(0, Math.min(1, scrolled / scrollRange));
-          const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // ease in-out quad
+        if (scrollEnd > 0) {
+          const t = Math.max(0, Math.min(1, scrolled / scrollEnd));
+          const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
           map3.jumpTo({
             center: [lerp(START.center[0], END.center[0], eased), lerp(START.center[1], END.center[1], eased)],
             zoom: lerp(START.zoom, END.zoom, eased),
