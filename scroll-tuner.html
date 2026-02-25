@@ -53,6 +53,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .output h4 { font-size: 11px; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
 
 .current-vals { background: #1a1a2a; border-radius: 6px; padding: 8px 10px; margin: 8px 0; font-family: monospace; font-size: 11px; color: #4f9cf7; line-height: 1.6; }
+.live-view-box { position: fixed; bottom: 20px; left: 20px; z-index: 200; background: rgba(10,10,20,0.92); backdrop-filter: blur(10px); border: 1px solid #d4a853; border-radius: 8px; padding: 12px 16px; font-family: monospace; font-size: 13px; color: #eee; line-height: 1.8; min-width: 260px; pointer-events: none; }
+.live-view-box .lv-label { font-size: 10px; color: #d4a853; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+.live-view-box span { color: #4f9cf7; }
 </style>
 </head>
 <body>
@@ -101,6 +104,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       <button class="btn btn-gold" onclick="copyOutput()">Copy Code</button>
     </div>
   </div>
+</div>
+
+<div class="live-view-box" id="liveViewBox">
+  <div class="lv-label">Current View</div>
+  <div>Lat: <span id="lv-lat">—</span></div>
+  <div>Lng: <span id="lv-lng">—</span></div>
+  <div>Zoom: <span id="lv-zoom">—</span></div>
+  <div>Pitch: <span id="lv-pitch">—</span></div>
+  <div>Bearing: <span id="lv-bearing">—</span></div>
 </div>
 
 <div class="scroll-container" id="scrollContainer">
@@ -317,6 +329,18 @@ function copyOutput() {
     setTimeout(() => btn.textContent = 'Copy Code', 1500);
   });
 }
+
+// Live view box — updates on any map movement (scroll, drag, zoom)
+function updateLiveView() {
+  const c = map.getCenter();
+  document.getElementById('lv-lat').textContent = c.lat.toFixed(5);
+  document.getElementById('lv-lng').textContent = c.lng.toFixed(5);
+  document.getElementById('lv-zoom').textContent = map.getZoom().toFixed(2);
+  document.getElementById('lv-pitch').textContent = map.getPitch().toFixed(1) + '°';
+  document.getElementById('lv-bearing').textContent = map.getBearing().toFixed(1) + '°';
+}
+map.on('move', updateLiveView);
+map.on('load', updateLiveView);
 
 // Update output on any input change
 document.getElementById('controls').addEventListener('input', updateOutput);
