@@ -1951,7 +1951,7 @@ footer {
 <section class="village-scroll-section" id="map3Section">
   <div class="village-scroll-sticky">
     <div class="village-scroll-header">
-      <h2>Jackson Hole Village</h2>
+      <h2>Teton Village</h2>
       <p>Scroll to explore from the Tetons to Teton Village</p>
     </div>
     <div id="map3" style="width:100%;height:100%;"></div>
@@ -2348,7 +2348,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   });
   map3.on('style.load', () => {
     map3.addSource('mapbox-dem-v', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
-    map3.setTerrain({ source: 'mapbox-dem-v', exaggeration: 1.2 });
+    map3.setTerrain({ source: 'mapbox-dem-v', exaggeration: 1.5 });
     const layers = map3.getStyle().layers;
     let labelLayerId;
     for (const layer of layers) { if (layer.type === 'symbol' && layer.layout['text-field']) { labelLayerId = layer.id; break; } }
@@ -2366,7 +2366,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
 
   // Scroll-driven animation with waypoints — smooth cubic interpolation
   function lerp(a, b, t) { return a + (b - a) * t; }
-  function smoothstep(t) { return t * t * (3 - 2 * t); } // smoother than quad
+  function smoothstep(t) { return t * t * (3 - 2 * t); }
 
   // Build keyframe list
   const keyframes = [
@@ -2393,15 +2393,30 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     };
   }
 
+  // Preload tiles: silently step through the path on page load to cache terrain/satellite tiles
+  map3.once('idle', () => {
+    let preT = 0;
+    function preloadStep() {
+      if (preT > 1.001) {
+        // Reset to start after all tiles requested
+        setTimeout(() => map3.jumpTo(interpolateAt(0)), 300);
+        return;
+      }
+      map3.jumpTo(interpolateAt(preT));
+      preT += 0.05;
+      setTimeout(preloadStep, 120);
+    }
+    setTimeout(preloadStep, 1000);
+  });
+
   const section3 = document.getElementById('map3Section');
   let targetT = 0, currentT = 0, rafId = null;
 
   window.addEventListener('scroll', () => {
     const rect = section3.getBoundingClientRect();
-    const navHeight = 80; // offset so title clears navbar
     const scrollEnd = section3.offsetHeight - window.innerHeight;
     if (scrollEnd > 0) {
-      targetT = Math.max(0, Math.min(1, (-rect.top - navHeight) / scrollEnd));
+      targetT = Math.max(0, Math.min(1, -rect.top / scrollEnd));
       if (!rafId) rafId = requestAnimationFrame(smoothUpdate);
     }
   }, { passive: true });
