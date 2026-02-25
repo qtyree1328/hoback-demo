@@ -1895,8 +1895,8 @@ footer {
 
 <!-- MAP 3: Jackson Hole Village — Scroll-triggered Zoom -->
 <style>
-.village-scroll-section { position: relative; height: 250vh; background: #f7f5f2; padding-top: 0; }
-.village-scroll-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.village-scroll-section { position: relative; height: 200vh; background: #f7f5f2; padding-top: 0; }
+.village-scroll-sticky { position: sticky; top: 0; height: 80vh; overflow: hidden; }
 .village-scroll-header { position: absolute; top: 0; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; padding: 30px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 70%, transparent 100%); }
 .village-scroll-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
 .village-scroll-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; letter-spacing: 0.05em; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
@@ -2348,20 +2348,27 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   }
 
   const section3 = document.getElementById('map3Section');
-  let lastT = -1;
+  let targetT = 0, currentT = 0, animating = false;
+
   window.addEventListener('scroll', () => {
-    requestAnimationFrame(() => {
-      const rect = section3.getBoundingClientRect();
-      const scrollEnd = section3.offsetHeight - window.innerHeight;
-      if (scrollEnd > 0) {
-        const t = Math.max(0, Math.min(1, -rect.top / scrollEnd));
-        if (Math.abs(t - lastT) > 0.0005) { // only update on meaningful change
-          lastT = t;
-          map3.jumpTo(interpolateAt(t));
-        }
-      }
-    });
+    const rect = section3.getBoundingClientRect();
+    const scrollEnd = section3.offsetHeight - window.innerHeight;
+    if (scrollEnd > 0) {
+      targetT = Math.max(0, Math.min(1, -rect.top / scrollEnd));
+      if (!animating) { animating = true; dampedUpdate(); }
+    }
   }, { passive: true });
+
+  function dampedUpdate() {
+    const diff = targetT - currentT;
+    if (Math.abs(diff) < 0.0001) { currentT = targetT; animating = false; }
+    else {
+      currentT += diff * 0.12; // smooth dampening factor
+      animating = true;
+      requestAnimationFrame(dampedUpdate);
+    }
+    map3.jumpTo(interpolateAt(currentT));
+  }
 })();
 
 // ===== TRAIL MAP =====
