@@ -2293,9 +2293,8 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     pitch: START.pitch,
     bearing: START.bearing,
     antialias: true,
-    interactive: true
+    interactive: false
   });
-  map3.addControl(new mapboxgl.NavigationControl(), 'top-right');
   map3.on('style.load', () => {
     map3.addSource('mapbox-dem-v', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
     map3.setTerrain({ source: 'mapbox-dem-v', exaggeration: 1.5 });
