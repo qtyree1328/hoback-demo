@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scroll Zoom Tuner</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #111; color: #eee; }
+
+.scroll-container { position: relative; height: 300vh; }
+.sticky-wrap { position: sticky; top: 0; height: 100vh; display: flex; }
+
+#map { flex: 1; }
+
+.controls {
+  position: fixed; top: 0; right: 0; z-index: 100;
+  width: 360px; max-height: 100vh; overflow-y: auto;
+  background: rgba(20,20,30,0.95); backdrop-filter: blur(10px);
+  padding: 16px; font-size: 13px; border-left: 1px solid #333;
+}
+.controls h2 { font-size: 14px; color: #d4a853; margin-bottom: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+.controls h3 { font-size: 12px; color: #888; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 0.08em; border-top: 1px solid #333; padding-top: 10px; }
+
+.field { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.field label { width: 60px; font-size: 11px; color: #999; text-align: right; flex-shrink: 0; }
+.field input { flex: 1; background: #1a1a2a; border: 1px solid #333; color: #eee; padding: 5px 8px; border-radius: 4px; font-size: 12px; font-family: monospace; }
+.field input:focus { border-color: #d4a853; outline: none; }
+
+.progress-bar { height: 4px; background: #333; border-radius: 2px; margin: 8px 0 4px; }
+.progress-fill { height: 100%; background: #d4a853; border-radius: 2px; width: 0; transition: width 0.05s; }
+.progress-label { font-size: 11px; color: #666; text-align: center; }
+
+.waypoints-list { margin: 8px 0; }
+.wp-item { background: #1a1a2a; border: 1px solid #333; border-radius: 6px; padding: 10px; margin-bottom: 6px; position: relative; }
+.wp-item .wp-num { position: absolute; top: 4px; left: 8px; font-size: 10px; color: #d4a853; font-weight: 700; }
+.wp-remove { position: absolute; top: 4px; right: 8px; background: none; border: none; color: #e05555; cursor: pointer; font-size: 14px; }
+.wp-item .field { margin-bottom: 4px; }
+.wp-item .field label { width: 50px; font-size: 10px; }
+.wp-item .field input { font-size: 11px; padding: 3px 6px; }
+
+.btn { padding: 7px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
+.btn-gold { background: #d4a853; color: #111; }
+.btn-gold:hover { background: #e0b55f; }
+.btn-outline { background: transparent; border: 1px solid #555; color: #ccc; }
+.btn-outline:hover { border-color: #d4a853; color: #d4a853; }
+.btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+.output { margin-top: 12px; background: #0a0a15; border: 1px solid #333; border-radius: 6px; padding: 10px; }
+.output pre { font-size: 11px; color: #a6e3a1; white-space: pre-wrap; line-height: 1.5; }
+.output h4 { font-size: 11px; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.current-vals { background: #1a1a2a; border-radius: 6px; padding: 8px 10px; margin: 8px 0; font-family: monospace; font-size: 11px; color: #4f9cf7; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="controls" id="controls">
+  <h2>🎿 Scroll Zoom Tuner</h2>
+
+  <h3>Start Position</h3>
+  <div class="field"><label>Lat</label><input type="number" id="s-lat" value="43.75" step="0.001"></div>
+  <div class="field"><label>Lng</label><input type="number" id="s-lng" value="-110.75" step="0.001"></div>
+  <div class="field"><label>Zoom</label><input type="number" id="s-zoom" value="10" step="0.5" min="1" max="20"></div>
+  <div class="field"><label>Pitch</label><input type="number" id="s-pitch" value="50" step="5" min="0" max="85"></div>
+  <div class="field"><label>Bearing</label><input type="number" id="s-bearing" value="-15" step="5" min="-180" max="180"></div>
+
+  <h3>End Position</h3>
+  <div class="field"><label>Lat</label><input type="number" id="e-lat" value="43.5877" step="0.001"></div>
+  <div class="field"><label>Lng</label><input type="number" id="e-lng" value="-110.8279" step="0.001"></div>
+  <div class="field"><label>Zoom</label><input type="number" id="e-zoom" value="15.5" step="0.5" min="1" max="20"></div>
+  <div class="field"><label>Pitch</label><input type="number" id="e-pitch" value="70" step="5" min="0" max="85"></div>
+  <div class="field"><label>Bearing</label><input type="number" id="e-bearing" value="20" step="5" min="-180" max="180"></div>
+
+  <h3>Waypoints</h3>
+  <div class="waypoints-list" id="wpList"></div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="addWaypoint()">+ Add Waypoint</button>
+    <button class="btn btn-outline" onclick="addWaypointFromMap()">+ From Current View</button>
+  </div>
+
+  <h3>Scroll Progress</h3>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0%</div>
+
+  <div class="current-vals" id="currentVals">Scroll to see live values</div>
+
+  <h3>Preview</h3>
+  <div class="btn-row">
+    <button class="btn btn-gold" onclick="previewAnimation()">▶ Preview</button>
+    <button class="btn btn-outline" onclick="resetToStart()">⏮ Reset</button>
+    <button class="btn btn-outline" onclick="jumpToEnd()">⏭ End</button>
+  </div>
+
+  <div class="output">
+    <h4>📋 Copy to index.html</h4>
+    <pre id="codeOutput">Adjust values and scroll to generate...</pre>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="copyOutput()">Copy Code</button>
+    </div>
+  </div>
+</div>
+
+<div class="scroll-container" id="scrollContainer">
+  <div class="sticky-wrap">
+    <div id="map"></div>
+  </div>
+</div>
+
+<script>
+mapboxgl.accessToken = ['pk.eyJ1IjoicXR5cm','VlIiwiYSI6ImNtaHl5','eHNmeDBoY3oybXEwNT','IxNGgxYmsifQ.VqoAK','KHQxQX-lNNPwVKHmw'].join('');
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-streets-v12',
+  center: [-110.75, 43.75],
+  zoom: 10,
+  pitch: 50,
+  bearing: -15,
+  antialias: true,
+  interactive: true
+});
+
+map.on('style.load', () => {
+  map.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
+  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+  map.addLayer({
+    id: '3d-buildings', source: 'composite', 'source-layer': 'building',
+    filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 14,
+    paint: {
+      'fill-extrusion-color': '#aaa',
+      'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 14, 0, 14.05, ['get', 'height']],
+      'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 14, 0, 14.05, ['get', 'min_height']],
+      'fill-extrusion-opacity': 0.7
+    }
+  });
+});
+
+// Waypoints array
+let waypoints = [];
+let wpIdCounter = 0;
+
+function getStart() {
+  return {
+    center: [parseFloat(document.getElementById('s-lng').value), parseFloat(document.getElementById('s-lat').value)],
+    zoom: parseFloat(document.getElementById('s-zoom').value),
+    pitch: parseFloat(document.getElementById('s-pitch').value),
+    bearing: parseFloat(document.getElementById('s-bearing').value)
+  };
+}
+
+function getEnd() {
+  return {
+    center: [parseFloat(document.getElementById('e-lng').value), parseFloat(document.getElementById('e-lat').value)],
+    zoom: parseFloat(document.getElementById('e-zoom').value),
+    pitch: parseFloat(document.getElementById('e-pitch').value),
+    bearing: parseFloat(document.getElementById('e-bearing').value)
+  };
+}
+
+function getWaypoints() {
+  return waypoints.map(wp => {
+    const el = document.getElementById('wp-' + wp.id);
+    if (!el) return null;
+    return {
+      t: parseFloat(el.querySelector('.wp-t').value),
+      center: [parseFloat(el.querySelector('.wp-lng').value), parseFloat(el.querySelector('.wp-lat').value)],
+      zoom: parseFloat(el.querySelector('.wp-zoom').value),
+      pitch: parseFloat(el.querySelector('.wp-pitch').value),
+      bearing: parseFloat(el.querySelector('.wp-bearing').value)
+    };
+  }).filter(Boolean).sort((a, b) => a.t - b.t);
+}
+
+function addWaypoint(lat, lng, zoom, pitch, bearing, t) {
+  const id = wpIdCounter++;
+  waypoints.push({ id });
+  const div = document.createElement('div');
+  div.className = 'wp-item';
+  div.id = 'wp-' + id;
+  div.innerHTML = `
+    <span class="wp-num">WP</span>
+    <button class="wp-remove" onclick="removeWaypoint(${id})">✕</button>
+    <div class="field"><label>At %</label><input type="number" class="wp-t" value="${t || 50}" step="5" min="1" max="99"></div>
+    <div class="field"><label>Lat</label><input type="number" class="wp-lat" value="${lat || 43.65}" step="0.001"></div>
+    <div class="field"><label>Lng</label><input type="number" class="wp-lng" value="${lng || -110.78}" step="0.001"></div>
+    <div class="field"><label>Zoom</label><input type="number" class="wp-zoom" value="${zoom || 12}" step="0.5" min="1" max="20"></div>
+    <div class="field"><label>Pitch</label><input type="number" class="wp-pitch" value="${pitch || 60}" step="5" min="0" max="85"></div>
+    <div class="field"><label>Bearing</label><input type="number" class="wp-bearing" value="${bearing || 0}" step="5" min="-180" max="180"></div>
+  `;
+  document.getElementById('wpList').appendChild(div);
+  updateOutput();
+}
+
+function addWaypointFromMap() {
+  const c = map.getCenter();
+  addWaypoint(c.lat.toFixed(4), c.lng.toFixed(4), map.getZoom().toFixed(1), map.getPitch().toFixed(0), map.getBearing().toFixed(0), 50);
+}
+
+function removeWaypoint(id) {
+  waypoints = waypoints.filter(w => w.id !== id);
+  const el = document.getElementById('wp-' + id);
+  if (el) el.remove();
+  updateOutput();
+}
+
+// Interpolation with waypoints
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function interpolateAt(t) {
+  const start = getStart();
+  const end = getEnd();
+  const wps = getWaypoints();
+
+  // Build keyframe list: start(0) → waypoints → end(1)
+  const keyframes = [
+    { t: 0, ...start },
+    ...wps.map(wp => ({ t: wp.t / 100, center: wp.center, zoom: wp.zoom, pitch: wp.pitch, bearing: wp.bearing })),
+    { t: 1, ...end }
+  ];
+
+  // Find segment
+  let a_kf = keyframes[0], b_kf = keyframes[keyframes.length - 1];
+  for (let i = 0; i < keyframes.length - 1; i++) {
+    if (t >= keyframes[i].t && t <= keyframes[i + 1].t) {
+      a_kf = keyframes[i];
+      b_kf = keyframes[i + 1];
+      break;
+    }
+  }
+
+  const segLen = b_kf.t - a_kf.t;
+  const segT = segLen > 0 ? (t - a_kf.t) / segLen : 0;
+  // Ease in-out quad per segment
+  const eased = segT < 0.5 ? 2 * segT * segT : -1 + (4 - 2 * segT) * segT;
+
+  return {
+    center: [lerp(a_kf.center[0], b_kf.center[0], eased), lerp(a_kf.center[1], b_kf.center[1], eased)],
+    zoom: lerp(a_kf.zoom, b_kf.zoom, eased),
+    pitch: lerp(a_kf.pitch, b_kf.pitch, eased),
+    bearing: lerp(a_kf.bearing, b_kf.bearing, eased)
+  };
+}
+
+// Scroll handler
+const section = document.getElementById('scrollContainer');
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    const rect = section.getBoundingClientRect();
+    const scrollRange = section.offsetHeight - window.innerHeight;
+    if (scrollRange > 0) {
+      const t = Math.max(0, Math.min(1, -rect.top / scrollRange));
+      const state = interpolateAt(t);
+      map.jumpTo(state);
+
+      document.getElementById('progressFill').style.width = (t * 100) + '%';
+      document.getElementById('progressLabel').textContent = (t * 100).toFixed(0) + '%';
+      document.getElementById('currentVals').textContent =
+        `lat: ${state.center[1].toFixed(4)}  lng: ${state.center[0].toFixed(4)}\nzoom: ${state.zoom.toFixed(1)}  pitch: ${state.pitch.toFixed(0)}°  bearing: ${state.bearing.toFixed(0)}°`;
+    }
+    ticking = false;
+  });
+}, { passive: true });
+
+// Preview animation
+function previewAnimation() {
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  const scrollTarget = section.offsetHeight - window.innerHeight;
+  let startTime = null;
+  const duration = 5000;
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    const progress = Math.min((ts - startTime) / duration, 1);
+    window.scrollTo(0, progress * scrollTarget);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function resetToStart() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function jumpToEnd() {
+  window.scrollTo({ top: section.offsetHeight, behavior: 'smooth' });
+}
+
+// Output generation
+function updateOutput() {
+  const start = getStart();
+  const end = getEnd();
+  const wps = getWaypoints();
+
+  let code = `const START = { center: [${start.center[0]}, ${start.center[1]}], zoom: ${start.zoom}, pitch: ${start.pitch}, bearing: ${start.bearing} };\n`;
+  code += `const END = { center: [${end.center[0]}, ${end.center[1]}], zoom: ${end.zoom}, pitch: ${end.pitch}, bearing: ${end.bearing} };\n`;
+
+  if (wps.length > 0) {
+    code += `const WAYPOINTS = [\n`;
+    wps.forEach(wp => {
+      code += `  { t: ${wp.t / 100}, center: [${wp.center[0]}, ${wp.center[1]}], zoom: ${wp.zoom}, pitch: ${wp.pitch}, bearing: ${wp.bearing} },\n`;
+    });
+    code += `];\n`;
+  }
+
+  document.getElementById('codeOutput').textContent = code;
+}
+
+function copyOutput() {
+  navigator.clipboard.writeText(document.getElementById('codeOutput').textContent).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy Code', 1500);
+  });
+}
+
+// Update output on any input change
+document.getElementById('controls').addEventListener('input', updateOutput);
+updateOutput();
+</script>
+</body>
+</html>
