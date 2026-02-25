@@ -1752,28 +1752,7 @@ footer {
 @media (max-width: 768px) { .map-container { height: 450px; } .map-section-header h2 { font-size: 1.6rem; } }
 </style>
 
-<!-- TRAIL MAP -->
-<section class="map-section" id="trailMapSection">
-  <div class="map-section-header">
-    <h2>Explore the Mountain</h2>
-    <p>Live ski trails and lifts powered by OpenStreetMap</p>
-  </div>
-  <div style="position:relative;">
-    <div class="map-container" id="trailMap" style="height:600px;"></div>
-    <div id="trailMapSpinner" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;background:rgba(30,45,58,0.85);color:#fff;padding:16px 28px;border-radius:6px;font-family:'Lato',sans-serif;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:10px;">
-      <span style="display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;"></span>
-      Loading trail data…
-    </div>
-    <div id="trailLegend" style="position:absolute;bottom:30px;right:10px;z-index:5;background:rgba(255,255,255,0.92);backdrop-filter:blur(4px);border-radius:6px;padding:12px 16px;font-family:'Lato',sans-serif;font-size:0.75rem;box-shadow:0 2px 10px rgba(0,0,0,0.2);display:none;">
-      <div style="font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;color:#1e2d3a;font-size:0.7rem;">Trail Difficulty</div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="width:20px;height:3px;background:hsl(125,100%,33%);border-radius:2px;display:inline-block;"></span> Easy</div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="width:20px;height:3px;background:hsl(208,100%,33%);border-radius:2px;display:inline-block;"></span> Intermediate</div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="width:20px;height:3px;background:hsl(0,0%,0%);border-radius:2px;display:inline-block;"></span> Advanced / Expert</div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="width:20px;height:3px;background:hsl(34,100%,50%);border-radius:2px;display:inline-block;"></span> Freeride</div>
-      <div style="display:flex;align-items:center;gap:8px;"><span style="width:20px;height:3px;background:#555;border-radius:2px;display:inline-block;border-top:2px dashed #555;height:0;"></span> Lift</div>
-    </div>
-  </div>
-</section>
+<!-- TRAIL MAP (removed — replaced by Trail Explorer below) -->
 <style>
 @keyframes spin { to { transform: rotate(360deg); } }
 .mapboxgl-popup-content .trail-popup { font-family: 'Lato', sans-serif; }
@@ -1815,6 +1794,11 @@ footer {
   </div>
   <div style="position:relative;">
     <div class="trail-explorer-map" id="trailExplorerMap"></div>
+    <div id="mapInteractBlocker" style="position:absolute;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);cursor:default;transition:opacity 0.3s;">
+      <button id="mapInteractBtn" style="padding:14px 32px;background:#1e2d3a;color:#fff;border:2px solid #fff;border-radius:6px;font-family:'Lato',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:all 0.2s;">
+        ✦ Interact with Map
+      </button>
+    </div>
     <div id="trailExplorerSpinner">
       <span style="display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;"></span>
       Loading enriched trail data…
@@ -1941,8 +1925,8 @@ footer {
 
 <!-- MAP 3: Jackson Hole Village — Scroll-triggered Zoom -->
 <style>
-.village-scroll-section { position: relative; height: 200vh; background: #f7f5f2; padding-top: 0; }
-.village-scroll-sticky { position: sticky; top: 0; height: 80vh; overflow: hidden; }
+.village-scroll-section { position: relative; height: 200vh; background: #f7f5f2; padding-top: 80px; }
+.village-scroll-sticky { position: sticky; top: 80px; height: calc(100vh - 80px); overflow: hidden; }
 .village-scroll-header { position: absolute; top: 0; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; padding: 30px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 70%, transparent 100%); }
 .village-scroll-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
 .village-scroll-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; letter-spacing: 0.05em; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
@@ -2435,121 +2419,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   }
 })();
 
-// ===== TRAIL MAP =====
-(function() {
-  const map = new mapboxgl.Map({
-    container: 'trailMap',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: [-110.849, 43.588],
-    zoom: 13.5,
-    pitch: 60,
-    bearing: -30,
-    maxPitch: 85,
-    antialias: true
-  });
-  map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-  map.on('style.load', () => {
-    map.addSource('mapbox-dem-trail', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
-    map.setTerrain({ source: 'mapbox-dem-trail', exaggeration: 1.5 });
-    map.setFog({ color: 'rgba(186,210,235,0.4)', 'high-color': 'rgba(36,92,223,0.3)', 'horizon-blend': 0.02, 'space-color': 'rgba(11,11,25,1)', 'star-intensity': 0.1 });
-
-    // Fetch OSM data
-    const query = '[out:json][timeout:30];(way["piste:type"="downhill"](43.55,-110.92,43.62,-110.80);way["aerialway"](43.55,-110.92,43.62,-110.80);relation["piste:type"="downhill"](43.55,-110.92,43.62,-110.80););out body;>;out skel qt;';
-    fetch('https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query))
-      .then(r => r.json())
-      .then(data => {
-        document.getElementById('trailMapSpinner').style.display = 'none';
-        document.getElementById('trailLegend').style.display = 'block';
-        const geojson = osmtogeojson(data);
-
-        // Split into runs and lifts
-        const runs = { type: 'FeatureCollection', features: geojson.features.filter(f => f.geometry.type !== 'Point' && f.properties['piste:type'] === 'downhill') };
-        const lifts = { type: 'FeatureCollection', features: geojson.features.filter(f => f.geometry.type !== 'Point' && f.properties.aerialway) };
-
-        // Difficulty color function
-        const diffColor = ['match', ['get', 'piste:difficulty'],
-          'novice', 'hsl(125,100%,33%)', 'easy', 'hsl(125,100%,33%)',
-          'intermediate', 'hsl(208,100%,33%)',
-          'advanced', 'hsl(0,0%,0%)', 'expert', 'hsl(0,0%,0%)',
-          'freeride', 'hsl(34,100%,50%)',
-          'hsl(208,100%,33%)' // default
-        ];
-
-        map.addSource('runs', { type: 'geojson', data: runs });
-        map.addSource('lifts', { type: 'geojson', data: lifts });
-
-        // Run casing
-        map.addLayer({ id: 'runs-casing', type: 'line', source: 'runs', paint: { 'line-color': '#000', 'line-width': 5, 'line-opacity': 0.35 } });
-        // Runs
-        map.addLayer({ id: 'runs-line', type: 'line', source: 'runs', paint: { 'line-color': diffColor, 'line-width': 3 } });
-        // Lifts
-        map.addLayer({ id: 'lifts-line', type: 'line', source: 'lifts', paint: { 'line-color': '#555', 'line-width': 2, 'line-dasharray': [4, 3] } });
-        // Run labels
-        map.addLayer({ id: 'runs-label', type: 'symbol', source: 'runs', layout: { 'symbol-placement': 'line', 'text-field': ['get', 'name'], 'text-size': 11, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-allow-overlap': false }, paint: { 'text-color': '#fff', 'text-halo-color': 'rgba(0,0,0,0.7)', 'text-halo-width': 1.5 } });
-        // Lift labels
-        map.addLayer({ id: 'lifts-label', type: 'symbol', source: 'lifts', layout: { 'symbol-placement': 'line', 'text-field': ['get', 'name'], 'text-size': 11, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-allow-overlap': false }, paint: { 'text-color': '#ddd', 'text-halo-color': 'rgba(0,0,0,0.7)', 'text-halo-width': 1.5 } });
-
-        // OpenSkiMap-style popup helpers
-        const OSM_COLORS = { novice:'hsl(125,100%,33%)',easy:'hsl(125,100%,33%)',intermediate:'hsl(208,100%,33%)',advanced:'hsl(0,0%,0%)',expert:'hsl(0,0%,0%)',freeride:'hsl(34,100%,50%)',extreme:'hsl(34,100%,50%)' };
-        const OSM_LABELS = {novice:'Novice',easy:'Easy',intermediate:'Intermediate',advanced:'Advanced',expert:'Expert',freeride:'Freeride',extreme:'Extreme'};
-        function osmBadgeSVG(diff) {
-          const c = OSM_COLORS[diff] || '#888';
-          switch(diff) {
-            case 'novice': case 'easy': return '<svg class="trail-badge" width="18" height="18"><circle cx="9" cy="9" r="8" fill="'+c+'"/></svg>';
-            case 'intermediate': return '<svg class="trail-badge" width="18" height="18"><rect x="1" y="1" width="16" height="16" fill="'+c+'"/></svg>';
-            case 'advanced': case 'expert': return '<svg class="trail-badge" width="18" height="18"><polygon points="9,1 17,9 9,17 1,9" fill="'+c+'"/></svg>';
-            case 'freeride': case 'extreme': return '<svg class="trail-badge" width="18" height="18"><polygon points="9,1 17,9 9,17 1,9" fill="'+c+'" stroke="#fff" stroke-width="1"/></svg>';
-            default: return '<svg class="trail-badge" width="18" height="18"><circle cx="9" cy="9" r="8" fill="#888"/></svg>';
-          }
-        }
-
-        // Click popups - runs (OpenSkiMap style)
-        map.on('click', 'runs-line', (e) => {
-          const p = e.features[0].properties;
-          const diff = p['piste:difficulty'] || 'unknown';
-          const badge = osmBadgeSVG(diff);
-          const refBadge = p.ref ? '<span class="ref-badge">' + p.ref + '</span> ' : '';
-          const name = p.name || 'Unnamed Run';
-          const diffLabel = OSM_LABELS[diff] || (diff.charAt(0).toUpperCase() + diff.slice(1));
-          const diffColor = OSM_COLORS[diff] || '#888';
-
-          let html = '<div class="trail-popup"><h3>' + badge + refBadge + name + '</h3>';
-          html += '<div class="diff-label" style="color:' + diffColor + '">' + diffLabel + '</div>';
-          if (p['piste:grooming']) html += '<div class="detail"><strong>Grooming:</strong> ' + p['piste:grooming'].replace(/_/g, ' ') + '</div>';
-          if (p.snowmaking === 'yes') html += '<div class="detail">❄️ Snowmaking</div>';
-          if (p['piste:lit'] === 'yes') html += '<div class="detail">💡 Night skiing</div>';
-          if (p.gladed === 'yes') html += '<div class="detail">🌲 Gladed</div>';
-          if (p.mogul === 'yes') html += '<div class="detail">⛷ Moguls</div>';
-          html += '</div>';
-          new mapboxgl.Popup({ offset: 12, maxWidth: '280px' }).setLngLat(e.lngLat).setHTML(html).addTo(map);
-        });
-
-        // Click popups - lifts (OpenSkiMap style)
-        map.on('click', 'lifts-line', (e) => {
-          const p = e.features[0].properties;
-          const liftType = (p.aerialway || '').replace(/_/g, ' ');
-          let html = '<div class="trail-popup"><h3>🚡 ' + (p.name || 'Unnamed Lift') + '</h3>';
-          if (liftType) html += '<div class="detail" style="text-transform:capitalize">' + liftType + '</div>';
-          if (p['aerialway:occupancy']) html += '<div class="detail"><strong>Occupancy:</strong> ' + p['aerialway:occupancy'] + '</div>';
-          if (p['aerialway:heating'] === 'yes') html += '<div class="detail">🔥 Heated</div>';
-          if (p['aerialway:bubble'] === 'yes') html += '<div class="detail">🫧 Bubble cover</div>';
-          html += '</div>';
-          new mapboxgl.Popup({ offset: 12, maxWidth: '280px' }).setLngLat(e.lngLat).setHTML(html).addTo(map);
-        });
-
-        // Cursor
-        map.on('mouseenter', 'runs-line', () => map.getCanvas().style.cursor = 'pointer');
-        map.on('mouseleave', 'runs-line', () => map.getCanvas().style.cursor = '');
-        map.on('mouseenter', 'lifts-line', () => map.getCanvas().style.cursor = 'pointer');
-        map.on('mouseleave', 'lifts-line', () => map.getCanvas().style.cursor = '');
-      })
-      .catch(err => {
-        console.error('Trail data error:', err);
-        document.getElementById('trailMapSpinner').innerHTML = '⚠ Failed to load trail data';
-      });
-  });
-})();
+// (Old Explore the Mountain trail map removed — replaced by Trail Explorer)
 
 // ===== TRAIL EXPLORER (OpenSkiData enriched) =====
 (function() {
@@ -2594,9 +2464,25 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     pitch: 60,
     bearing: -30,
     maxPitch: 85,
-    antialias: true
+    antialias: true,
+    interactive: false
   });
   teMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+  // Interact button — enables map interaction
+  document.getElementById('mapInteractBtn').addEventListener('click', () => {
+    teMap.scrollZoom.enable();
+    teMap.boxZoom.enable();
+    teMap.dragRotate.enable();
+    teMap.dragPan.enable();
+    teMap.keyboard.enable();
+    teMap.doubleClickZoom.enable();
+    teMap.touchZoomRotate.enable();
+    teMap.touchPitch.enable();
+    const blocker = document.getElementById('mapInteractBlocker');
+    blocker.style.opacity = '0';
+    setTimeout(() => blocker.style.display = 'none', 300);
+  });
 
   teMap.on('style.load', () => {
     teMap.addSource('mapbox-dem-te', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
