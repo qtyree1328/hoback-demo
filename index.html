@@ -1734,18 +1734,18 @@ footer {
   </div>
 </div>
 
-<!-- ===== 3D MAP SECTIONS ===== -->
+<!-- ===== MAP LIBRARIES ===== -->
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.js"></script>
-<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
-<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<link href="https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.js"></script>
 <script src="https://unpkg.com/osmtogeojson@3.0.0-beta.5/osmtogeojson.js"></script>
 <style>
 .map-section { background: #f7f5f2; padding: 60px 0 0; }
 .map-section-header { text-align: center; padding: 0 30px 30px; }
 .map-section-header h2 { font-family: 'Lato', sans-serif; color: #1e2d3a; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
 .map-section-header p { color: #5a6d7a; font-size: 0.9rem; letter-spacing: 0.05em; }
-.map-container { width: 100%; height: 650px; position: relative; }
+.map-container { width: 100%; height: 600px; position: relative; }
 .map-container .mapboxgl-popup-content, .map-container .maplibregl-popup-content { font-family: 'Lato', sans-serif; padding: 14px 18px; border-radius: 4px; }
 .map-container .mapboxgl-popup-content h3, .map-container .maplibregl-popup-content h3 { font-size: 0.95rem; color: #1e2d3a; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.08em; }
 .map-container .mapboxgl-popup-content p, .map-container .maplibregl-popup-content p { font-size: 0.85rem; color: #555; margin: 0; }
@@ -1753,33 +1753,6 @@ footer {
 .map-marker:hover { transform: scale(1.2); }
 @media (max-width: 768px) { .map-container { height: 450px; } .map-section-header h2 { font-size: 1.6rem; } }
 </style>
-
-<!-- MAP 1: Mapbox 3D Terrain -->
-<section class="map-section" id="map1Section">
-  <div class="map-section-header">
-    <h2>Explore the Valley — Mapbox</h2>
-    <p>Interactive 3D terrain powered by Mapbox GL JS with elevation data</p>
-  </div>
-  <div class="map-container" id="map1"></div>
-</section>
-
-<!-- MAP 2: MapLibre 3D Terrain -->
-<section class="map-section" id="map2Section">
-  <div class="map-section-header">
-    <h2>Explore the Valley — MapLibre</h2>
-    <p>Open-source 3D mapping with MapLibre GL JS — no paid token required</p>
-  </div>
-  <div class="map-container" id="map2"></div>
-</section>
-
-<!-- MAP 3: Village 3D -->
-<section class="map-section" id="map3Section" style="padding-bottom: 60px;">
-  <div class="map-section-header">
-    <h2>Jackson Hole Village 3D</h2>
-    <p>A cinematic virtual tour of the village with 3D buildings and satellite imagery</p>
-  </div>
-  <div class="map-container" id="map3"></div>
-</section>
 
 <!-- TRAIL MAP -->
 <section class="map-section" id="trailMapSection">
@@ -1810,6 +1783,33 @@ footer {
 .trail-popup .trail-badge { display:inline-block; }
 .trail-popup .detail { font-size:0.8rem; color:#555; margin:2px 0; }
 </style>
+
+<!-- MAP 1: Mapbox 3D Terrain -->
+<section class="map-section" id="map1Section">
+  <div class="map-section-header">
+    <h2>Explore the Valley</h2>
+    <p>Interactive 3D terrain powered by Mapbox GL JS · satellite imagery with elevation data</p>
+  </div>
+  <div class="map-container" id="map1"></div>
+</section>
+
+<!-- MAP 2: MapLibre 3D Terrain (Free) -->
+<section class="map-section" id="map2Section">
+  <div class="map-section-header">
+    <h2>Explore the Valley</h2>
+    <p>Open-source 3D mapping with MapLibre GL JS — no API key required</p>
+  </div>
+  <div class="map-container" id="map2"></div>
+</section>
+
+<!-- MAP 3: Village 3D Buildings -->
+<section class="map-section" id="map3Section" style="padding-bottom: 60px;">
+  <div class="map-section-header">
+    <h2>Jackson Hole Village 3D</h2>
+    <p>Cinematic satellite view with 3D buildings · auto-rotating camera · Mapbox GL JS</p>
+  </div>
+  <div class="map-container" id="map3"></div>
+</section>
 
 <!-- MEMBERSHIP PANEL -->
 <section class="panel-2">
@@ -2164,7 +2164,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
         .setPopup(popup)
         .addTo(map);
       el.addEventListener('click', () => {
-        map.flyTo({ center: [poi.lng, poi.lat], zoom: isMapbox ? 13 : 12, pitch: 55, duration: 2000 });
+        map.flyTo({ center: [poi.lng, poi.lat], zoom: isMapbox ? 14 : 12, pitch: 65, duration: 2000 });
       });
     });
   }
@@ -2198,16 +2198,25 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   map1.on('style.load', () => {
     map1.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
     map1.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+    map1.setFog({ color: 'rgba(186,210,235,0.5)', 'high-color': 'rgba(36,92,223,0.4)', 'horizon-blend': 0.02, 'space-color': 'rgba(11,11,25,1)', 'star-intensity': 0.6 });
     addMarkers(map1, POIS, 'mapbox');
   });
   observeAndAnimate('map1Section', () => {
     map1.flyTo({ center: [-110.7624, 43.4799], zoom: 11, pitch: 60, bearing: -20, duration: 4000, essential: true });
   });
 
-  // MAP 2: MapLibre
+  // MAP 2: MapLibre (free — OSM + Terrarium DEM)
   const map2 = new maplibregl.Map({
     container: 'map2',
-    style: 'https://tiles.openfreemap.org/styles/liberty',
+    style: {
+      version: 8,
+      sources: {
+        osm: { type: 'raster', tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, maxzoom: 19, attribution: '© OpenStreetMap' },
+        terrainSource: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], encoding: 'terrarium', tileSize: 256, maxzoom: 15 }
+      },
+      layers: [{ id: 'osm', type: 'raster', source: 'osm' }],
+      terrain: { source: 'terrainSource', exaggeration: 1.5 }
+    },
     center: [-110.7624, 43.8],
     zoom: 8,
     pitch: 20,
