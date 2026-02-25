@@ -1737,8 +1737,6 @@ footer {
 <!-- ===== MAP LIBRARIES ===== -->
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.js"></script>
-<link href="https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.css" rel="stylesheet">
-<script src="https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.js"></script>
 <script src="https://unpkg.com/osmtogeojson@3.0.0-beta.5/osmtogeojson.js"></script>
 <style>
 .map-section { background: #f7f5f2; padding: 60px 0 0; }
@@ -1746,9 +1744,9 @@ footer {
 .map-section-header h2 { font-family: 'Lato', sans-serif; color: #1e2d3a; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
 .map-section-header p { color: #5a6d7a; font-size: 0.9rem; letter-spacing: 0.05em; }
 .map-container { width: 100%; height: 600px; position: relative; }
-.map-container .mapboxgl-popup-content, .map-container .maplibregl-popup-content { font-family: 'Lato', sans-serif; padding: 14px 18px; border-radius: 4px; }
-.map-container .mapboxgl-popup-content h3, .map-container .maplibregl-popup-content h3 { font-size: 0.95rem; color: #1e2d3a; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.08em; }
-.map-container .mapboxgl-popup-content p, .map-container .maplibregl-popup-content p { font-size: 0.85rem; color: #555; margin: 0; }
+.map-container .mapboxgl-popup-content { font-family: 'Lato', sans-serif; padding: 14px 18px; border-radius: 4px; }
+.map-container .mapboxgl-popup-content h3 { font-size: 0.95rem; color: #1e2d3a; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+.map-container .mapboxgl-popup-content p { font-size: 0.85rem; color: #555; margin: 0; }
 .map-marker { width: 28px; height: 28px; background: #1e2d3a; border: 3px solid #fff; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: transform 0.2s; }
 .map-marker:hover { transform: scale(1.2); }
 @media (max-width: 768px) { .map-container { height: 450px; } .map-section-header h2 { font-size: 1.6rem; } }
@@ -1786,31 +1784,132 @@ footer {
 .trail-popup .diff-label { font-size:0.82rem; font-weight:600; margin-top:2px; }
 </style>
 
-<!-- MAP 1: Mapbox 3D Terrain -->
-<section class="map-section" id="map1Section">
-  <div class="map-section-header">
+<!-- MAP 1: Explore the Valley — 50/50 Panel + Map -->
+<style>
+.valley-explorer { background: #f7f5f2; min-height: 700px; padding: 60px 0 0; }
+.valley-explorer-header { text-align: center; padding: 0 30px 30px; }
+.valley-explorer-header h2 { font-family: 'Lato', sans-serif; color: #1e2d3a; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+.valley-explorer-header p { color: #5a6d7a; font-size: 0.9rem; letter-spacing: 0.05em; }
+.valley-explorer-body { display: flex; min-height: 600px; }
+.valley-panel { flex: 0 0 50%; background: #f7f5f2; overflow-y: auto; max-height: 700px; }
+.valley-map-wrap { flex: 0 0 50%; position: relative; min-height: 600px; }
+.valley-map-wrap #map1 { width: 100%; height: 100%; position: absolute; inset: 0; }
+.valley-loc { border-bottom: 1px solid #e8e4df; cursor: pointer; transition: background 0.3s; }
+.valley-loc:hover { background: #edeae6; }
+.valley-loc-head { padding: 20px 28px; display: flex; align-items: center; gap: 14px; }
+.valley-loc-num { width: 28px; height: 28px; border-radius: 50%; background: #1e2d3a; color: #fff; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.valley-loc-info { flex: 1; }
+.valley-loc-name { font-size: 1rem; font-weight: 700; color: #1e2d3a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+.valley-loc-preview { font-size: 0.82rem; color: #5a6d7a; line-height: 1.4; }
+.valley-loc-expand { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1); }
+.valley-loc.active .valley-loc-expand { max-height: 500px; }
+.valley-loc.active { background: #fff; }
+.valley-loc-detail { padding: 0 28px 24px; }
+.valley-loc-detail img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-bottom: 14px; }
+.valley-loc-detail p { font-size: 0.9rem; color: #3a4f5e; line-height: 1.7; }
+@media (max-width: 768px) {
+  .valley-explorer-body { flex-direction: column; }
+  .valley-panel { flex: none; max-height: none; }
+  .valley-map-wrap { flex: none; height: 450px; position: relative; }
+  .valley-map-wrap #map1 { position: absolute; }
+}
+</style>
+<section class="valley-explorer" id="map1Section">
+  <div class="valley-explorer-header">
     <h2>Explore the Valley</h2>
-    <p>Interactive 3D terrain powered by Mapbox GL JS · satellite imagery with elevation data</p>
+    <p>Discover the best of Jackson Hole and beyond</p>
   </div>
-  <div class="map-container" id="map1"></div>
+  <div class="valley-explorer-body">
+    <div class="valley-panel" id="valleyPanel">
+      <div class="valley-loc" data-idx="0">
+        <div class="valley-loc-head">
+          <div class="valley-loc-num">1</div>
+          <div class="valley-loc-info">
+            <div class="valley-loc-name">Grand Teton National Park</div>
+            <div class="valley-loc-preview">Iconic peaks rising to 13,775 feet</div>
+          </div>
+        </div>
+        <div class="valley-loc-expand"><div class="valley-loc-detail">
+          <img src="https://images.unsplash.com/photo-1565182999561-18d7dc61c393?w=600&h=400&fit=crop" alt="Grand Teton">
+          <p>Iconic peaks rising to 13,775 feet. World-class mountaineering, hiking, and wildlife viewing in one of America's most dramatic landscapes.</p>
+        </div></div>
+      </div>
+      <div class="valley-loc" data-idx="1">
+        <div class="valley-loc-head">
+          <div class="valley-loc-num">2</div>
+          <div class="valley-loc-info">
+            <div class="valley-loc-name">Hoback Club</div>
+            <div class="valley-loc-preview">An exclusive mountain retreat</div>
+          </div>
+        </div>
+        <div class="valley-loc-expand"><div class="valley-loc-detail">
+          <img src="images/card-discover.jpg" alt="Hoback Club">
+          <p>An exclusive mountain retreat nestled at the base of Jackson Hole Mountain Resort. Private ski-in/ski-out access with luxury amenities.</p>
+        </div></div>
+      </div>
+      <div class="valley-loc" data-idx="2">
+        <div class="valley-loc-head">
+          <div class="valley-loc-num">3</div>
+          <div class="valley-loc-info">
+            <div class="valley-loc-name">Snake River</div>
+            <div class="valley-loc-preview">Blue-ribbon trout fishing</div>
+          </div>
+        </div>
+        <div class="valley-loc-expand"><div class="valley-loc-detail">
+          <img src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=600&h=400&fit=crop" alt="Snake River">
+          <p>Blue-ribbon trout fishing through pristine canyon waters. Scenic float trips beneath the Tetons with opportunities to spot bald eagles, moose, and otters.</p>
+        </div></div>
+      </div>
+      <div class="valley-loc" data-idx="3">
+        <div class="valley-loc-head">
+          <div class="valley-loc-num">4</div>
+          <div class="valley-loc-info">
+            <div class="valley-loc-name">Jackson Hole Town</div>
+            <div class="valley-loc-preview">Vibrant mountain town culture</div>
+          </div>
+        </div>
+        <div class="valley-loc-expand"><div class="valley-loc-detail">
+          <img src="https://images.unsplash.com/photo-1578983427937-26078ee3d9d3?w=600&h=400&fit=crop" alt="Jackson Hole Town">
+          <p>A vibrant mountain town centered around the iconic elk antler arches of Town Square. Fine dining, western galleries, and après-ski culture.</p>
+        </div></div>
+      </div>
+      <div class="valley-loc" data-idx="4">
+        <div class="valley-loc-head">
+          <div class="valley-loc-num">5</div>
+          <div class="valley-loc-info">
+            <div class="valley-loc-name">Yellowstone National Park</div>
+            <div class="valley-loc-preview">The world's first national park</div>
+          </div>
+        </div>
+        <div class="valley-loc-expand"><div class="valley-loc-detail">
+          <img src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600&h=400&fit=crop" alt="Yellowstone">
+          <p>The world's first national park, just an hour north. Old Faithful, Grand Prismatic Spring, and the largest concentration of wildlife in the lower 48.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="valley-map-wrap">
+      <div id="map1"></div>
+    </div>
+  </div>
 </section>
 
-<!-- MAP 2: MapLibre 3D Terrain (Free) -->
-<section class="map-section" id="map2Section">
-  <div class="map-section-header">
-    <h2>Explore the Valley</h2>
-    <p>Open-source 3D mapping with MapLibre GL JS — no API key required</p>
+<!-- MAP 3: Jackson Hole Village — Scroll-triggered Zoom -->
+<style>
+.village-scroll-section { position: relative; height: 150vh; background: #f7f5f2; padding-top: 0; }
+.village-scroll-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.village-scroll-header { position: absolute; top: 30px; left: 0; right: 0; text-align: center; z-index: 5; pointer-events: none; }
+.village-scroll-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+.village-scroll-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; letter-spacing: 0.05em; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+#map3 { width: 100%; height: 100%; }
+</style>
+<section class="village-scroll-section" id="map3Section">
+  <div class="village-scroll-sticky">
+    <div class="village-scroll-header">
+      <h2>Jackson Hole Village</h2>
+      <p>Scroll to explore from the Tetons to Teton Village</p>
+    </div>
+    <div id="map3" style="width:100%;height:100%;"></div>
   </div>
-  <div class="map-container" id="map2"></div>
-</section>
-
-<!-- MAP 3: Village 3D Buildings -->
-<section class="map-section" id="map3Section" style="padding-bottom: 60px;">
-  <div class="map-section-header">
-    <h2>Jackson Hole Village 3D</h2>
-    <p>Cinematic satellite view with 3D buildings · auto-rotating camera · Mapbox GL JS</p>
-  </div>
-  <div class="map-container" id="map3"></div>
 </section>
 
 <!-- MEMBERSHIP PANEL -->
@@ -2137,63 +2236,24 @@ document.querySelectorAll('.cam-fade').forEach(img => {
 // ===== 3D MAPS =====
 (function() {
   const MAPBOX_TOKEN = ['pk.eyJ1IjoicXR5cm','VlIiwiYSI6ImNtaHl5','eHNmeDBoY3oybXEwNT','IxNGgxYmsifQ.VqoAK','KHQxQX-lNNPwVKHmw'].join('');
-  const POIS = [
-    { name: 'Jackson Hole Mountain Resort', lng: -110.8279, lat: 43.5877, desc: "World-class skiing with 4,139' vertical drop" },
-    { name: 'Grand Teton National Park', lng: -110.6818, lat: 43.7904, desc: 'Iconic peaks and hiking trails' },
-    { name: 'Snake River', lng: -110.7571, lat: 43.4857, desc: 'Blue-ribbon trout fishing' },
-    { name: 'Yellowstone', lng: -110.5885, lat: 44.4280, desc: 'Wildlife and geysers' },
-    { name: 'Jackson Town Square', lng: -110.7624, lat: 43.4799, desc: 'Dining, shopping, and entertainment' }
-  ];
-  const VILLAGE_POIS = [
-    { name: 'Town Square', lng: -110.7624, lat: 43.4799, desc: 'Heart of Jackson — elk antler arches' },
-    { name: 'The Kitchen', lng: -110.7610, lat: 43.4790, desc: 'Farm-to-table dining' },
-    { name: 'Center for the Arts', lng: -110.7645, lat: 43.4785, desc: 'Galleries and performances' },
-    { name: 'Million Dollar Cowboy Bar', lng: -110.7628, lat: 43.4797, desc: 'Iconic western saloon' },
-    { name: 'Persephone Bakery', lng: -110.7615, lat: 43.4803, desc: 'Artisan pastries and coffee' }
+
+  const LOCATIONS = [
+    { name: 'Grand Teton National Park', lat: 43.7904, lng: -110.6818, zoom: 11 },
+    { name: 'Hoback Club', lat: 43.5877, lng: -110.8279, zoom: 14 },
+    { name: 'Snake River', lat: 43.4857, lng: -110.7571, zoom: 12 },
+    { name: 'Jackson Hole Town', lat: 43.4799, lng: -110.7624, zoom: 14 },
+    { name: 'Yellowstone National Park', lat: 44.4280, lng: -110.5885, zoom: 9 }
   ];
 
-  function addMarkers(map, pois, lib) {
-    const isMapbox = lib === 'mapbox';
-    pois.forEach(poi => {
-      const el = document.createElement('div');
-      el.className = 'map-marker';
-      const PopupClass = isMapbox ? mapboxgl.Popup : maplibregl.Popup;
-      const MarkerClass = isMapbox ? mapboxgl.Marker : maplibregl.Marker;
-      const popup = new PopupClass({ offset: 20, maxWidth: '260px' })
-        .setHTML('<h3>' + poi.name + '</h3><p>' + poi.desc + '</p>');
-      const marker = new MarkerClass({ element: el })
-        .setLngLat([poi.lng, poi.lat])
-        .setPopup(popup)
-        .addTo(map);
-      el.addEventListener('click', () => {
-        map.flyTo({ center: [poi.lng, poi.lat], zoom: isMapbox ? 14 : 12, pitch: 65, duration: 2000 });
-      });
-    });
-  }
-
-  function observeAndAnimate(sectionId, callback) {
-    let fired = false;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !fired) {
-          fired = true;
-          callback();
-          observer.disconnect();
-        }
-      });
-    }, { threshold: 0.2 });
-    observer.observe(document.getElementById(sectionId));
-  }
-
-  // MAP 1: Mapbox 3D Terrain
+  // MAP 1: Valley Explorer with Panel
   mapboxgl.accessToken = MAPBOX_TOKEN;
   const map1 = new mapboxgl.Map({
     container: 'map1',
     style: 'mapbox://styles/mapbox/outdoors-v12',
-    center: [-110.7624, 43.8],
-    zoom: 8,
-    pitch: 20,
-    bearing: -20,
+    center: [-110.75, 43.65],
+    zoom: 9,
+    pitch: 40,
+    bearing: 0,
     antialias: true
   });
   map1.addControl(new mapboxgl.NavigationControl(), 'top-right');
@@ -2201,62 +2261,50 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     map1.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
     map1.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
     map1.setFog({ color: 'rgba(186,210,235,0.5)', 'high-color': 'rgba(36,92,223,0.4)', 'horizon-blend': 0.02, 'space-color': 'rgba(11,11,25,1)', 'star-intensity': 0.6 });
-    addMarkers(map1, POIS, 'mapbox');
-  });
-  observeAndAnimate('map1Section', () => {
-    map1.flyTo({ center: [-110.7624, 43.4799], zoom: 11, pitch: 60, bearing: -20, duration: 4000, essential: true });
   });
 
-  // MAP 2: MapLibre (free — OSM + Terrarium DEM)
-  const map2 = new maplibregl.Map({
-    container: 'map2',
-    style: {
-      version: 8,
-      sources: {
-        osm: { type: 'raster', tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, maxzoom: 19, attribution: '© OpenStreetMap' },
-        terrainSource: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], encoding: 'terrarium', tileSize: 256, maxzoom: 15 }
-      },
-      layers: [{ id: 'osm', type: 'raster', source: 'osm' }],
-      terrain: { source: 'terrainSource', exaggeration: 1.5 }
-    },
-    center: [-110.7624, 43.8],
-    zoom: 8,
-    pitch: 20,
-    bearing: -20
-  });
-  map2.addControl(new maplibregl.NavigationControl(), 'top-right');
-  map2.on('load', () => {
-    addMarkers(map2, POIS, 'maplibre');
-  });
-  observeAndAnimate('map2Section', () => {
-    map2.flyTo({ center: [-110.7624, 43.4799], zoom: 11, pitch: 55, bearing: -20, duration: 4000, essential: true });
+  // Valley panel accordion + flyTo
+  const panel = document.getElementById('valleyPanel');
+  const locs = panel.querySelectorAll('.valley-loc');
+  locs.forEach(loc => {
+    loc.addEventListener('click', () => {
+      const idx = parseInt(loc.dataset.idx);
+      const wasActive = loc.classList.contains('active');
+      locs.forEach(l => l.classList.remove('active'));
+      if (!wasActive) {
+        loc.classList.add('active');
+        const dest = LOCATIONS[idx];
+        map1.flyTo({ center: [dest.lng, dest.lat], zoom: dest.zoom, pitch: 55, duration: 2500 });
+      } else {
+        map1.flyTo({ center: [-110.75, 43.65], zoom: 9, pitch: 40, duration: 2000 });
+      }
+    });
   });
 
-  // MAP 3: Village 3D
+  // MAP 3: Scroll-triggered Teton → Village zoom
+  const START = { center: [-110.75, 43.75], zoom: 10, pitch: 50, bearing: -15 };
+  const END = { center: [-110.8279, 43.5877], zoom: 15.5, pitch: 70, bearing: 20 };
+
   const map3 = new mapboxgl.Map({
     container: 'map3',
     style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: [-110.7624, 43.4799],
-    zoom: 16,
-    pitch: 70,
-    bearing: 30,
-    antialias: true
+    center: START.center,
+    zoom: START.zoom,
+    pitch: START.pitch,
+    bearing: START.bearing,
+    antialias: true,
+    interactive: true
   });
   map3.addControl(new mapboxgl.NavigationControl(), 'top-right');
   map3.on('style.load', () => {
     map3.addSource('mapbox-dem-v', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
     map3.setTerrain({ source: 'mapbox-dem-v', exaggeration: 1.5 });
-    // 3D buildings
     const layers = map3.getStyle().layers;
     let labelLayerId;
     for (const layer of layers) { if (layer.type === 'symbol' && layer.layout['text-field']) { labelLayerId = layer.id; break; } }
     map3.addLayer({
-      id: '3d-buildings',
-      source: 'composite',
-      'source-layer': 'building',
-      filter: ['==', 'extrude', 'true'],
-      type: 'fill-extrusion',
-      minzoom: 14,
+      id: '3d-buildings', source: 'composite', 'source-layer': 'building',
+      filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 14,
       paint: {
         'fill-extrusion-color': '#aaa',
         'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 14, 0, 14.05, ['get', 'height']],
@@ -2264,20 +2312,35 @@ document.querySelectorAll('.cam-fade').forEach(img => {
         'fill-extrusion-opacity': 0.7
       }
     }, labelLayerId);
-    addMarkers(map3, VILLAGE_POIS, 'mapbox');
   });
-  // Auto-rotate
-  let rotating = true;
-  function rotateCamera() {
-    if (!rotating) return;
-    map3.rotateTo(map3.getBearing() + 0.3, { duration: 50, easing: t => t });
-    requestAnimationFrame(rotateCamera);
-  }
-  map3.on('mousedown', () => { rotating = false; });
-  map3.on('mouseup', () => { rotating = true; rotateCamera(); });
-  map3.on('touchstart', () => { rotating = false; });
-  map3.on('touchend', () => { rotating = true; rotateCamera(); });
-  observeAndAnimate('map3Section', () => { rotateCamera(); });
+
+  // Scroll-driven animation
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  const section3 = document.getElementById('map3Section');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        const rect = section3.getBoundingClientRect();
+        const sectionH = section3.offsetHeight;
+        const viewH = window.innerHeight;
+        const scrolled = -rect.top;
+        const scrollRange = sectionH - viewH;
+        if (scrollRange > 0) {
+          const t = Math.max(0, Math.min(1, scrolled / scrollRange));
+          const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // ease in-out quad
+          map3.jumpTo({
+            center: [lerp(START.center[0], END.center[0], eased), lerp(START.center[1], END.center[1], eased)],
+            zoom: lerp(START.zoom, END.zoom, eased),
+            pitch: lerp(START.pitch, END.pitch, eased),
+            bearing: lerp(START.bearing, END.bearing, eased)
+          });
+        }
+        ticking = false;
+      });
+    }
+  }, { passive: true });
 })();
 
 // ===== TRAIL MAP =====
