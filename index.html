@@ -2282,8 +2282,12 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   });
 
   // MAP 3: Scroll-triggered Teton → Village zoom
-  const START = { center: [-110.75, 43.75], zoom: 10, pitch: 50, bearing: -15 };
-  const END = { center: [-110.8279, 43.5877], zoom: 15.5, pitch: 70, bearing: 20 };
+  const START = { center: [-110.76963, 43.73576], zoom: 12.85, pitch: 74.5, bearing: -111.2 };
+  const END = { center: [-110.8339, 43.59484], zoom: 15.26, pitch: 84, bearing: -40 };
+  const WAYPOINTS = [
+    { t: 0.3, center: [-110.83825, 43.60253], zoom: 12.95, pitch: 76, bearing: -133.6 },
+    { t: 0.5, center: [-110.83247, 43.59941], zoom: 13.76, pitch: 85, bearing: -66.4 },
+  ];
 
   const map3 = new mapboxgl.Map({
     container: 'map3',
@@ -2292,6 +2296,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     zoom: START.zoom,
     pitch: START.pitch,
     bearing: START.bearing,
+    maxPitch: 85,
     antialias: true,
     interactive: false
   });
@@ -2313,35 +2318,49 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     }, labelLayerId);
   });
 
-  // Scroll-driven animation — starts when full section is in viewport
+  // Scroll-driven animation with waypoints — smooth cubic interpolation
   function lerp(a, b, t) { return a + (b - a) * t; }
-  const section3 = document.getElementById('map3Section');
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(() => {
-        const rect = section3.getBoundingClientRect();
-        const sectionH = section3.offsetHeight;
-        const viewH = window.innerHeight;
-        // Animation starts when section top reaches top of viewport (fully visible)
-        // and ends when section bottom reaches bottom of viewport
-        const scrollStart = 0; // rect.top == 0 means section top at viewport top
-        const scrollEnd = sectionH - viewH;
-        const scrolled = -rect.top;
-        if (scrollEnd > 0) {
-          const t = Math.max(0, Math.min(1, scrolled / scrollEnd));
-          const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-          map3.jumpTo({
-            center: [lerp(START.center[0], END.center[0], eased), lerp(START.center[1], END.center[1], eased)],
-            zoom: lerp(START.zoom, END.zoom, eased),
-            pitch: lerp(START.pitch, END.pitch, eased),
-            bearing: lerp(START.bearing, END.bearing, eased)
-          });
-        }
-        ticking = false;
-      });
+  function smoothstep(t) { return t * t * (3 - 2 * t); } // smoother than quad
+
+  // Build keyframe list
+  const keyframes = [
+    { t: 0, ...START },
+    ...WAYPOINTS.map(wp => ({ t: wp.t, center: wp.center, zoom: wp.zoom, pitch: wp.pitch, bearing: wp.bearing })),
+    { t: 1, ...END }
+  ].sort((a, b) => a.t - b.t);
+
+  function interpolateAt(t) {
+    let a = keyframes[0], b = keyframes[keyframes.length - 1];
+    for (let i = 0; i < keyframes.length - 1; i++) {
+      if (t >= keyframes[i].t && t <= keyframes[i + 1].t) {
+        a = keyframes[i]; b = keyframes[i + 1]; break;
+      }
     }
+    const segLen = b.t - a.t;
+    const segT = segLen > 0 ? (t - a.t) / segLen : 0;
+    const eased = smoothstep(segT);
+    return {
+      center: [lerp(a.center[0], b.center[0], eased), lerp(a.center[1], b.center[1], eased)],
+      zoom: lerp(a.zoom, b.zoom, eased),
+      pitch: lerp(a.pitch, b.pitch, eased),
+      bearing: lerp(a.bearing, b.bearing, eased)
+    };
+  }
+
+  const section3 = document.getElementById('map3Section');
+  let lastT = -1;
+  window.addEventListener('scroll', () => {
+    requestAnimationFrame(() => {
+      const rect = section3.getBoundingClientRect();
+      const scrollEnd = section3.offsetHeight - window.innerHeight;
+      if (scrollEnd > 0) {
+        const t = Math.max(0, Math.min(1, -rect.top / scrollEnd));
+        if (Math.abs(t - lastT) > 0.0005) { // only update on meaningful change
+          lastT = t;
+          map3.jumpTo(interpolateAt(t));
+        }
+      }
+    });
   }, { passive: true });
 })();
 
