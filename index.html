@@ -1782,6 +1782,8 @@ footer {
 .trail-popup h3 { display:flex; align-items:center; gap:8px; font-size:1rem; color:#1e2d3a; margin:0 0 6px; }
 .trail-popup .trail-badge { display:inline-block; }
 .trail-popup .detail { font-size:0.8rem; color:#555; margin:2px 0; }
+.trail-popup .ref-badge { display:inline-block; background:#eee; border-radius:3px; padding:0 5px; font-size:0.75rem; font-weight:600; margin-right:4px; color:#333; }
+.trail-popup .diff-label { font-size:0.82rem; font-weight:600; margin-top:2px; }
 </style>
 
 <!-- MAP 1: Mapbox 3D Terrain -->
@@ -2333,36 +2335,52 @@ document.querySelectorAll('.cam-fade').forEach(img => {
         // Lift labels
         map.addLayer({ id: 'lifts-label', type: 'symbol', source: 'lifts', layout: { 'symbol-placement': 'line', 'text-field': ['get', 'name'], 'text-size': 11, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-allow-overlap': false }, paint: { 'text-color': '#ddd', 'text-halo-color': 'rgba(0,0,0,0.7)', 'text-halo-width': 1.5 } });
 
-        // Click popups - runs
+        // OpenSkiMap-style popup helpers
+        const OSM_COLORS = { novice:'hsl(125,100%,33%)',easy:'hsl(125,100%,33%)',intermediate:'hsl(208,100%,33%)',advanced:'hsl(0,0%,0%)',expert:'hsl(0,0%,0%)',freeride:'hsl(34,100%,50%)',extreme:'hsl(34,100%,50%)' };
+        const OSM_LABELS = {novice:'Novice',easy:'Easy',intermediate:'Intermediate',advanced:'Advanced',expert:'Expert',freeride:'Freeride',extreme:'Extreme'};
+        function osmBadgeSVG(diff) {
+          const c = OSM_COLORS[diff] || '#888';
+          switch(diff) {
+            case 'novice': case 'easy': return '<svg class="trail-badge" width="18" height="18"><circle cx="9" cy="9" r="8" fill="'+c+'"/></svg>';
+            case 'intermediate': return '<svg class="trail-badge" width="18" height="18"><rect x="1" y="1" width="16" height="16" fill="'+c+'"/></svg>';
+            case 'advanced': case 'expert': return '<svg class="trail-badge" width="18" height="18"><polygon points="9,1 17,9 9,17 1,9" fill="'+c+'"/></svg>';
+            case 'freeride': case 'extreme': return '<svg class="trail-badge" width="18" height="18"><polygon points="9,1 17,9 9,17 1,9" fill="'+c+'" stroke="#fff" stroke-width="1"/></svg>';
+            default: return '<svg class="trail-badge" width="18" height="18"><circle cx="9" cy="9" r="8" fill="#888"/></svg>';
+          }
+        }
+
+        // Click popups - runs (OpenSkiMap style)
         map.on('click', 'runs-line', (e) => {
           const p = e.features[0].properties;
           const diff = p['piste:difficulty'] || 'unknown';
-          let badge = '';
-          const colors = { novice: 'hsl(125,100%,33%)', easy: 'hsl(125,100%,33%)', intermediate: 'hsl(208,100%,33%)', advanced: '#000', expert: '#000', freeride: 'hsl(34,100%,50%)' };
-          const c = colors[diff] || '#888';
-          if (diff === 'novice' || diff === 'easy') badge = '<svg class="trail-badge" width="18" height="18"><circle cx="9" cy="9" r="8" fill="'+c+'"/></svg>';
-          else if (diff === 'intermediate') badge = '<svg class="trail-badge" width="18" height="18"><rect x="1" y="1" width="16" height="16" fill="'+c+'"/></svg>';
-          else if (diff === 'advanced' || diff === 'expert') badge = '<svg class="trail-badge" width="18" height="18"><polygon points="9,1 17,17 1,17" fill="'+c+'"/></svg>';
-          else if (diff === 'freeride') badge = '<svg class="trail-badge" width="18" height="18"><polygon points="9,1 17,9 9,17 1,9" fill="'+c+'"/></svg>';
+          const badge = osmBadgeSVG(diff);
+          const refBadge = p.ref ? '<span class="ref-badge">' + p.ref + '</span> ' : '';
+          const name = p.name || 'Unnamed Run';
+          const diffLabel = OSM_LABELS[diff] || (diff.charAt(0).toUpperCase() + diff.slice(1));
+          const diffColor = OSM_COLORS[diff] || '#888';
 
-          let html = '<div class="trail-popup"><h3>' + badge + (p.name || 'Unnamed Run') + '</h3>';
-          html += '<div class="detail"><strong>Difficulty:</strong> ' + diff.charAt(0).toUpperCase() + diff.slice(1) + '</div>';
-          if (p['piste:grooming']) html += '<div class="detail"><strong>Grooming:</strong> ' + p['piste:grooming'] + '</div>';
+          let html = '<div class="trail-popup"><h3>' + badge + refBadge + name + '</h3>';
+          html += '<div class="diff-label" style="color:' + diffColor + '">' + diffLabel + '</div>';
+          if (p['piste:grooming']) html += '<div class="detail"><strong>Grooming:</strong> ' + p['piste:grooming'].replace(/_/g, ' ') + '</div>';
           if (p.snowmaking === 'yes') html += '<div class="detail">❄️ Snowmaking</div>';
-          if (p['piste:lit'] === 'yes') html += '<div class="detail">🌙 Night skiing</div>';
+          if (p['piste:lit'] === 'yes') html += '<div class="detail">💡 Night skiing</div>';
+          if (p.gladed === 'yes') html += '<div class="detail">🌲 Gladed</div>';
+          if (p.mogul === 'yes') html += '<div class="detail">⛷ Moguls</div>';
           html += '</div>';
-          new mapboxgl.Popup({ maxWidth: '280px' }).setLngLat(e.lngLat).setHTML(html).addTo(map);
+          new mapboxgl.Popup({ offset: 12, maxWidth: '280px' }).setLngLat(e.lngLat).setHTML(html).addTo(map);
         });
 
-        // Click popups - lifts
+        // Click popups - lifts (OpenSkiMap style)
         map.on('click', 'lifts-line', (e) => {
           const p = e.features[0].properties;
+          const liftType = (p.aerialway || '').replace(/_/g, ' ');
           let html = '<div class="trail-popup"><h3>🚡 ' + (p.name || 'Unnamed Lift') + '</h3>';
-          if (p.aerialway) html += '<div class="detail"><strong>Type:</strong> ' + p.aerialway.replace(/_/g, ' ') + '</div>';
-          if (p.occupancy) html += '<div class="detail"><strong>Occupancy:</strong> ' + p.occupancy + '</div>';
-          if (p.heated === 'yes') html += '<div class="detail">🔥 Heated</div>';
+          if (liftType) html += '<div class="detail" style="text-transform:capitalize">' + liftType + '</div>';
+          if (p['aerialway:occupancy']) html += '<div class="detail"><strong>Occupancy:</strong> ' + p['aerialway:occupancy'] + '</div>';
+          if (p['aerialway:heating'] === 'yes') html += '<div class="detail">🔥 Heated</div>';
+          if (p['aerialway:bubble'] === 'yes') html += '<div class="detail">🫧 Bubble cover</div>';
           html += '</div>';
-          new mapboxgl.Popup({ maxWidth: '280px' }).setLngLat(e.lngLat).setHTML(html).addTo(map);
+          new mapboxgl.Popup({ offset: 12, maxWidth: '280px' }).setLngLat(e.lngLat).setHTML(html).addTo(map);
         });
 
         // Cursor
