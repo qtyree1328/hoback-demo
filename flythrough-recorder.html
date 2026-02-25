@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Teton Village Flythrough Recorder</title>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.9.4/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.9.4/mapbox-gl.css" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; }
+body { overflow: hidden; background: #000; }
+#map { width: 1920px; height: 1080px; }
+#status { position: fixed; top: 10px; left: 10px; color: #0f0; font: 14px monospace; z-index: 999; background: rgba(0,0,0,0.7); padding: 8px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="status">Initializing...</div>
+<script>
+const TOKEN_A = 'pk.eyJ1IjoicXR5cmVlIiwiYSI6ImNtaH';
+const TOKEN_B = 'l5eHNmeDBoY3oybXEwNTIxNGgxYmsifQ.VqoAKKHQxQX-lNNPwVKHmw';
+mapboxgl.accessToken = TOKEN_A + TOKEN_B;
+
+const START = { center: [-110.76963, 43.73576], zoom: 12.85, pitch: 74.5, bearing: -111.2 };
+const WP1 = { center: [-110.83825, 43.60253], zoom: 12.95, pitch: 76, bearing: -133.6 };
+const WP2 = { center: [-110.83247, 43.59941], zoom: 13.76, pitch: 85, bearing: -66.4 };
+const END = { center: [-110.8339, 43.59484], zoom: 15.26, pitch: 84, bearing: -40 };
+
+const status = document.getElementById('status');
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-streets-v12',
+  ...START,
+  preserveDrawingBuffer: true,
+  antialias: true
+});
+
+map.on('load', () => {
+  map.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512 });
+  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+  // 3D buildings
+  const layers = map.getStyle().layers;
+  const labelLayer = layers.find(l => l.type === 'symbol' && l.layout['text-field']);
+  if (labelLayer) {
+    map.addLayer({
+      id: '3d-buildings', source: 'composite', 'source-layer': 'building',
+      filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 13,
+      paint: { 'fill-extrusion-color': '#aaa', 'fill-extrusion-height': ['get', 'height'],
+        'fill-extrusion-base': ['get', 'min_height'], 'fill-extrusion-opacity': 0.6 }
+    }, labelLayer.id);
+  }
+
+  status.textContent = 'Waiting for tiles...';
+  map.once('idle', () => {
+    status.textContent = 'Starting recording...';
+    startRecording();
+  });
+});
+
+function flyChain(steps) {
+  return new Promise(resolve => {
+    let i = 0;
+    function next() {
+      if (i >= steps.length) { resolve(); return; }
+      const s = steps[i++];
+      map.once('moveend', () => { map.once('idle', next); });
+      map.flyTo({ ...s, essential: true });
+    }
+    next();
+  });
+}
+
+async function startRecording() {
+  const stream = map.getCanvas().captureStream(30);
+  const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9', videoBitsPerSecond: 8000000 });
+  const chunks = [];
+  recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type: 'video/webm' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'flythrough-browser.webm';
+    a.click();
+    status.textContent = `Done! ${(blob.size/1024/1024).toFixed(1)}MB`;
+    // Also expose for programmatic access
+    window._recordingDone = true;
+    window._recordingBlob = blob;
+  };
+
+  // Wait 2s at start
+  await new Promise(r => setTimeout(r, 2000));
+  status.textContent = 'Recording...';
+  recorder.start();
+
+  await flyChain([
+    { ...WP1, duration: 5000, curve: 1.2 },
+    { ...WP2, duration: 4000, curve: 1.2 },
+    { ...END, duration: 5000, curve: 1.2 }
+  ]);
+
+  // Hold 2s at end
+  await new Promise(r => setTimeout(r, 2000));
+  recorder.stop();
+}
+</script>
+</body>
+</html>

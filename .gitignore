@@ -2,3 +2,7 @@
 *.py
 filter-openskidata.js
 enrich-data.py
+images/flythrough*.mp4
+images/flythrough*.webm
+node_modules/
+extract-webm.js
