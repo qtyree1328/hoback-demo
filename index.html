@@ -1925,18 +1925,18 @@ footer {
 
 <!-- MAP 3: Jackson Hole Village — Scroll-triggered Zoom -->
 <style>
-.village-scroll-section { position: relative; height: 200vh; background: #f7f5f2; padding-top: 80px; }
-.village-scroll-sticky { position: sticky; top: 80px; height: calc(100vh - 80px); overflow: hidden; }
+.village-scroll-section { position: relative; background: #f7f5f2; padding-top: 80px; }
+.village-scroll-map { height: calc(100vh - 80px); overflow: hidden; position: relative; }
 .village-scroll-header { position: absolute; top: 0; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; padding: 30px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 70%, transparent 100%); }
 .village-scroll-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
 .village-scroll-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; letter-spacing: 0.05em; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
 #map3 { width: 100%; height: 100%; }
 </style>
 <section class="village-scroll-section" id="map3Section">
-  <div class="village-scroll-sticky">
+  <div class="village-scroll-map">
     <div class="village-scroll-header">
       <h2>Teton Village</h2>
-      <p>Scroll to explore from the Tetons to Teton Village</p>
+      <p>Cinematic flythrough from the Tetons to Teton Village</p>
     </div>
     <div id="map3" style="width:100%;height:100%;"></div>
   </div>
@@ -2348,75 +2348,31 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     }, labelLayerId);
   });
 
-  // Scroll-driven animation with waypoints — smooth cubic interpolation
-  function lerp(a, b, t) { return a + (b - a) * t; }
-  function smoothstep(t) { return t * t * (3 - 2 * t); }
-
-  // Build keyframe list
-  const keyframes = [
-    { t: 0, ...START },
-    ...WAYPOINTS.map(wp => ({ t: wp.t, center: wp.center, zoom: wp.zoom, pitch: wp.pitch, bearing: wp.bearing })),
-    { t: 1, ...END }
-  ].sort((a, b) => a.t - b.t);
-
-  function interpolateAt(t) {
-    let a = keyframes[0], b = keyframes[keyframes.length - 1];
-    for (let i = 0; i < keyframes.length - 1; i++) {
-      if (t >= keyframes[i].t && t <= keyframes[i + 1].t) {
-        a = keyframes[i]; b = keyframes[i + 1]; break;
+  // Option B: Chained flyTo triggered when section scrolls into view
+  // Mapbox handles interpolation internally — much smoother than scroll-driven
+  let flyTriggered = false;
+  const flyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !flyTriggered) {
+        flyTriggered = true;
+        flyObserver.disconnect();
+        const chain = [
+          { center: WAYPOINTS[0].center, zoom: WAYPOINTS[0].zoom, pitch: WAYPOINTS[0].pitch, bearing: WAYPOINTS[0].bearing, duration: 4000 },
+          { center: WAYPOINTS[1].center, zoom: WAYPOINTS[1].zoom, pitch: WAYPOINTS[1].pitch, bearing: WAYPOINTS[1].bearing, duration: 3000 },
+          { center: END.center, zoom: END.zoom, pitch: END.pitch, bearing: END.bearing, duration: 5000 }
+        ];
+        let i = 0;
+        function flyNext() {
+          if (i >= chain.length) return;
+          const wp = chain[i]; i++;
+          map3.flyTo({ center: wp.center, zoom: wp.zoom, pitch: wp.pitch, bearing: wp.bearing, duration: wp.duration, essential: true, curve: 1.2 });
+          map3.once('moveend', flyNext);
+        }
+        flyNext();
       }
-    }
-    const segLen = b.t - a.t;
-    const segT = segLen > 0 ? (t - a.t) / segLen : 0;
-    const eased = smoothstep(segT);
-    return {
-      center: [lerp(a.center[0], b.center[0], eased), lerp(a.center[1], b.center[1], eased)],
-      zoom: lerp(a.zoom, b.zoom, eased),
-      pitch: lerp(a.pitch, b.pitch, eased),
-      bearing: lerp(a.bearing, b.bearing, eased)
-    };
-  }
-
-  // Preload tiles: silently step through the path on page load to cache terrain/satellite tiles
-  map3.once('idle', () => {
-    let preT = 0;
-    function preloadStep() {
-      if (preT > 1.001) {
-        // Reset to start after all tiles requested
-        setTimeout(() => map3.jumpTo(interpolateAt(0)), 300);
-        return;
-      }
-      map3.jumpTo(interpolateAt(preT));
-      preT += 0.05;
-      setTimeout(preloadStep, 120);
-    }
-    setTimeout(preloadStep, 1000);
-  });
-
-  const section3 = document.getElementById('map3Section');
-  let targetT = 0, currentT = 0, rafId = null;
-
-  window.addEventListener('scroll', () => {
-    const rect = section3.getBoundingClientRect();
-    const scrollEnd = section3.offsetHeight - window.innerHeight;
-    if (scrollEnd > 0) {
-      targetT = Math.max(0, Math.min(1, -rect.top / scrollEnd));
-      if (!rafId) rafId = requestAnimationFrame(smoothUpdate);
-    }
-  }, { passive: true });
-
-  function smoothUpdate() {
-    const diff = targetT - currentT;
-    if (Math.abs(diff) < 0.00005) {
-      currentT = targetT;
-      rafId = null;
-    } else {
-      currentT += diff * 0.06; // very smooth — lower = smoother
-      rafId = requestAnimationFrame(smoothUpdate);
-    }
-    const state = interpolateAt(Math.max(0, currentT));
-    map3.easeTo({ ...state, duration: 0, easing: t => t });
-  }
+    });
+  }, { threshold: 0.3 });
+  flyObserver.observe(document.getElementById('map3Section'));
 })();
 
 // (Old Explore the Mountain trail map removed — replaced by Trail Explorer)
