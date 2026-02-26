@@ -1765,6 +1765,11 @@ footer {
 
 <!-- TRAIL EXPLORER (OpenSkiData enriched) -->
 <style>
+.map-integrations-intro { background:#f7f5f2; padding:84px 24px 24px; text-align:center; }
+.map-integrations-intro h2 { font-family:'Lato',sans-serif; color:#1e2d3a; font-size:3rem; font-weight:300; text-transform:uppercase; letter-spacing:0.16em; margin-bottom:10px; }
+.map-integrations-intro p { color:#5a6d7a; font-size:0.95rem; letter-spacing:0.08em; text-transform:uppercase; }
+.map-example-kicker { display:inline-block; margin-bottom:10px; padding:6px 12px; border-radius:999px; background:#e6ecef; color:#2d4457; font-size:0.7rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; }
+.map-section-spacer { height:72px; background:#fff; }
 .trail-explorer-section { background: #f7f5f2; padding: 60px 0 0; }
 .trail-explorer-header { text-align: center; padding: 0 30px 30px; }
 .trail-explorer-header h2 { font-family: 'Lato', sans-serif; color: #1e2d3a; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
@@ -1785,11 +1790,22 @@ footer {
 .te-popup .te-flag { background:#f0f0f0;border-radius:3px;padding:2px 6px; }
 .te-popup .te-elev-chart { margin-top:8px; }
 .te-popup .te-lift-type { font-size:0.85rem;color:#555;text-transform:capitalize;margin:2px 0 8px; }
-@media (max-width: 768px) { .trail-explorer-map { height: 500px; } .trail-explorer-header h2 { font-size: 1.6rem; } }
+@media (max-width: 768px) {
+  .map-integrations-intro { padding:64px 16px 18px; }
+  .map-integrations-intro h2 { font-size:2rem; letter-spacing:0.12em; }
+  .map-section-spacer { height:52px; }
+  .trail-explorer-map { height: 500px; }
+  .trail-explorer-header h2 { font-size: 1.6rem; }
+}
 </style>
+<section class="map-integrations-intro" id="mapIntegrationsSection">
+  <h2>Map Integrations</h2>
+  <p>Examples of integrated map and flyover experiences</p>
+</section>
 <section class="trail-explorer-section" id="trailExplorerSection">
   <div class="trail-explorer-header">
-    <h2>Trail Explorer</h2>
+    <div class="map-example-kicker">Example 1 · Interactive Map</div>
+    <h2>Interactive Jackson Trail Map</h2>
     <p>Enriched trail data with elevation profiles powered by OpenSkiData</p>
   </div>
   <div style="position:relative;">
@@ -1813,6 +1829,7 @@ footer {
     </div>
   </div>
 </section>
+<div class="map-section-spacer"></div>
 
 <!-- MAP 1: Explore the Valley — 50/50 Panel + Map -->
 <style>
@@ -1839,15 +1856,16 @@ footer {
 .valley-loc-detail p { font-size: 0.9rem; color: #3a4f5e; line-height: 1.7; }
 @media (max-width: 768px) {
   .valley-explorer-body { flex-direction: column; }
-  .valley-panel { flex: none; max-height: none; }
-  .valley-map-wrap { flex: none; height: 450px; position: relative; }
+  .valley-panel { max-height: none; }
+  .valley-map-wrap { flex: none; height: 450px; position: relative; min-height: 0; }
   .valley-map-wrap #map1 { position: absolute; }
 }
 </style>
 <section class="valley-explorer" id="map1Section">
   <div class="valley-explorer-header">
-    <h2>Explore the Valley</h2>
-    <p>Discover the best of Jackson Hole and beyond</p>
+    <div class="map-example-kicker">Example 2 · Locked Location Map</div>
+    <h2>Explore Jackson Hole</h2>
+    <p>Discover key destinations without direct map interaction</p>
   </div>
   <div class="valley-explorer-body">
     <div class="valley-panel" id="valleyPanel">
@@ -1860,7 +1878,7 @@ footer {
           </div>
         </div>
         <div class="valley-loc-expand"><div class="valley-loc-detail">
-          <img src="https://images.unsplash.com/photo-1565182999561-18d7dc61c393?w=600&h=400&fit=crop" alt="Grand Teton">
+          <img src="https://outdoorbeginner.com/wp-content/uploads/2019/01/beginners-guide-to-grand-teton-hiking-itinerary-e1599526796664.jpg" alt="Grand Teton">
           <p>Iconic peaks rising to 13,775 feet. World-class mountaineering, hiking, and wildlife viewing in one of America's most dramatic landscapes.</p>
         </div></div>
       </div>
@@ -1886,7 +1904,7 @@ footer {
           </div>
         </div>
         <div class="valley-loc-expand"><div class="valley-loc-detail">
-          <img src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=600&h=400&fit=crop" alt="Snake River">
+          <img src="https://hatchetresort.com/wp-content/uploads/2021/10/Snake-fishing-2245.jpeg" alt="Snake River">
           <p>Blue-ribbon trout fishing through pristine canyon waters. Scenic float trips beneath the Tetons with opportunities to spot bald eagles, moose, and otters.</p>
         </div></div>
       </div>
@@ -1899,7 +1917,7 @@ footer {
           </div>
         </div>
         <div class="valley-loc-expand"><div class="valley-loc-detail">
-          <img src="https://images.unsplash.com/photo-1578983427937-26078ee3d9d3?w=600&h=400&fit=crop" alt="Jackson Hole Town">
+          <img src="https://live.staticflickr.com/1150/1235648564_ddef24e34f_b.jpg" alt="Jackson Hole Town">
           <p>A vibrant mountain town centered around the iconic elk antler arches of Town Square. Fine dining, western galleries, and après-ski culture.</p>
         </div></div>
       </div>
@@ -1912,7 +1930,7 @@ footer {
           </div>
         </div>
         <div class="valley-loc-expand"><div class="valley-loc-detail">
-          <img src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600&h=400&fit=crop" alt="Yellowstone">
+          <img src="https://www.nps.gov/yell/learn/nature/images/Wolf_1.jpg" alt="Yellowstone">
           <p>The world's first national park, just an hour north. Old Faithful, Grand Prismatic Spring, and the largest concentration of wildlife in the lower 48.</p>
         </div></div>
       </div>
@@ -1922,6 +1940,7 @@ footer {
     </div>
   </div>
 </section>
+<div class="map-section-spacer"></div>
 
 <!-- MAP 3: Jackson Hole Village — Scroll-triggered Zoom -->
 <style>
@@ -1935,29 +1954,35 @@ footer {
 <section class="village-scroll-section" id="flyoverSection">
   <div style="position:relative;">
     <div class="village-scroll-header">
-      <h2>Through the Valley</h2>
+      <div class="map-example-kicker" style="background:rgba(255,255,255,0.18);color:#fff;">Example 3 · Video</div>
+      <h2>Jackson Flyover to Hoback</h2>
     </div>
     <video class="village-scroll-video" id="flyoverVideo" src="images/flyover-hq.mp4" muted playsinline preload="auto" loop></video>
   </div>
 </section>
 
 <!-- SPACER -->
-<div style="height: 80px; background: #f7f5f2;"></div>
+<div class="map-section-spacer"></div>
 
 <!-- LIVE 3D FLYTHROUGH -->
 <style>
-.live-flythrough-section { background: #000; position: relative; height: 300vh; }
-.live-flythrough-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.live-flythrough-section { --live-fly-header-offset: 72px; background: #000; position: relative; height: 260vh; }
+.live-flythrough-sticky { position: sticky; top: var(--live-fly-header-offset); height: calc(100vh - var(--live-fly-header-offset)); height: calc(100svh - var(--live-fly-header-offset)); overflow: hidden; }
 .live-flythrough-header { position: absolute; top: 0; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; padding: 30px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 70%, transparent 100%); }
 .live-flythrough-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
 .live-flythrough-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; letter-spacing: 0.05em; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
 #liveMap { width: 100%; height: 100%; }
+@media (max-width: 768px) {
+  .live-flythrough-section { height: 240vh; --live-fly-header-offset: 56px; }
+  .live-flythrough-header h2 { font-size: 1.6rem; }
+}
 </style>
 <section class="live-flythrough-section" id="liveFlySection">
   <div class="live-flythrough-sticky">
     <div class="live-flythrough-header">
-      <h2>Through the Valley</h2>
-      <p>Live 3D rendering · scroll to fly</p>
+      <div class="map-example-kicker" style="background:rgba(255,255,255,0.18);color:#fff;">Example 4 · Interactive Scroll</div>
+      <h2>Jackson Flyover to Hoback</h2>
+      <p>Interactive Scroll</p>
     </div>
     <div id="liveMap"></div>
   </div>
@@ -2294,7 +2319,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   const LOCATIONS = [
     { name: 'Grand Teton National Park', lat: 43.7904, lng: -110.6818, zoom: 11 },
     { name: 'Hoback Club', lat: 43.5877, lng: -110.8279, zoom: 14 },
-    { name: 'Snake River', lat: 43.4857, lng: -110.7571, zoom: 12 },
+    { name: 'Snake River', lat: 43.859167, lng: -110.546227, zoom: 12 },
     { name: 'Jackson Hole Town', lat: 43.4799, lng: -110.7624, zoom: 14 },
     { name: 'Yellowstone National Park', lat: 44.4280, lng: -110.5885, zoom: 9 }
   ];
@@ -2308,9 +2333,9 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     zoom: 9,
     pitch: 40,
     bearing: 0,
-    antialias: true
+    antialias: true,
+    interactive: false
   });
-  map1.addControl(new mapboxgl.NavigationControl(), 'top-right');
   map1.on('style.load', () => {
     map1.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
     map1.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
@@ -2540,6 +2565,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     { center: [-110.83477, 43.59359], zoom: 15.19, pitch: 84.0, bearing: -51.3 }
   ];
   const SEGMENT_DURATIONS_MS = [5400, 3000];
+  const TARGET_POI_NAME = 'hoback club';
   const TARGET_BUILDING_ID = 1473477932;
   const BUILDINGS_GEOJSON_URL = 'data/hoback_buildings_new.geojson';
   const TARGET_BUILDING_HEIGHT_SCALE = 4.5;
@@ -2553,112 +2579,11 @@ document.querySelectorAll('.cam-fade').forEach(img => {
   let positionTangents = [];
   let segmentTimings = [];
   let totalDurationMs = 0;
-
-  function lerp(a,b,t){return a+(b-a)*t;}
-  function easeOutQuad(t){const x=Math.max(0,Math.min(1,t));return 1-(1-x)*(1-x);}
-  function blendLinearWithEase(lt,et,b){const w=Math.max(0,Math.min(1,b));return lerp(lt,et,w);}
-  function dotQuat(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]+a[3]*b[3];}
-  function normalizeQuat(q){const l=Math.hypot(q[0],q[1],q[2],q[3])||1;return[q[0]/l,q[1]/l,q[2]/l,q[3]/l];}
-  function slerpQuat(a,b,t){
-    let qa=normalizeQuat(a),qb=normalizeQuat(b),c=dotQuat(qa,qb);
-    if(c<0){qb=[-qb[0],-qb[1],-qb[2],-qb[3]];c=-c;}
-    if(c>0.9995)return normalizeQuat([lerp(qa[0],qb[0],t),lerp(qa[1],qb[1],t),lerp(qa[2],qb[2],t),lerp(qa[3],qb[3],t)]);
-    const th=Math.acos(c),s=Math.sin(th),w1=Math.sin((1-t)*th)/s,w2=Math.sin(t*th)/s;
-    return[qa[0]*w1+qb[0]*w2,qa[1]*w1+qb[1]*w2,qa[2]*w1+qb[2]*w2,qa[3]*w1+qb[3]*w2];
-  }
-  function readOrientation(o){return Array.isArray(o)?o.slice(0,4):(o&&typeof o.length==='number')?[o[0],o[1],o[2],o[3]]:[o.x,o.y,o.z,o.w];}
-  function captureKeyframe(){const c=liveMap.getFreeCameraOptions();return{pos:[c.position.x,c.position.y,c.position.z],quat:normalizeQuat(readOrientation(c.orientation))};}
-
-  function buildSegmentTimings(){
-    segmentTimings=[];let offset=0;
-    for(let i=0;i<ROUTE_POINTS.length-1;i++){const d=SEGMENT_DURATIONS_MS[i]||1000;segmentTimings.push({index:i,startMs:offset,endMs:offset+d,durationMs:d});offset+=d;}
-    totalDurationMs=offset;
-  }
-
-  function buildPositionTangents(){
-    positionTangents=[];const n=keyframes.length;if(n<2)return;
-    for(let i=0;i<n;i++){
-      const prev=keyframes[Math.max(0,i-1)].pos;const next=keyframes[Math.min(n-1,i+1)].pos;
-      let scale=(i===0||i===n-1)?0.65:0.5*TURN_ROUNDING_FACTOR;
-      positionTangents.push([(next[0]-prev[0])*scale,(next[1]-prev[1])*scale,(next[2]-prev[2])*scale]);
-    }
-  }
-
-  function hermiteVec3(p0,p1,m0,m1,t){
-    const t2=t*t,t3=t2*t;
-    const h00=2*t3-3*t2+1,h10=t3-2*t2+t,h01=-2*t3+3*t2,h11=t3-t2;
-    return[h00*p0[0]+h10*m0[0]+h01*p1[0]+h11*m1[0],h00*p0[1]+h10*m0[1]+h01*p1[1]+h11*m1[1],h00*p0[2]+h10*m0[2]+h01*p1[2]+h11*m1[2]];
-  }
-
-  function getSegmentAt(elapsed){
-    const clamped=Math.max(0,Math.min(elapsed,totalDurationMs));
-    for(let i=0;i<segmentTimings.length;i++){if(clamped<=segmentTimings[i].endMs)return segmentTimings[i];}
-    return segmentTimings[segmentTimings.length-1];
-  }
-
-  function setCameraAtElapsed(elapsed){
-    const seg=getSegmentAt(elapsed);
-    const tRaw=Math.max(0,Math.min(1,(elapsed-seg.startMs)/seg.durationMs));
-    const t=seg.index===0?blendLinearWithEase(tRaw,easeOutQuad(tRaw),MIDDLE_APPROACH_DECEL_BLEND):tRaw;
-    const k0=keyframes[seg.index],k1=keyframes[seg.index+1];
-    const m0=positionTangents[seg.index],m1=positionTangents[seg.index+1];
-    const pos=(m0&&m1)?hermiteVec3(k0.pos,k1.pos,m0,m1,t):[lerp(k0.pos[0],k1.pos[0],t),lerp(k0.pos[1],k1.pos[1],t),lerp(k0.pos[2],k1.pos[2],t)];
-    const quat=slerpQuat(k0.quat,k1.quat,t);
-    const cam=liveMap.getFreeCameraOptions();
-    cam.position.x=pos[0];cam.position.y=pos[1];cam.position.z=pos[2];
-    cam.orientation=quat;
-    liveMap.setFreeCameraOptions(cam);
-  }
-
-  // Building helpers
-  function pointInRing(pt,ring){let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i,i++){const xi=ring[i][0],yi=ring[i][1],xj=ring[j][0],yj=ring[j][1];if(((yi>pt[1])!==(yj>pt[1]))&&(pt[0]<(xj-xi)*(pt[1]-yi)/((yj-yi)||1e-12)+xi))inside=!inside;}return inside;}
-  function pointInPolygonWithHoles(pt,poly){if(!poly||!poly.length)return false;if(!pointInRing(pt,poly[0]))return false;for(let i=1;i<poly.length;i++)if(pointInRing(pt,poly[i]))return false;return true;}
-  function ringBounds(r){let a=Infinity,b=Infinity,c=-Infinity,d=-Infinity;for(const p of r){a=Math.min(a,p[0]);b=Math.min(b,p[1]);c=Math.max(c,p[0]);d=Math.max(d,p[1]);}return{minX:a,minY:b,maxX:c,maxY:d};}
-
-  function buildTargetRoofTiles(feat){
-    const tiles=[];const polys=feat.geometry.type==='Polygon'?[feat.geometry.coordinates]:feat.geometry.type==='MultiPolygon'?feat.geometry.coordinates:[];
-    const rawH=Number(feat.properties&&feat.properties.height);const h=Number.isFinite(rawH)?rawH:8;
-    const roofTop=h*TARGET_BUILDING_HEIGHT_SCALE;const tileBase=Math.max(roofTop-0.11,0);const tileTop=roofTop+0.03;
-    let cnt=0;for(const poly of polys){if(!poly||!poly.length)continue;const b=ringBounds(poly[0]);
-    for(let x=b.minX;x<=b.maxX-TARGET_ROOF_TILE_STEP_LNG;x+=TARGET_ROOF_TILE_STEP_LNG){
-    for(let y=b.minY;y<=b.maxY-TARGET_ROOF_TILE_STEP_LAT;y+=TARGET_ROOF_TILE_STEP_LAT){
-    const c1=[x,y],c2=[x+TARGET_ROOF_TILE_STEP_LNG,y],c3=[x+TARGET_ROOF_TILE_STEP_LNG,y+TARGET_ROOF_TILE_STEP_LAT],c4=[x,y+TARGET_ROOF_TILE_STEP_LAT];
-    if(!(pointInPolygonWithHoles(c1,poly)&&pointInPolygonWithHoles(c2,poly)&&pointInPolygonWithHoles(c3,poly)&&pointInPolygonWithHoles(c4,poly)))continue;
-    tiles.push({type:'Feature',properties:{base:tileBase,top:tileTop,shade:(Math.floor((x-b.minX)/TARGET_ROOF_TILE_STEP_LNG)+Math.floor((y-b.minY)/TARGET_ROOF_TILE_STEP_LAT))%2},geometry:{type:'Polygon',coordinates:[[c1,c2,c3,c4,c1]]}});
-    cnt++;if(cnt>2000)break;}if(cnt>2000)break;}if(cnt>2000)break;}
-    return{type:'FeatureCollection',features:tiles};
-  }
-
-  async function ensure3DBuildings(map){
-    if(map.getLayer('buildings-all'))return;
-    if(!map.getSource('buildings-local'))map.addSource('buildings-local',{type:'geojson',data:BUILDINGS_GEOJSON_URL});
-    const style=map.getStyle();if(!style||!style.layers)return;
-    for(const l of style.layers){if(l.type==='fill-extrusion'&&((l['source-layer']||'').toLowerCase().includes('building'))&&!l.id.startsWith('buildings-'))map.setLayoutProperty(l.id,'visibility','none');}
-    const labelLayer=style.layers.find(l=>l.type==='symbol');const ll=labelLayer?labelLayer.id:undefined;
-    const bh=['coalesce',['get','height'],8],bm=['coalesce',['get','min_height'],0];
-    const th=['*',bh,TARGET_BUILDING_HEIGHT_SCALE],tb=['*',bm,TARGET_BUILDING_HEIGHT_SCALE];
-    const allColor=['match',['%',['to-number',['id'],0],5],0,'#3a3a3a',1,'#404040',2,'#353535',3,'#474747','#3f3f3f'];
-
-    map.addLayer({id:'buildings-all',source:'buildings-local',filter:['==',['to-string',['get','extrude']],'true'],type:'fill-extrusion',minzoom:8,paint:{'fill-extrusion-color':allColor,'fill-extrusion-height':bh,'fill-extrusion-base':bm,'fill-extrusion-vertical-gradient':true,'fill-extrusion-opacity':0.95}},ll);
-    map.addLayer({id:'buildings-all-roof',source:'buildings-local',filter:['all',['==',['to-string',['get','extrude']],'true'],['!=',['id'],TARGET_BUILDING_ID]],type:'fill-extrusion',minzoom:9,paint:{'fill-extrusion-color':'#5a5a5a','fill-extrusion-height':bh,'fill-extrusion-base':['max',0,['-',bh,ROOF_CAP_M]],'fill-extrusion-vertical-gradient':true,'fill-extrusion-opacity':0.9}},ll);
-    map.addLayer({id:'buildings-target',source:'buildings-local',filter:['all',['==',['to-string',['get','extrude']],'true'],['==',['id'],TARGET_BUILDING_ID]],type:'fill-extrusion',minzoom:8,paint:{'fill-extrusion-color':'#4a2e1f','fill-extrusion-height':th,'fill-extrusion-base':tb,'fill-extrusion-vertical-gradient':true,'fill-extrusion-opacity':1.0}},ll);
-    map.addLayer({id:'buildings-target-roof',source:'buildings-local',filter:['all',['==',['to-string',['get','extrude']],'true'],['==',['id'],TARGET_BUILDING_ID]],type:'fill-extrusion',minzoom:9,paint:{'fill-extrusion-color':'#6a4630','fill-extrusion-height':th,'fill-extrusion-base':['max',0,['-',th,ROOF_CAP_M*TARGET_BUILDING_HEIGHT_SCALE]],'fill-extrusion-vertical-gradient':true,'fill-extrusion-opacity':0.95}},ll);
-    map.addLayer({id:'buildings-target-roof-grain',source:'buildings-local',filter:['all',['==',['to-string',['get','extrude']],'true'],['==',['id'],TARGET_BUILDING_ID]],type:'fill-extrusion',minzoom:9,paint:{'fill-extrusion-color':'#8a664b','fill-extrusion-height':['-',th,0.02],'fill-extrusion-base':['max',0,['-',th,ROOF_CAP_M*TARGET_BUILDING_HEIGHT_SCALE*0.45]],'fill-extrusion-vertical-gradient':true,'fill-extrusion-opacity':0.55}},ll);
-    map.addLayer({id:'buildings-edges',source:'buildings-local',filter:['==',['to-string',['get','extrude']],'true'],type:'line',minzoom:8,paint:{'line-color':'rgba(18,18,18,0.65)','line-width':['interpolate',['linear'],['zoom'],8,0.35,14,0.9],'line-opacity':0.55}},ll);
-    try{const r=await fetch(BUILDINGS_GEOJSON_URL,{cache:'no-store'});const d=await r.json();if(d&&d.features){const tgt=d.features.find(f=>String(f.id)===String(TARGET_BUILDING_ID));if(tgt&&tgt.geometry){const td=buildTargetRoofTiles(tgt);if(td.features.length){if(!map.getSource('target-roof-tiles'))map.addSource('target-roof-tiles',{type:'geojson',data:td});map.addLayer({id:'buildings-target-roof-tiles',source:'target-roof-tiles',type:'fill-extrusion',minzoom:9,paint:{'fill-extrusion-color':['match',['get','shade'],0,'#7f5a3f','#6b4934'],'fill-extrusion-height':['get','top'],'fill-extrusion-base':['get','base'],'fill-extrusion-opacity':0.88}},ll);}}}}catch(e){console.warn('roof tiles error',e);}
-  }
-
-  function applyPoiLabelFilter(map){
-    const style=map.getStyle();if(!style||!style.layers)return;
-    const poiNameFilter=['any',['==',['downcase',['coalesce',['get','name_en'],['get','name'],'']],'hoback club'],['==',['downcase',['coalesce',['get','name'],['get','name_en'],'']],'hoback club']];
-    for(const layer of style.layers){
-      if(layer.type!=='symbol')continue;
-      const id=layer.id,idL=(id||'').toLowerCase(),sl=((layer['source-layer'])||'').toLowerCase();
-      const isPoi=/poi|landmark|point[-_]?of[-_]?interest/.test(idL)||/poi|landmark|point[-_]?of[-_]?interest/.test(sl);
-      if(isPoi){map.setLayoutProperty(id,'visibility','visible');map.setFilter(id,poiNameFilter);}
-      else{map.setLayoutProperty(id,'visibility','none');}
-    }
-  }
+  let ready = false;
+  let scrollRafPending = false;
+  const poiBaseFilters = {};
+  const section = document.getElementById('liveFlySection');
+  const sticky = section.querySelector('.live-flythrough-sticky');
 
   const liveMap = new mapboxgl.Map({
     container: 'liveMap',
@@ -2673,33 +2598,521 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     interactive: false
   });
 
-  liveMap.on('style.load', async () => {
-    if(!liveMap.getSource('mapbox-dem-live'))liveMap.addSource('mapbox-dem-live',{type:'raster-dem',url:'mapbox://mapbox.mapbox-terrain-dem-v1',tileSize:512,maxzoom:14});
-    liveMap.setTerrain({source:'mapbox-dem-live',exaggeration:1.5});
-    await ensure3DBuildings(liveMap);
-    applyPoiLabelFilter(liveMap);
-    // Capture keyframes
+  function waitForIdle() {
+    return new Promise((resolve) => liveMap.once('idle', resolve));
+  }
+
+  function waitOneFrame() {
+    return new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function easeOutQuad(t) {
+    const x = Math.max(0, Math.min(1, t));
+    return 1 - (1 - x) * (1 - x);
+  }
+
+  function blendLinearWithEase(linearT, easedT, blend) {
+    const w = Math.max(0, Math.min(1, blend));
+    return lerp(linearT, easedT, w);
+  }
+
+  function dotQuat(a, b) {
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+  }
+
+  function normalizeQuat(q) {
+    const len = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
+    return [q[0] / len, q[1] / len, q[2] / len, q[3] / len];
+  }
+
+  function slerpQuat(a, b, t) {
+    let qa = normalizeQuat(a);
+    let qb = normalizeQuat(b);
+    let cosTheta = dotQuat(qa, qb);
+    if (cosTheta < 0) {
+      qb = [-qb[0], -qb[1], -qb[2], -qb[3]];
+      cosTheta = -cosTheta;
+    }
+    if (cosTheta > 0.9995) {
+      return normalizeQuat([
+        lerp(qa[0], qb[0], t),
+        lerp(qa[1], qb[1], t),
+        lerp(qa[2], qb[2], t),
+        lerp(qa[3], qb[3], t)
+      ]);
+    }
+    const theta = Math.acos(cosTheta);
+    const sinTheta = Math.sin(theta);
+    const w1 = Math.sin((1 - t) * theta) / sinTheta;
+    const w2 = Math.sin(t * theta) / sinTheta;
+    return [
+      qa[0] * w1 + qb[0] * w2,
+      qa[1] * w1 + qb[1] * w2,
+      qa[2] * w1 + qb[2] * w2,
+      qa[3] * w1 + qb[3] * w2
+    ];
+  }
+
+  function readOrientation(orientation) {
+    if (Array.isArray(orientation)) return orientation.slice(0, 4);
+    if (orientation && typeof orientation.length === 'number') {
+      return [orientation[0], orientation[1], orientation[2], orientation[3]];
+    }
+    return [orientation.x, orientation.y, orientation.z, orientation.w];
+  }
+
+  function captureKeyframe() {
+    const cam = liveMap.getFreeCameraOptions();
+    return {
+      pos: [cam.position.x, cam.position.y, cam.position.z],
+      quat: normalizeQuat(readOrientation(cam.orientation))
+    };
+  }
+
+  function buildSegmentTimings() {
+    segmentTimings = [];
+    let offset = 0;
+    for (let i = 0; i < ROUTE_POINTS.length - 1; i += 1) {
+      const durationMs = Math.max(1, SEGMENT_DURATIONS_MS[i] || 1000);
+      segmentTimings.push({ index: i, startMs: offset, endMs: offset + durationMs, durationMs });
+      offset += durationMs;
+    }
+    totalDurationMs = offset;
+  }
+
+  function buildPositionTangents() {
+    positionTangents = [];
+    const n = keyframes.length;
+    if (n < 2) return;
+    for (let i = 0; i < n; i += 1) {
+      const prev = keyframes[Math.max(0, i - 1)].pos;
+      const next = keyframes[Math.min(n - 1, i + 1)].pos;
+      const scale = (i === 0 || i === n - 1) ? 0.65 : 0.5 * TURN_ROUNDING_FACTOR;
+      positionTangents.push([
+        (next[0] - prev[0]) * scale,
+        (next[1] - prev[1]) * scale,
+        (next[2] - prev[2]) * scale
+      ]);
+    }
+  }
+
+  function hermiteVec3(p0, p1, m0, m1, t) {
+    const t2 = t * t;
+    const t3 = t2 * t;
+    const h00 = 2 * t3 - 3 * t2 + 1;
+    const h10 = t3 - 2 * t2 + t;
+    const h01 = -2 * t3 + 3 * t2;
+    const h11 = t3 - t2;
+    return [
+      h00 * p0[0] + h10 * m0[0] + h01 * p1[0] + h11 * m1[0],
+      h00 * p0[1] + h10 * m0[1] + h01 * p1[1] + h11 * m1[1],
+      h00 * p0[2] + h10 * m0[2] + h01 * p1[2] + h11 * m1[2]
+    ];
+  }
+
+  function getSegmentAt(elapsed) {
+    const clamped = Math.max(0, Math.min(elapsed, totalDurationMs));
+    for (let i = 0; i < segmentTimings.length; i += 1) {
+      if (clamped <= segmentTimings[i].endMs) return segmentTimings[i];
+    }
+    return segmentTimings[segmentTimings.length - 1];
+  }
+
+  function setCameraAtElapsed(elapsed) {
+    const seg = getSegmentAt(elapsed);
+    const tRaw = Math.max(0, Math.min(1, (elapsed - seg.startMs) / seg.durationMs));
+    const t = seg.index === 0 ? blendLinearWithEase(tRaw, easeOutQuad(tRaw), MIDDLE_APPROACH_DECEL_BLEND) : tRaw;
+    const k0 = keyframes[seg.index];
+    const k1 = keyframes[seg.index + 1];
+    const m0 = positionTangents[seg.index];
+    const m1 = positionTangents[seg.index + 1];
+    const pos = (m0 && m1)
+      ? hermiteVec3(k0.pos, k1.pos, m0, m1, t)
+      : [lerp(k0.pos[0], k1.pos[0], t), lerp(k0.pos[1], k1.pos[1], t), lerp(k0.pos[2], k1.pos[2], t)];
+    const quat = slerpQuat(k0.quat, k1.quat, t);
+    const cam = liveMap.getFreeCameraOptions();
+    cam.position.x = pos[0];
+    cam.position.y = pos[1];
+    cam.position.z = pos[2];
+    cam.orientation = quat;
+    liveMap.setFreeCameraOptions(cam);
+  }
+
+  function pointInRing(point, ring) {
+    let inside = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i, i += 1) {
+      const xi = ring[i][0];
+      const yi = ring[i][1];
+      const xj = ring[j][0];
+      const yj = ring[j][1];
+      const intersects = ((yi > point[1]) !== (yj > point[1])) &&
+        (point[0] < (xj - xi) * (point[1] - yi) / ((yj - yi) || 1e-12) + xi);
+      if (intersects) inside = !inside;
+    }
+    return inside;
+  }
+
+  function pointInPolygonWithHoles(point, polygonCoords) {
+    if (!polygonCoords || !polygonCoords.length) return false;
+    if (!pointInRing(point, polygonCoords[0])) return false;
+    for (let i = 1; i < polygonCoords.length; i += 1) {
+      if (pointInRing(point, polygonCoords[i])) return false;
+    }
+    return true;
+  }
+
+  function geometryToPolygonsForTiles(geometry) {
+    if (!geometry || !geometry.type || !geometry.coordinates) return [];
+    if (geometry.type === 'Polygon') return [geometry.coordinates];
+    if (geometry.type === 'MultiPolygon') return geometry.coordinates.slice();
+    return [];
+  }
+
+  function ringBounds(ring) {
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (const point of ring) {
+      minX = Math.min(minX, point[0]);
+      minY = Math.min(minY, point[1]);
+      maxX = Math.max(maxX, point[0]);
+      maxY = Math.max(maxY, point[1]);
+    }
+    return { minX, minY, maxX, maxY };
+  }
+
+  function buildTargetRoofTiles(targetFeature) {
+    const tiles = [];
+    const polys = geometryToPolygonsForTiles(targetFeature.geometry);
+    const rawHeight = Number(targetFeature.properties && targetFeature.properties.height);
+    const height = Number.isFinite(rawHeight) ? rawHeight : 8;
+    const roofTop = height * TARGET_BUILDING_HEIGHT_SCALE;
+    const tileBase = Math.max(roofTop - 0.11, 0);
+    const tileTop = roofTop + 0.03;
+    let tileCount = 0;
+
+    for (const poly of polys) {
+      if (!poly || !poly.length) continue;
+      const bounds = ringBounds(poly[0]);
+      for (let x = bounds.minX; x <= bounds.maxX - TARGET_ROOF_TILE_STEP_LNG; x += TARGET_ROOF_TILE_STEP_LNG) {
+        for (let y = bounds.minY; y <= bounds.maxY - TARGET_ROOF_TILE_STEP_LAT; y += TARGET_ROOF_TILE_STEP_LAT) {
+          const c1 = [x, y];
+          const c2 = [x + TARGET_ROOF_TILE_STEP_LNG, y];
+          const c3 = [x + TARGET_ROOF_TILE_STEP_LNG, y + TARGET_ROOF_TILE_STEP_LAT];
+          const c4 = [x, y + TARGET_ROOF_TILE_STEP_LAT];
+          const inside = pointInPolygonWithHoles(c1, poly) &&
+            pointInPolygonWithHoles(c2, poly) &&
+            pointInPolygonWithHoles(c3, poly) &&
+            pointInPolygonWithHoles(c4, poly);
+          if (!inside) continue;
+          tiles.push({
+            type: 'Feature',
+            properties: {
+              base: tileBase,
+              top: tileTop,
+              shade: (Math.floor((x - bounds.minX) / TARGET_ROOF_TILE_STEP_LNG) + Math.floor((y - bounds.minY) / TARGET_ROOF_TILE_STEP_LAT)) % 2
+            },
+            geometry: { type: 'Polygon', coordinates: [[c1, c2, c3, c4, c1]] }
+          });
+          tileCount += 1;
+          if (tileCount > 2000) break;
+        }
+        if (tileCount > 2000) break;
+      }
+      if (tileCount > 2000) break;
+    }
+
+    return { type: 'FeatureCollection', features: tiles };
+  }
+
+  async function ensureTargetRoofTilesLayer(labelLayer) {
+    if (liveMap.getLayer('buildings-target-roof-tiles')) return;
+
+    let data = null;
+    try {
+      const resp = await fetch(BUILDINGS_GEOJSON_URL, { cache: 'no-store' });
+      data = await resp.json();
+    } catch (err) {
+      console.warn('Could not load buildings GeoJSON for roof tiles', err);
+      return;
+    }
+    if (!data || !Array.isArray(data.features)) return;
+
+    const target = data.features.find((feature) => String(feature.id) === String(TARGET_BUILDING_ID));
+    if (!target || !target.geometry) return;
+    const tileData = buildTargetRoofTiles(target);
+    if (!tileData.features.length) return;
+
+    if (!liveMap.getSource('target-roof-tiles')) {
+      liveMap.addSource('target-roof-tiles', { type: 'geojson', data: tileData });
+    }
+
+    liveMap.addLayer({
+      id: 'buildings-target-roof-tiles',
+      source: 'target-roof-tiles',
+      type: 'fill-extrusion',
+      minzoom: 9,
+      paint: {
+        'fill-extrusion-color': ['match', ['get', 'shade'], 0, '#7f5a3f', '#6b4934'],
+        'fill-extrusion-height': ['get', 'top'],
+        'fill-extrusion-base': ['get', 'base'],
+        'fill-extrusion-opacity': 0.88
+      }
+    }, labelLayer ? labelLayer.id : undefined);
+  }
+
+  async function ensure3DBuildingsLayer() {
+    if (
+      liveMap.getLayer('buildings-all') &&
+      liveMap.getLayer('buildings-all-roof') &&
+      liveMap.getLayer('buildings-target') &&
+      liveMap.getLayer('buildings-target-roof') &&
+      liveMap.getLayer('buildings-target-roof-grain') &&
+      liveMap.getLayer('buildings-target-roof-tiles') &&
+      liveMap.getLayer('buildings-edges')
+    ) {
+      return;
+    }
+
+    const style = liveMap.getStyle();
+    if (!style || !style.layers) return;
+
+    if (!liveMap.getSource('buildings-local')) {
+      liveMap.addSource('buildings-local', { type: 'geojson', data: BUILDINGS_GEOJSON_URL });
+    }
+
+    for (const layer of style.layers) {
+      const sourceLayer = ((layer['source-layer']) || '').toLowerCase();
+      if (
+        layer.type === 'fill-extrusion' &&
+        sourceLayer.includes('building') &&
+        layer.id !== 'buildings-all' &&
+        layer.id !== 'buildings-all-roof' &&
+        layer.id !== 'buildings-target' &&
+        layer.id !== 'buildings-target-roof' &&
+        layer.id !== 'buildings-target-roof-grain' &&
+        layer.id !== 'buildings-target-roof-tiles'
+      ) {
+        liveMap.setLayoutProperty(layer.id, 'visibility', 'none');
+      }
+    }
+
+    const labelLayer = style.layers.find((layer) => layer.type === 'symbol');
+    const baseHeightExpr = ['coalesce', ['get', 'height'], 8];
+    const baseMinHeightExpr = ['coalesce', ['get', 'min_height'], 0];
+    const targetHeightExpr = ['*', baseHeightExpr, TARGET_BUILDING_HEIGHT_SCALE];
+    const targetBaseExpr = ['*', baseMinHeightExpr, TARGET_BUILDING_HEIGHT_SCALE];
+    const allColorExpr = ['match', ['%', ['to-number', ['id'], 0], 5], 0, '#3a3a3a', 1, '#404040', 2, '#353535', 3, '#474747', '#3f3f3f'];
+
+    liveMap.addLayer({
+      id: 'buildings-all',
+      source: 'buildings-local',
+      filter: ['==', ['to-string', ['get', 'extrude']], 'true'],
+      type: 'fill-extrusion',
+      minzoom: 8,
+      paint: {
+        'fill-extrusion-color': allColorExpr,
+        'fill-extrusion-height': baseHeightExpr,
+        'fill-extrusion-base': baseMinHeightExpr,
+        'fill-extrusion-vertical-gradient': true,
+        'fill-extrusion-opacity': 0.95
+      }
+    }, labelLayer ? labelLayer.id : undefined);
+
+    liveMap.addLayer({
+      id: 'buildings-all-roof',
+      source: 'buildings-local',
+      filter: ['all', ['==', ['to-string', ['get', 'extrude']], 'true'], ['!=', ['id'], TARGET_BUILDING_ID]],
+      type: 'fill-extrusion',
+      minzoom: 9,
+      paint: {
+        'fill-extrusion-color': '#5a5a5a',
+        'fill-extrusion-height': baseHeightExpr,
+        'fill-extrusion-base': ['max', 0, ['-', baseHeightExpr, ROOF_CAP_M]],
+        'fill-extrusion-vertical-gradient': true,
+        'fill-extrusion-opacity': 0.9
+      }
+    }, labelLayer ? labelLayer.id : undefined);
+
+    liveMap.addLayer({
+      id: 'buildings-target',
+      source: 'buildings-local',
+      filter: ['all', ['==', ['to-string', ['get', 'extrude']], 'true'], ['==', ['id'], TARGET_BUILDING_ID]],
+      type: 'fill-extrusion',
+      minzoom: 8,
+      paint: {
+        'fill-extrusion-color': '#4a2e1f',
+        'fill-extrusion-height': targetHeightExpr,
+        'fill-extrusion-base': targetBaseExpr,
+        'fill-extrusion-vertical-gradient': true,
+        'fill-extrusion-opacity': 1
+      }
+    }, labelLayer ? labelLayer.id : undefined);
+
+    liveMap.addLayer({
+      id: 'buildings-target-roof',
+      source: 'buildings-local',
+      filter: ['all', ['==', ['to-string', ['get', 'extrude']], 'true'], ['==', ['id'], TARGET_BUILDING_ID]],
+      type: 'fill-extrusion',
+      minzoom: 9,
+      paint: {
+        'fill-extrusion-color': '#6a4630',
+        'fill-extrusion-height': targetHeightExpr,
+        'fill-extrusion-base': ['max', 0, ['-', targetHeightExpr, ROOF_CAP_M * TARGET_BUILDING_HEIGHT_SCALE]],
+        'fill-extrusion-vertical-gradient': true,
+        'fill-extrusion-opacity': 0.95
+      }
+    }, labelLayer ? labelLayer.id : undefined);
+
+    liveMap.addLayer({
+      id: 'buildings-target-roof-grain',
+      source: 'buildings-local',
+      filter: ['all', ['==', ['to-string', ['get', 'extrude']], 'true'], ['==', ['id'], TARGET_BUILDING_ID]],
+      type: 'fill-extrusion',
+      minzoom: 9,
+      paint: {
+        'fill-extrusion-color': '#8a664b',
+        'fill-extrusion-height': ['-', targetHeightExpr, 0.02],
+        'fill-extrusion-base': ['max', 0, ['-', targetHeightExpr, ROOF_CAP_M * TARGET_BUILDING_HEIGHT_SCALE * 0.45]],
+        'fill-extrusion-vertical-gradient': true,
+        'fill-extrusion-opacity': 0.55
+      }
+    }, labelLayer ? labelLayer.id : undefined);
+
+    liveMap.addLayer({
+      id: 'buildings-edges',
+      source: 'buildings-local',
+      filter: ['==', ['to-string', ['get', 'extrude']], 'true'],
+      type: 'line',
+      minzoom: 8,
+      paint: {
+        'line-color': 'rgba(18,18,18,0.65)',
+        'line-width': ['interpolate', ['linear'], ['zoom'], 8, 0.35, 14, 0.9],
+        'line-opacity': 0.55
+      }
+    }, labelLayer ? labelLayer.id : undefined);
+
+    await ensureTargetRoofTilesLayer(labelLayer);
+  }
+
+  function applyPoiLabelFilter() {
+    const style = liveMap.getStyle();
+    if (!style || !style.layers) return;
+
+    const poiNameFilter = [
+      'any',
+      ['==', ['downcase', ['coalesce', ['get', 'name_en'], ['get', 'name'], '']], TARGET_POI_NAME],
+      ['==', ['downcase', ['coalesce', ['get', 'name'], ['get', 'name_en'], '']], TARGET_POI_NAME]
+    ];
+
+    for (const layer of style.layers) {
+      if (layer.type !== 'symbol') continue;
+
+      const id = layer.id;
+      const idLower = (id || '').toLowerCase();
+      const sourceLower = ((layer['source-layer']) || '').toLowerCase();
+      const isPoi = /poi|landmark|point[-_]?of[-_]?interest/.test(idLower) || /poi|landmark|point[-_]?of[-_]?interest/.test(sourceLower);
+
+      if (isPoi) {
+        liveMap.setLayoutProperty(id, 'visibility', 'visible');
+        if (!(id in poiBaseFilters)) {
+          poiBaseFilters[id] = liveMap.getFilter(id) || null;
+        }
+        const base = poiBaseFilters[id];
+        liveMap.setFilter(id, base ? ['all', base, poiNameFilter] : poiNameFilter);
+      } else {
+        liveMap.setLayoutProperty(id, 'visibility', 'none');
+      }
+    }
+  }
+
+  function getHeaderOffsetPx() {
+    const header = document.getElementById('mainHeader');
+    if (!header) return 0;
+    const rect = header.getBoundingClientRect();
+    return Math.max(0, Math.ceil(rect.height));
+  }
+
+  function updateStickyOffset() {
+    const offset = getHeaderOffsetPx();
+    section.style.setProperty('--live-fly-header-offset', `${offset}px`);
+  }
+
+  function getSectionProgress() {
+    const rect = section.getBoundingClientRect();
+    const stickyHeight = sticky.getBoundingClientRect().height || window.innerHeight;
+    const scrollEnd = Math.max(1, section.offsetHeight - stickyHeight);
+    return Math.max(0, Math.min(1, -rect.top / scrollEnd));
+  }
+
+  function updateCameraFromScroll() {
+    scrollRafPending = false;
+    if (!ready || !keyframes.length) return;
+    setCameraAtElapsed(getSectionProgress() * totalDurationMs);
+  }
+
+  function queueScrollUpdate() {
+    updateStickyOffset();
+    if (scrollRafPending) return;
+    scrollRafPending = true;
+    requestAnimationFrame(updateCameraFromScroll);
+  }
+
+  async function prepareFlight() {
+    keyframes = [];
+    positionTangents = [];
     buildSegmentTimings();
-    keyframes=[];
-    for(const pt of ROUTE_POINTS){liveMap.jumpTo({center:pt.center,zoom:pt.zoom,pitch:pt.pitch,bearing:pt.bearing});await new Promise(r=>liveMap.once('idle',r));await new Promise(r=>requestAnimationFrame(r));keyframes.push(captureKeyframe());}
+
+    for (const point of ROUTE_POINTS) {
+      liveMap.jumpTo({ center: point.center, zoom: point.zoom, pitch: point.pitch, bearing: point.bearing });
+      await waitForIdle();
+      await waitOneFrame();
+      keyframes.push(captureKeyframe());
+    }
+
     buildPositionTangents();
-    // Preload route tiles
-    for(const pt of ROUTE_POINTS){liveMap.jumpTo({center:pt.center,zoom:pt.zoom,pitch:pt.pitch,bearing:pt.bearing});await new Promise(r=>liveMap.once('idle',r));}
+
+    for (const point of ROUTE_POINTS) {
+      liveMap.jumpTo({ center: point.center, zoom: point.zoom, pitch: point.pitch, bearing: point.bearing });
+      await waitForIdle();
+    }
+
     setCameraAtElapsed(0);
+    await waitOneFrame();
+  }
+
+  liveMap.on('style.load', async () => {
+    if (!liveMap.getSource('mapbox-dem-live')) {
+      liveMap.addSource('mapbox-dem-live', {
+        type: 'raster-dem',
+        url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        tileSize: 512,
+        maxzoom: 14
+      });
+    }
+
+    liveMap.setTerrain({ source: 'mapbox-dem-live', exaggeration: 1.5 });
+    await ensure3DBuildingsLayer();
+    applyPoiLabelFilter();
+    await prepareFlight();
+
+    ready = true;
+    queueScrollUpdate();
   });
 
-  // Scroll-driven animation
-  const section = document.getElementById('liveFlySection');
-  window.addEventListener('scroll', () => {
-    if(!keyframes.length)return;
-    requestAnimationFrame(() => {
-      const rect=section.getBoundingClientRect();
-      const scrollEnd=section.offsetHeight-window.innerHeight;
-      if(scrollEnd<=0)return;
-      const t=Math.max(0,Math.min(1,-rect.top/scrollEnd));
-      setCameraAtElapsed(t*totalDurationMs);
-    });
-  }, {passive:true});
+  window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+  window.addEventListener('resize', () => {
+    updateStickyOffset();
+    liveMap.resize();
+    queueScrollUpdate();
+  }, { passive: true });
+
+  updateStickyOffset();
 })();
 </script>
 
