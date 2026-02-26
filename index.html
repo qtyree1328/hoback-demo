@@ -1925,20 +1925,20 @@ footer {
 
 <!-- MAP 3: Jackson Hole Village — Scroll-triggered Zoom -->
 <style>
-.village-scroll-section { position: relative; background: #f7f5f2; padding-top: 80px; }
-.village-scroll-map { height: calc(100vh - 80px); overflow: hidden; position: relative; }
+.village-scroll-section { position: relative; height: 300vh; background: #000; }
+.village-scroll-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.village-scroll-video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .village-scroll-header { position: absolute; top: 0; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; padding: 30px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 70%, transparent 100%); }
 .village-scroll-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
 .village-scroll-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; letter-spacing: 0.05em; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
-#map3 { width: 100%; height: 100%; }
+/* map3 removed — replaced by flyover video */
 </style>
-<section class="village-scroll-section" id="map3Section">
-  <div class="village-scroll-map">
+<section class="village-scroll-section" id="flyoverSection">
+  <div class="village-scroll-sticky">
     <div class="village-scroll-header">
-      <h2>Teton Village</h2>
-      <p>Cinematic flythrough from the Tetons to Teton Village</p>
+      <h2>Through the Valley</h2>
     </div>
-    <div id="map3" style="width:100%;height:100%;"></div>
+    <video class="village-scroll-video" id="flyoverVideo" src="images/flyover.mp4" muted playsinline preload="auto"></video>
   </div>
 </section>
 
@@ -2311,68 +2311,25 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     });
   });
 
-  // MAP 3: Scroll-triggered Teton → Village zoom
-  const START = { center: [-110.76963, 43.73576], zoom: 12.85, pitch: 74.5, bearing: -111.2 };
-  const END = { center: [-110.8339, 43.59484], zoom: 15.26, pitch: 84, bearing: -40 };
-  const WAYPOINTS = [
-    { t: 0.3, center: [-110.83825, 43.60253], zoom: 12.95, pitch: 76, bearing: -133.6 },
-    { t: 0.5, center: [-110.83247, 43.59941], zoom: 13.76, pitch: 85, bearing: -66.4 },
-  ];
-
-  const map3 = new mapboxgl.Map({
-    container: 'map3',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: START.center,
-    zoom: START.zoom,
-    pitch: START.pitch,
-    bearing: START.bearing,
-    maxPitch: 85,
-    antialias: true,
-    interactive: false
-  });
-  map3.on('style.load', () => {
-    map3.addSource('mapbox-dem-v', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
-    map3.setTerrain({ source: 'mapbox-dem-v', exaggeration: 1.5 });
-    const layers = map3.getStyle().layers;
-    let labelLayerId;
-    for (const layer of layers) { if (layer.type === 'symbol' && layer.layout['text-field']) { labelLayerId = layer.id; break; } }
-    map3.addLayer({
-      id: '3d-buildings', source: 'composite', 'source-layer': 'building',
-      filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 14,
-      paint: {
-        'fill-extrusion-color': '#aaa',
-        'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 14, 0, 14.05, ['get', 'height']],
-        'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 14, 0, 14.05, ['get', 'min_height']],
-        'fill-extrusion-opacity': 0.7
-      }
-    }, labelLayerId);
-  });
-
-  // Option B: Chained flyTo triggered when section scrolls into view
-  // Mapbox handles interpolation internally — much smoother than scroll-driven
-  let flyTriggered = false;
-  const flyObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !flyTriggered) {
-        flyTriggered = true;
-        flyObserver.disconnect();
-        const chain = [
-          { center: WAYPOINTS[0].center, zoom: WAYPOINTS[0].zoom, pitch: WAYPOINTS[0].pitch, bearing: WAYPOINTS[0].bearing, duration: 4000 },
-          { center: WAYPOINTS[1].center, zoom: WAYPOINTS[1].zoom, pitch: WAYPOINTS[1].pitch, bearing: WAYPOINTS[1].bearing, duration: 3000 },
-          { center: END.center, zoom: END.zoom, pitch: END.pitch, bearing: END.bearing, duration: 5000 }
-        ];
-        let i = 0;
-        function flyNext() {
-          if (i >= chain.length) return;
-          const wp = chain[i]; i++;
-          map3.flyTo({ center: wp.center, zoom: wp.zoom, pitch: wp.pitch, bearing: wp.bearing, duration: wp.duration, essential: true, curve: 1.2 });
-          map3.once('moveend', flyNext);
-        }
-        flyNext();
-      }
-    });
-  }, { threshold: 0.3 });
-  flyObserver.observe(document.getElementById('map3Section'));
+  // FLYOVER VIDEO — scroll-driven playback
+  (function() {
+    const video = document.getElementById('flyoverVideo');
+    const section = document.getElementById('flyoverSection');
+    
+    // Ensure video is ready
+    video.pause();
+    video.currentTime = 0;
+    
+    window.addEventListener('scroll', () => {
+      requestAnimationFrame(() => {
+        const rect = section.getBoundingClientRect();
+        const scrollRange = section.offsetHeight - window.innerHeight;
+        if (scrollRange <= 0 || !video.duration) return;
+        const t = Math.max(0, Math.min(1, -rect.top / scrollRange));
+        video.currentTime = t * video.duration;
+      });
+    }, { passive: true });
+  })();
 })();
 
 // (Old Explore the Mountain trail map removed — replaced by Trail Explorer)
