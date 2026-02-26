@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flythrough — Free Camera (No Jitter)</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #111; font-family: -apple-system, sans-serif; }
+#map { width: 100%; height: 100vh; }
+.controls {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10;
+  display: flex; gap: 12px; align-items: center;
+}
+.btn {
+  padding: 14px 36px; border: none; border-radius: 8px; cursor: pointer;
+  font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  transition: all 0.2s;
+}
+.btn-play { background: #d4a853; color: #111; }
+.btn-play:hover { background: #e0b55f; }
+.btn-reset { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.btn-reset:hover { background: rgba(255,255,255,0.25); }
+.status {
+  position: fixed; top: 20px; left: 20px; z-index: 10;
+  background: rgba(0,0,0,0.7); color: #eee; padding: 10px 16px;
+  border-radius: 6px; font-size: 13px; font-family: monospace;
+}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="status" id="status">Loading tiles...</div>
+<div class="controls">
+  <button class="btn btn-play" id="playBtn" onclick="play()" disabled>▶ Play</button>
+  <button class="btn btn-reset" onclick="reset()">⏮ Reset</button>
+</div>
+
+<script>
+mapboxgl.accessToken = ['pk.eyJ1IjoicXR5cm','VlIiwiYSI6ImNtaHl5','eHNmeDBoY3oybXEwNT','IxNGgxYmsifQ.VqoAK','KHQxQX-lNNPwVKHmw'].join('');
+
+// Camera keyframes (map view params → will capture as free camera states)
+const VIEWS = [
+  { center: [-110.76963, 43.73576], zoom: 12.85, pitch: 74.5, bearing: -111.2 },
+  { center: [-110.83825, 43.60253], zoom: 12.95, pitch: 76, bearing: -133.6 },
+  { center: [-110.83247, 43.59941], zoom: 13.76, pitch: 85, bearing: -66.4 },
+  { center: [-110.8339, 43.59484], zoom: 15.26, pitch: 84, bearing: -40 }
+];
+
+// Timing: seconds at each keyframe
+const TIMES = [0, 4, 7, 12];
+const TOTAL_DURATION = TIMES[TIMES.length - 1] * 1000;
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-streets-v12',
+  center: VIEWS[0].center,
+  zoom: VIEWS[0].zoom,
+  pitch: VIEWS[0].pitch,
+  bearing: VIEWS[0].bearing,
+  maxPitch: 85,
+  antialias: true,
+  interactive: true
+});
+
+map.on('style.load', () => {
+  map.addSource('mapbox-dem', {
+    type: 'raster-dem',
+    url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+    tileSize: 512,
+    maxzoom: 14
+  });
+  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+  
+  // 3D buildings
+  map.addLayer({
+    id: '3d-buildings', source: 'composite', 'source-layer': 'building',
+    filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 14,
+    paint: {
+      'fill-extrusion-color': '#aaa',
+      'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 14, 0, 14.05, ['get', 'height']],
+      'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 14, 0, 14.05, ['get', 'min_height']],
+      'fill-extrusion-opacity': 0.7
+    }
+  });
+});
+
+// ===== QUATERNION MATH =====
+function quatFromEuler(pitch, bearing, roll) {
+  // Convert degrees to radians
+  const p = pitch * Math.PI / 180 / 2;
+  const y = bearing * Math.PI / 180 / 2;
+  const r = (roll || 0) * Math.PI / 180 / 2;
+  
+  const sp = Math.sin(p), cp = Math.cos(p);
+  const sy = Math.sin(y), cy = Math.cos(y);
+  const sr = Math.sin(r), cr = Math.cos(r);
+  
+  return [
+    sr * cp * cy - cr * sp * sy, // x
+    cr * sp * cy + sr * cp * sy, // y
+    cr * cp * sy - sr * sp * cy, // z
+    cr * cp * cy + sr * sp * sy  // w
+  ];
+}
+
+function quatSlerp(a, b, t) {
+  let dot = a[0]*b[0] + a[1]*b[1] + a[2]*b[2] + a[3]*b[3];
+  
+  // If dot is negative, negate one quat to take shorter path
+  const neg = dot < 0;
+  if (neg) {
+    dot = -dot;
+    b = [-b[0], -b[1], -b[2], -b[3]];
+  }
+  
+  let s0, s1;
+  if (dot > 0.9995) {
+    // Very close — linear interpolation
+    s0 = 1 - t;
+    s1 = t;
+  } else {
+    const omega = Math.acos(Math.min(dot, 1));
+    const sinOmega = Math.sin(omega);
+    s0 = Math.sin((1 - t) * omega) / sinOmega;
+    s1 = Math.sin(t * omega) / sinOmega;
+  }
+  
+  return [
+    s0*a[0] + s1*b[0],
+    s0*a[1] + s1*b[1],
+    s0*a[2] + s1*b[2],
+    s0*a[3] + s1*b[3]
+  ];
+}
+
+function quatNormalize(q) {
+  const len = Math.sqrt(q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3]);
+  return [q[0]/len, q[1]/len, q[2]/len, q[3]/len];
+}
+
+// ===== FREE CAMERA KEYFRAMES =====
+let cameraKeyframes = [];
+
+function captureKeyframes() {
+  cameraKeyframes = [];
+  for (let i = 0; i < VIEWS.length; i++) {
+    // Jump to each view and capture free camera state
+    map.jumpTo({
+      center: VIEWS[i].center,
+      zoom: VIEWS[i].zoom,
+      pitch: VIEWS[i].pitch,
+      bearing: VIEWS[i].bearing
+    });
+    
+    const cam = map.getFreeCameraOptions();
+    const pos = cam.position;
+    const orient = quatFromEuler(VIEWS[i].pitch, VIEWS[i].bearing, 0);
+    
+    cameraKeyframes.push({
+      time: TIMES[i],
+      position: { x: pos.x, y: pos.y, z: pos.z },
+      orientation: orient,
+      // Also store MercatorCoordinate for direct use
+      mercPos: [pos.x, pos.y, pos.z]
+    });
+  }
+  
+  // Reset to start
+  map.jumpTo({
+    center: VIEWS[0].center,
+    zoom: VIEWS[0].zoom,
+    pitch: VIEWS[0].pitch,
+    bearing: VIEWS[0].bearing
+  });
+}
+
+// ===== SMOOTHSTEP =====
+function smoothstep(t) { return t * t * (3 - 2 * t); }
+
+// ===== PRELOAD TILES =====
+function preloadTiles() {
+  return new Promise((resolve) => {
+    document.getElementById('status').textContent = 'Preloading tiles along route...';
+    let i = 0;
+    function step() {
+      if (i >= VIEWS.length) {
+        // Reset to start and wait for idle
+        map.jumpTo({
+          center: VIEWS[0].center,
+          zoom: VIEWS[0].zoom,
+          pitch: VIEWS[0].pitch,
+          bearing: VIEWS[0].bearing
+        });
+        map.once('idle', () => {
+          document.getElementById('status').textContent = 'Ready — click Play';
+          resolve();
+        });
+        return;
+      }
+      map.jumpTo({
+        center: VIEWS[i].center,
+        zoom: VIEWS[i].zoom,
+        pitch: VIEWS[i].pitch,
+        bearing: VIEWS[i].bearing
+      });
+      i++;
+      map.once('idle', () => {
+        document.getElementById('status').textContent = `Preloading ${i}/${VIEWS.length}...`;
+        setTimeout(step, 200);
+      });
+    }
+    step();
+  });
+}
+
+// ===== ANIMATION =====
+let animating = false;
+
+function play() {
+  if (animating) return;
+  animating = true;
+  document.getElementById('playBtn').disabled = true;
+  document.getElementById('status').textContent = 'Playing...';
+  
+  // Capture free camera positions at each keyframe
+  captureKeyframes();
+  
+  const startTime = performance.now();
+  
+  function frame(now) {
+    const elapsed = now - startTime;
+    const t = Math.min(elapsed / TOTAL_DURATION, 1);
+    
+    // Find which segment we're in
+    let segIdx = 0;
+    for (let i = 0; i < TIMES.length - 1; i++) {
+      if (t * TIMES[TIMES.length-1] >= TIMES[i] && t * TIMES[TIMES.length-1] <= TIMES[i+1]) {
+        segIdx = i;
+        break;
+      }
+    }
+    
+    const segStart = TIMES[segIdx] / TIMES[TIMES.length-1];
+    const segEnd = TIMES[segIdx + 1] / TIMES[TIMES.length-1];
+    const segT = (t - segStart) / (segEnd - segStart);
+    const eased = smoothstep(Math.max(0, Math.min(1, segT)));
+    
+    const kfA = cameraKeyframes[segIdx];
+    const kfB = cameraKeyframes[segIdx + 1];
+    
+    // Lerp position
+    const px = kfA.mercPos[0] + (kfB.mercPos[0] - kfA.mercPos[0]) * eased;
+    const py = kfA.mercPos[1] + (kfB.mercPos[1] - kfA.mercPos[1]) * eased;
+    const pz = kfA.mercPos[2] + (kfB.mercPos[2] - kfA.mercPos[2]) * eased;
+    
+    // Slerp orientation
+    const orient = quatNormalize(quatSlerp(kfA.orientation, kfB.orientation, eased));
+    
+    // Apply free camera
+    const cam = map.getFreeCameraOptions();
+    cam.position = new mapboxgl.MercatorCoordinate(px, py, pz);
+    cam.orientation = orient;
+    map.setFreeCameraOptions(cam);
+    
+    if (t < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      animating = false;
+      document.getElementById('playBtn').disabled = false;
+      document.getElementById('status').textContent = 'Done — click Play to replay';
+    }
+  }
+  
+  requestAnimationFrame(frame);
+}
+
+function reset() {
+  animating = false;
+  map.jumpTo({
+    center: VIEWS[0].center,
+    zoom: VIEWS[0].zoom,
+    pitch: VIEWS[0].pitch,
+    bearing: VIEWS[0].bearing
+  });
+  document.getElementById('playBtn').disabled = false;
+  document.getElementById('status').textContent = 'Ready — click Play';
+}
+
+// Init: preload tiles then enable play
+map.once('idle', async () => {
+  await preloadTiles();
+  document.getElementById('playBtn').disabled = false;
+});
+</script>
+</body>
+</html>
