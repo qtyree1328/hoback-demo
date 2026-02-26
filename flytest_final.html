@@ -60,7 +60,7 @@ const ROUTE_POINTS = [
   { center: [-110.83213, 43.58540], zoom: 14.41, pitch: 77.5, bearing: -99.3 },
   { center: [-110.83477, 43.59359], zoom: 15.19, pitch: 84.0, bearing: -51.3 }
 ];
-const SEGMENT_DURATIONS_MS = [4500, 1800];
+const SEGMENT_DURATIONS_MS = [5400, 3000];
 const TARGET_POI_NAME = 'hoback club';
 const TARGET_BUILDING_ID = 1473477932;
 const BUILDINGS_GEOJSON_URL = 'data/hoback_buildings_new.geojson';
@@ -68,6 +68,8 @@ const TARGET_BUILDING_HEIGHT_SCALE = 4.5;
 const ROOF_CAP_M = 0;
 const TARGET_ROOF_TILE_STEP_LNG = 0.00002;
 const TARGET_ROOF_TILE_STEP_LAT = 0.00002;
+const MIDDLE_APPROACH_DECEL_BLEND = 0.05;
+const TURN_ROUNDING_FACTOR = 0.3;
 const BUILDING_AREA_BBOX = {
   w: -110.845,
   e: -110.821,
@@ -80,6 +82,7 @@ const playPauseBtn = document.getElementById('playPauseBtn');
 const exportBtn = document.getElementById('exportBtn');
 
 let keyframes = [];
+let positionTangents = [];
 let segmentTimings = [];
 let totalDurationMs = 0;
 let elapsedMs = 0;
@@ -127,6 +130,16 @@ function waitForIdleOrTimeout(ms) {
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
+}
+
+function easeOutQuad(t) {
+  const x = Math.max(0, Math.min(1, t));
+  return 1 - (1 - x) * (1 - x);
+}
+
+function blendLinearWithEase(linearT, easedT, blend) {
+  const w = Math.max(0, Math.min(1, blend));
+  return lerp(linearT, easedT, w);
 }
 
 function dotQuat(a, b) {
@@ -198,6 +211,37 @@ function buildSegmentTimings() {
   totalDurationMs = offset;
 }
 
+function buildPositionTangents() {
+  positionTangents = [];
+  const n = keyframes.length;
+  if (n < 2) return;
+
+  for (let i = 0; i < n; i += 1) {
+    const prev = keyframes[Math.max(0, i - 1)].pos;
+    const next = keyframes[Math.min(n - 1, i + 1)].pos;
+    let scale = (i === 0 || i === n - 1) ? 0.65 : 0.5 * TURN_ROUNDING_FACTOR;
+    positionTangents.push([
+      (next[0] - prev[0]) * scale,
+      (next[1] - prev[1]) * scale,
+      (next[2] - prev[2]) * scale
+    ]);
+  }
+}
+
+function hermiteVec3(p0, p1, m0, m1, t) {
+  const t2 = t * t;
+  const t3 = t2 * t;
+  const h00 = 2 * t3 - 3 * t2 + 1;
+  const h10 = t3 - 2 * t2 + t;
+  const h01 = -2 * t3 + 3 * t2;
+  const h11 = t3 - t2;
+  return [
+    h00 * p0[0] + h10 * m0[0] + h01 * p1[0] + h11 * m1[0],
+    h00 * p0[1] + h10 * m0[1] + h01 * p1[1] + h11 * m1[1],
+    h00 * p0[2] + h10 * m0[2] + h01 * p1[2] + h11 * m1[2]
+  ];
+}
+
 function getSegmentAt(elapsed) {
   const clamped = Math.max(0, Math.min(elapsed, totalDurationMs));
   for (let i = 0; i < segmentTimings.length; i += 1) {
@@ -209,16 +253,22 @@ function getSegmentAt(elapsed) {
 function setCameraAtElapsed(elapsed) {
   const seg = getSegmentAt(elapsed);
   const tRaw = Math.max(0, Math.min(1, (elapsed - seg.startMs) / seg.durationMs));
-  const t = tRaw;
+  const t = seg.index === 0
+    ? blendLinearWithEase(tRaw, easeOutQuad(tRaw), MIDDLE_APPROACH_DECEL_BLEND)
+    : tRaw;
 
   const k0 = keyframes[seg.index];
   const k1 = keyframes[seg.index + 1];
 
-  const pos = [
-    lerp(k0.pos[0], k1.pos[0], t),
-    lerp(k0.pos[1], k1.pos[1], t),
-    lerp(k0.pos[2], k1.pos[2], t)
-  ];
+  const m0 = positionTangents[seg.index];
+  const m1 = positionTangents[seg.index + 1];
+  const pos = (m0 && m1)
+    ? hermiteVec3(k0.pos, k1.pos, m0, m1, t)
+    : [
+      lerp(k0.pos[0], k1.pos[0], t),
+      lerp(k0.pos[1], k1.pos[1], t),
+      lerp(k0.pos[2], k1.pos[2], t)
+    ];
   const quat = slerpQuat(k0.quat, k1.quat, t);
 
   const cam = map.getFreeCameraOptions();
@@ -724,6 +774,7 @@ function applyPoiLabelFilter() {
 
 async function prepareFlight() {
   keyframes = [];
+  positionTangents = [];
   buildSegmentTimings();
 
   for (const point of ROUTE_POINTS) {
@@ -737,6 +788,8 @@ async function prepareFlight() {
     await waitOneFrame();
     keyframes.push(captureKeyframe());
   }
+
+  buildPositionTangents();
 
   elapsedMs = 0;
   setCameraAtElapsed(0);
@@ -823,3 +876,4 @@ map.on('style.load', async () => {
 </script>
 </body>
 </html>
+
