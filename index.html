@@ -1941,6 +1941,31 @@ footer {
   </div>
 </section>
 
+<!-- SPACER -->
+<div style="height: 80px; background: #f7f5f2;"></div>
+
+<!-- LIVE 3D FLYTHROUGH -->
+<style>
+.live-flythrough-section { background: #000; position: relative; height: 300vh; }
+.live-flythrough-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.live-flythrough-header { position: absolute; top: 0; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; padding: 30px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 70%, transparent 100%); }
+.live-flythrough-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+.live-flythrough-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; letter-spacing: 0.05em; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+#liveMap { width: 100%; height: 100%; }
+</style>
+<section class="live-flythrough-section" id="liveFlySection">
+  <div class="live-flythrough-sticky">
+    <div class="live-flythrough-header">
+      <h2>Through the Valley</h2>
+      <p>Live 3D rendering · scroll to fly</p>
+    </div>
+    <div id="liveMap"></div>
+  </div>
+</section>
+
+<!-- SPACER -->
+<div style="height: 80px; background: #f7f5f2;"></div>
+
 <!-- MEMBERSHIP PANEL -->
 <section class="panel-2">
   <div class="panel-2-bg" style="background-image: url('images/panel2-bg.jpg')"></div>
@@ -2503,6 +2528,142 @@ document.querySelectorAll('.cam-fade').forEach(img => {
       document.getElementById('trailExplorerSpinner').innerHTML = '⚠ Failed to load enriched trail data';
     });
   });
+})();
+
+// ===== LIVE 3D FLYTHROUGH — Free Camera + Scroll-driven =====
+(function() {
+  mapboxgl.prewarm();
+
+  const ROUTE_POINTS = [
+    { center: [-110.75599, 43.72594], zoom: 12.54, pitch: 79.0, bearing: -145.7 },
+    { center: [-110.83213, 43.58540], zoom: 14.41, pitch: 77.5, bearing: -99.3 },
+    { center: [-110.83477, 43.59359], zoom: 15.19, pitch: 84.0, bearing: -51.3 }
+  ];
+  const SEGMENT_DURATIONS_MS = [4500, 1800];
+  const TARGET_BUILDING_ID = 1473477932;
+  const BUILDINGS_GEOJSON_URL = 'data/hoback_buildings_new.geojson';
+  const TARGET_BUILDING_HEIGHT_SCALE = 4.5;
+  const ROOF_CAP_M = 0;
+  const TARGET_ROOF_TILE_STEP_LNG = 0.00002;
+  const TARGET_ROOF_TILE_STEP_LAT = 0.00002;
+
+  let keyframes = [];
+  let segmentTimings = [];
+  let totalDurationMs = 0;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function dotQuat(a, b) { return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]+a[3]*b[3]; }
+  function normalizeQuat(q) { const l=Math.hypot(q[0],q[1],q[2],q[3])||1; return [q[0]/l,q[1]/l,q[2]/l,q[3]/l]; }
+  function slerpQuat(a, b, t) {
+    let qa=normalizeQuat(a), qb=normalizeQuat(b), c=dotQuat(qa,qb);
+    if(c<0){qb=[-qb[0],-qb[1],-qb[2],-qb[3]];c=-c;}
+    if(c>0.9995) return normalizeQuat([lerp(qa[0],qb[0],t),lerp(qa[1],qb[1],t),lerp(qa[2],qb[2],t),lerp(qa[3],qb[3],t)]);
+    const th=Math.acos(c),s=Math.sin(th),w1=Math.sin((1-t)*th)/s,w2=Math.sin(t*th)/s;
+    return [qa[0]*w1+qb[0]*w2,qa[1]*w1+qb[1]*w2,qa[2]*w1+qb[2]*w2,qa[3]*w1+qb[3]*w2];
+  }
+  function readOrientation(o) { return Array.isArray(o)?o.slice(0,4):(o&&typeof o.length==='number')?[o[0],o[1],o[2],o[3]]:[o.x,o.y,o.z,o.w]; }
+  function captureKeyframe() { const c=liveMap.getFreeCameraOptions(); return {pos:[c.position.x,c.position.y,c.position.z],quat:normalizeQuat(readOrientation(c.orientation))}; }
+
+  function buildSegmentTimings() {
+    segmentTimings=[]; let offset=0;
+    for(let i=0;i<ROUTE_POINTS.length-1;i++){const d=SEGMENT_DURATIONS_MS[i]||1000;segmentTimings.push({index:i,startMs:offset,endMs:offset+d,durationMs:d});offset+=d;}
+    totalDurationMs=offset;
+  }
+
+  function setCameraAtElapsed(elapsed) {
+    const clamped=Math.max(0,Math.min(elapsed,totalDurationMs));
+    let seg=segmentTimings[segmentTimings.length-1];
+    for(let i=0;i<segmentTimings.length;i++){if(clamped<=segmentTimings[i].endMs){seg=segmentTimings[i];break;}}
+    const t=Math.max(0,Math.min(1,(clamped-seg.startMs)/seg.durationMs));
+    const k0=keyframes[seg.index],k1=keyframes[seg.index+1];
+    const pos=[lerp(k0.pos[0],k1.pos[0],t),lerp(k0.pos[1],k1.pos[1],t),lerp(k0.pos[2],k1.pos[2],t)];
+    const quat=slerpQuat(k0.quat,k1.quat,t);
+    const cam=liveMap.getFreeCameraOptions();
+    cam.position.x=pos[0];cam.position.y=pos[1];cam.position.z=pos[2];
+    cam.orientation=quat;
+    liveMap.setFreeCameraOptions(cam);
+  }
+
+  // Building helpers (from flytest_final)
+  function pointInRing(pt,ring){let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i,i++){const xi=ring[i][0],yi=ring[i][1],xj=ring[j][0],yj=ring[j][1];if(((yi>pt[1])!==(yj>pt[1]))&&(pt[0]<(xj-xi)*(pt[1]-yi)/((yj-yi)||1e-12)+xi))inside=!inside;}return inside;}
+  function pointInPolygonWithHoles(pt,poly){if(!poly||!poly.length)return false;if(!pointInRing(pt,poly[0]))return false;for(let i=1;i<poly.length;i++)if(pointInRing(pt,poly[i]))return false;return true;}
+  function ringBounds(r){let a=Infinity,b=Infinity,c=-Infinity,d=-Infinity;for(const p of r){a=Math.min(a,p[0]);b=Math.min(b,p[1]);c=Math.max(c,p[0]);d=Math.max(d,p[1]);}return{minX:a,minY:b,maxX:c,maxY:d};}
+
+  function buildTargetRoofTiles(feat){
+    const tiles=[];const polys=feat.geometry.type==='Polygon'?[feat.geometry.coordinates]:feat.geometry.type==='MultiPolygon'?feat.geometry.coordinates:[];
+    const rawH=Number(feat.properties&&feat.properties.height);const h=Number.isFinite(rawH)?rawH:8;
+    const roofTop=h*TARGET_BUILDING_HEIGHT_SCALE;const tileBase=Math.max(roofTop-0.11,0);const tileTop=roofTop+0.03;
+    let cnt=0;for(const poly of polys){if(!poly||!poly.length)continue;const b=ringBounds(poly[0]);
+    for(let x=b.minX;x<=b.maxX-TARGET_ROOF_TILE_STEP_LNG;x+=TARGET_ROOF_TILE_STEP_LNG){
+    for(let y=b.minY;y<=b.maxY-TARGET_ROOF_TILE_STEP_LAT;y+=TARGET_ROOF_TILE_STEP_LAT){
+    const c1=[x,y],c2=[x+TARGET_ROOF_TILE_STEP_LNG,y],c3=[x+TARGET_ROOF_TILE_STEP_LNG,y+TARGET_ROOF_TILE_STEP_LAT],c4=[x,y+TARGET_ROOF_TILE_STEP_LAT];
+    if(!(pointInPolygonWithHoles(c1,poly)&&pointInPolygonWithHoles(c2,poly)&&pointInPolygonWithHoles(c3,poly)&&pointInPolygonWithHoles(c4,poly)))continue;
+    tiles.push({type:'Feature',properties:{base:tileBase,top:tileTop,shade:(Math.floor((x-b.minX)/TARGET_ROOF_TILE_STEP_LNG)+Math.floor((y-b.minY)/TARGET_ROOF_TILE_STEP_LAT))%2},geometry:{type:'Polygon',coordinates:[[c1,c2,c3,c4,c1]]}});
+    cnt++;if(cnt>2000)break;}if(cnt>2000)break;}if(cnt>2000)break;}
+    return{type:'FeatureCollection',features:tiles};
+  }
+
+  async function ensure3DBuildings(map) {
+    if(map.getLayer('buildings-all'))return;
+    if(!map.getSource('buildings-local'))map.addSource('buildings-local',{type:'geojson',data:BUILDINGS_GEOJSON_URL});
+    const style=map.getStyle();if(!style||!style.layers)return;
+    // Hide default building extrusions
+    for(const l of style.layers){if(l.type==='fill-extrusion'&&((l['source-layer']||'').toLowerCase().includes('building'))&&!l.id.startsWith('buildings-'))map.setLayoutProperty(l.id,'visibility','none');}
+    const labelLayer=style.layers.find(l=>l.type==='symbol');const ll=labelLayer?labelLayer.id:undefined;
+    const bh=['coalesce',['get','height'],8],bm=['coalesce',['get','min_height'],0];
+    const th=['*',bh,TARGET_BUILDING_HEIGHT_SCALE],tb=['*',bm,TARGET_BUILDING_HEIGHT_SCALE];
+
+    map.addLayer({id:'buildings-all',source:'buildings-local',filter:['==',['to-string',['get','extrude']],'true'],type:'fill-extrusion',minzoom:8,paint:{'fill-extrusion-color':['match',['%',['to-number',['id'],0],5],0,'#3a3a3a',1,'#404040',2,'#353535',3,'#474747','#3f3f3f'],'fill-extrusion-height':bh,'fill-extrusion-base':bm,'fill-extrusion-vertical-gradient':true,'fill-extrusion-opacity':0.95}},ll);
+    map.addLayer({id:'buildings-all-roof',source:'buildings-local',filter:['all',['==',['to-string',['get','extrude']],'true'],['!=',['id'],TARGET_BUILDING_ID]],type:'fill-extrusion',minzoom:9,paint:{'fill-extrusion-color':'#5a5a5a','fill-extrusion-height':bh,'fill-extrusion-base':['max',0,['-',bh,ROOF_CAP_M]],'fill-extrusion-vertical-gradient':true,'fill-extrusion-opacity':0.9}},ll);
+    map.addLayer({id:'buildings-target',source:'buildings-local',filter:['all',['==',['to-string',['get','extrude']],'true'],['==',['id'],TARGET_BUILDING_ID]],type:'fill-extrusion',minzoom:8,paint:{'fill-extrusion-color':'#4a2e1f','fill-extrusion-height':th,'fill-extrusion-base':tb,'fill-extrusion-vertical-gradient':true,'fill-extrusion-opacity':1.0}},ll);
+    map.addLayer({id:'buildings-target-roof',source:'buildings-local',filter:['all',['==',['to-string',['get','extrude']],'true'],['==',['id'],TARGET_BUILDING_ID]],type:'fill-extrusion',minzoom:9,paint:{'fill-extrusion-color':'#6a4630','fill-extrusion-height':th,'fill-extrusion-base':['max',0,['-',th,ROOF_CAP_M*TARGET_BUILDING_HEIGHT_SCALE]],'fill-extrusion-vertical-gradient':true,'fill-extrusion-opacity':0.95}},ll);
+    map.addLayer({id:'buildings-target-roof-grain',source:'buildings-local',filter:['all',['==',['to-string',['get','extrude']],'true'],['==',['id'],TARGET_BUILDING_ID]],type:'fill-extrusion',minzoom:9,paint:{'fill-extrusion-color':'#8a664b','fill-extrusion-height':['-',th,0.02],'fill-extrusion-base':['max',0,['-',th,ROOF_CAP_M*TARGET_BUILDING_HEIGHT_SCALE*0.45]],'fill-extrusion-vertical-gradient':true,'fill-extrusion-opacity':0.55}},ll);
+    map.addLayer({id:'buildings-edges',source:'buildings-local',filter:['==',['to-string',['get','extrude']],'true'],type:'line',minzoom:8,paint:{'line-color':'rgba(18,18,18,0.65)','line-width':['interpolate',['linear'],['zoom'],8,0.35,14,0.9],'line-opacity':0.55}},ll);
+    // Roof tiles
+    try{const r=await fetch(BUILDINGS_GEOJSON_URL,{cache:'no-store'});const d=await r.json();if(d&&d.features){const tgt=d.features.find(f=>String(f.id)===String(TARGET_BUILDING_ID));if(tgt&&tgt.geometry){const td=buildTargetRoofTiles(tgt);if(td.features.length){if(!map.getSource('target-roof-tiles'))map.addSource('target-roof-tiles',{type:'geojson',data:td});map.addLayer({id:'buildings-target-roof-tiles',source:'target-roof-tiles',type:'fill-extrusion',minzoom:9,paint:{'fill-extrusion-color':['match',['get','shade'],0,'#7f5a3f','#6b4934'],'fill-extrusion-height':['get','top'],'fill-extrusion-base':['get','base'],'fill-extrusion-opacity':0.88}},ll);}}}}catch(e){console.warn('roof tiles error',e);}
+  }
+
+  const liveMap = new mapboxgl.Map({
+    container: 'liveMap',
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
+    center: ROUTE_POINTS[0].center,
+    zoom: ROUTE_POINTS[0].zoom,
+    pitch: ROUTE_POINTS[0].pitch,
+    bearing: ROUTE_POINTS[0].bearing,
+    maxPitch: 85,
+    antialias: true,
+    fadeDuration: 0,
+    interactive: false
+  });
+
+  liveMap.on('style.load', async () => {
+    if(!liveMap.getSource('mapbox-dem-live'))liveMap.addSource('mapbox-dem-live',{type:'raster-dem',url:'mapbox://mapbox.mapbox-terrain-dem-v1',tileSize:512,maxzoom:14});
+    liveMap.setTerrain({source:'mapbox-dem-live',exaggeration:1.5});
+    await ensure3DBuildings(liveMap);
+    // Hide non-target POI labels
+    const style=liveMap.getStyle();if(style&&style.layers){for(const l of style.layers){if(l.type==='symbol'){const id=(l.id||'').toLowerCase();const sl=((l['source-layer'])||'').toLowerCase();if(/poi|landmark/.test(id)||/poi|landmark/.test(sl))liveMap.setLayoutProperty(l.id,'visibility','none');else liveMap.setLayoutProperty(l.id,'visibility','none');}}}
+    // Capture keyframes by jumping to each point
+    buildSegmentTimings();
+    keyframes=[];
+    for(const pt of ROUTE_POINTS){liveMap.jumpTo({center:pt.center,zoom:pt.zoom,pitch:pt.pitch,bearing:pt.bearing});await new Promise(r=>liveMap.once('idle',r));await new Promise(r=>requestAnimationFrame(r));keyframes.push(captureKeyframe());}
+    // Preload route tiles
+    for(const pt of ROUTE_POINTS){liveMap.jumpTo({center:pt.center,zoom:pt.zoom,pitch:pt.pitch,bearing:pt.bearing});await new Promise(r=>liveMap.once('idle',r));}
+    // Reset to start
+    setCameraAtElapsed(0);
+  });
+
+  // Scroll-driven animation
+  const section = document.getElementById('liveFlySection');
+  window.addEventListener('scroll', () => {
+    if(!keyframes.length)return;
+    requestAnimationFrame(() => {
+      const rect=section.getBoundingClientRect();
+      const scrollEnd=section.offsetHeight-window.innerHeight;
+      if(scrollEnd<=0)return;
+      const t=Math.max(0,Math.min(1,-rect.top/scrollEnd));
+      setCameraAtElapsed(t*totalDurationMs);
+    });
+  }, {passive:true});
 })();
 </script>
 
