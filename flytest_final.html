@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoback Final Flythrough</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0d0d0d; font-family: -apple-system, sans-serif; }
+#map { width: 100%; height: 100vh; }
+#playPauseBtn {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 20;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 12px;
+  cursor: pointer;
+}
+#playPauseBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+#exportBtn {
+  position: fixed;
+  top: 14px;
+  left: 90px;
+  z-index: 20;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 12px;
+  cursor: pointer;
+}
+#exportBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<button id="playPauseBtn" disabled>Play</button>
+<button id="exportBtn" disabled>Export Buildings</button>
+
+<script>
+mapboxgl.accessToken = ['pk.eyJ1IjoicXR5cm','VlIiwiYSI6ImNtaHl5','eHNmeDBoY3oybXEwNT','IxNGgxYmsifQ.VqoAK','KHQxQX-lNNPwVKHmw'].join('');
+mapboxgl.prewarm();
+
+const ROUTE_POINTS = [
+  { center: [-110.75599, 43.72594], zoom: 12.54, pitch: 79.0, bearing: -145.7 },
+  { center: [-110.83213, 43.58540], zoom: 14.41, pitch: 77.5, bearing: -99.3 },
+  { center: [-110.83477, 43.59359], zoom: 15.19, pitch: 84.0, bearing: -51.3 }
+];
+const SEGMENT_DURATIONS_MS = [4500, 1800];
+const TARGET_POI_NAME = 'hoback club';
+const TARGET_BUILDING_ID = 1473477932;
+const BUILDINGS_GEOJSON_URL = 'data/hoback_buildings_new.geojson';
+const TARGET_BUILDING_HEIGHT_SCALE = 4.5;
+const ROOF_CAP_M = 0;
+const TARGET_ROOF_TILE_STEP_LNG = 0.00002;
+const TARGET_ROOF_TILE_STEP_LAT = 0.00002;
+const BUILDING_AREA_BBOX = {
+  w: -110.845,
+  e: -110.821,
+  s: 43.581,
+  n: 43.598
+};
+const EXPORT_SCAN_GRID = 4;
+
+const playPauseBtn = document.getElementById('playPauseBtn');
+const exportBtn = document.getElementById('exportBtn');
+
+let keyframes = [];
+let segmentTimings = [];
+let totalDurationMs = 0;
+let elapsedMs = 0;
+let startedAtMs = 0;
+let playing = false;
+let ready = false;
+let rafId = null;
+let poiBaseFilters = {};
+let exporting = false;
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-streets-v12',
+  center: ROUTE_POINTS[0].center,
+  zoom: ROUTE_POINTS[0].zoom,
+  pitch: ROUTE_POINTS[0].pitch,
+  bearing: ROUTE_POINTS[0].bearing,
+  maxPitch: 85,
+  antialias: true,
+  fadeDuration: 0,
+  interactive: false
+});
+
+function waitForIdle() {
+  return new Promise((resolve) => map.once('idle', resolve));
+}
+
+function waitOneFrame() {
+  return new Promise((resolve) => requestAnimationFrame(resolve));
+}
+
+function waitForIdleOrTimeout(ms) {
+  return new Promise((resolve) => {
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve();
+    };
+    const timer = setTimeout(finish, ms);
+    map.once('idle', finish);
+  });
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
+function dotQuat(a, b) {
+  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+}
+
+function normalizeQuat(q) {
+  const len = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
+  return [q[0] / len, q[1] / len, q[2] / len, q[3] / len];
+}
+
+function slerpQuat(a, b, t) {
+  let qa = normalizeQuat(a);
+  let qb = normalizeQuat(b);
+  let cosTheta = dotQuat(qa, qb);
+
+  if (cosTheta < 0) {
+    qb = [-qb[0], -qb[1], -qb[2], -qb[3]];
+    cosTheta = -cosTheta;
+  }
+
+  if (cosTheta > 0.9995) {
+    return normalizeQuat([
+      lerp(qa[0], qb[0], t),
+      lerp(qa[1], qb[1], t),
+      lerp(qa[2], qb[2], t),
+      lerp(qa[3], qb[3], t)
+    ]);
+  }
+
+  const theta = Math.acos(cosTheta);
+  const sinTheta = Math.sin(theta);
+  const w1 = Math.sin((1 - t) * theta) / sinTheta;
+  const w2 = Math.sin(t * theta) / sinTheta;
+  return [
+    qa[0] * w1 + qb[0] * w2,
+    qa[1] * w1 + qb[1] * w2,
+    qa[2] * w1 + qb[2] * w2,
+    qa[3] * w1 + qb[3] * w2
+  ];
+}
+
+function readOrientation(orientation) {
+  if (Array.isArray(orientation)) return orientation.slice(0, 4);
+  if (orientation && typeof orientation.length === 'number') {
+    return [orientation[0], orientation[1], orientation[2], orientation[3]];
+  }
+  return [orientation.x, orientation.y, orientation.z, orientation.w];
+}
+
+function captureKeyframe() {
+  const cam = map.getFreeCameraOptions();
+  return {
+    pos: [cam.position.x, cam.position.y, cam.position.z],
+    quat: normalizeQuat(readOrientation(cam.orientation))
+  };
+}
+
+function buildSegmentTimings() {
+  segmentTimings = [];
+  let offset = 0;
+
+  for (let i = 0; i < ROUTE_POINTS.length - 1; i += 1) {
+    const durationMs = Math.max(1, SEGMENT_DURATIONS_MS[i] || 1000);
+    segmentTimings.push({ index: i, startMs: offset, endMs: offset + durationMs, durationMs });
+    offset += durationMs;
+  }
+
+  totalDurationMs = offset;
+}
+
+function getSegmentAt(elapsed) {
+  const clamped = Math.max(0, Math.min(elapsed, totalDurationMs));
+  for (let i = 0; i < segmentTimings.length; i += 1) {
+    if (clamped <= segmentTimings[i].endMs) return segmentTimings[i];
+  }
+  return segmentTimings[segmentTimings.length - 1];
+}
+
+function setCameraAtElapsed(elapsed) {
+  const seg = getSegmentAt(elapsed);
+  const tRaw = Math.max(0, Math.min(1, (elapsed - seg.startMs) / seg.durationMs));
+  const t = tRaw;
+
+  const k0 = keyframes[seg.index];
+  const k1 = keyframes[seg.index + 1];
+
+  const pos = [
+    lerp(k0.pos[0], k1.pos[0], t),
+    lerp(k0.pos[1], k1.pos[1], t),
+    lerp(k0.pos[2], k1.pos[2], t)
+  ];
+  const quat = slerpQuat(k0.quat, k1.quat, t);
+
+  const cam = map.getFreeCameraOptions();
+  cam.position.x = pos[0];
+  cam.position.y = pos[1];
+  cam.position.z = pos[2];
+  cam.orientation = quat;
+  map.setFreeCameraOptions(cam);
+}
+
+function pointInRing(point, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i, i += 1) {
+    const xi = ring[i][0];
+    const yi = ring[i][1];
+    const xj = ring[j][0];
+    const yj = ring[j][1];
+    const intersects = ((yi > point[1]) !== (yj > point[1])) &&
+      (point[0] < (xj - xi) * (point[1] - yi) / ((yj - yi) || 1e-12) + xi);
+    if (intersects) inside = !inside;
+  }
+  return inside;
+}
+
+function pointInPolygonWithHoles(point, polygonCoords) {
+  if (!polygonCoords || !polygonCoords.length) return false;
+  if (!pointInRing(point, polygonCoords[0])) return false;
+  for (let i = 1; i < polygonCoords.length; i += 1) {
+    if (pointInRing(point, polygonCoords[i])) return false;
+  }
+  return true;
+}
+
+function geometryToPolygonsForTiles(geometry) {
+  if (!geometry || !geometry.type || !geometry.coordinates) return [];
+  if (geometry.type === 'Polygon') return [geometry.coordinates];
+  if (geometry.type === 'MultiPolygon') return geometry.coordinates.slice();
+  return [];
+}
+
+function ringBounds(ring) {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const p of ring) {
+    minX = Math.min(minX, p[0]);
+    minY = Math.min(minY, p[1]);
+    maxX = Math.max(maxX, p[0]);
+    maxY = Math.max(maxY, p[1]);
+  }
+  return { minX, minY, maxX, maxY };
+}
+
+function buildTargetRoofTiles(targetFeature) {
+  const tiles = [];
+  const polys = geometryToPolygonsForTiles(targetFeature.geometry);
+  const rawH = Number(targetFeature.properties && targetFeature.properties.height);
+  const height = Number.isFinite(rawH) ? rawH : 8;
+  const roofTop = height * TARGET_BUILDING_HEIGHT_SCALE;
+  const tileBase = Math.max(roofTop - 0.11, 0);
+  const tileTop = roofTop + 0.03;
+
+  let tileCount = 0;
+  for (const poly of polys) {
+    if (!poly || !poly.length) continue;
+    const outer = poly[0];
+    const b = ringBounds(outer);
+    for (let x = b.minX; x <= b.maxX - TARGET_ROOF_TILE_STEP_LNG; x += TARGET_ROOF_TILE_STEP_LNG) {
+      for (let y = b.minY; y <= b.maxY - TARGET_ROOF_TILE_STEP_LAT; y += TARGET_ROOF_TILE_STEP_LAT) {
+        const c1 = [x, y];
+        const c2 = [x + TARGET_ROOF_TILE_STEP_LNG, y];
+        const c3 = [x + TARGET_ROOF_TILE_STEP_LNG, y + TARGET_ROOF_TILE_STEP_LAT];
+        const c4 = [x, y + TARGET_ROOF_TILE_STEP_LAT];
+        const inside = pointInPolygonWithHoles(c1, poly) &&
+          pointInPolygonWithHoles(c2, poly) &&
+          pointInPolygonWithHoles(c3, poly) &&
+          pointInPolygonWithHoles(c4, poly);
+        if (!inside) continue;
+        tiles.push({
+          type: 'Feature',
+          properties: {
+            base: tileBase,
+            top: tileTop,
+            shade: (Math.floor((x - b.minX) / TARGET_ROOF_TILE_STEP_LNG) + Math.floor((y - b.minY) / TARGET_ROOF_TILE_STEP_LAT)) % 2
+          },
+          geometry: {
+            type: 'Polygon',
+            coordinates: [[c1, c2, c3, c4, c1]]
+          }
+        });
+        tileCount += 1;
+        if (tileCount > 2000) break;
+      }
+      if (tileCount > 2000) break;
+    }
+    if (tileCount > 2000) break;
+  }
+
+  return {
+    type: 'FeatureCollection',
+    features: tiles
+  };
+}
+
+async function ensureTargetRoofTilesLayer(labelLayer) {
+  if (map.getLayer('buildings-target-roof-tiles')) return;
+
+  let data = null;
+  try {
+    const resp = await fetch(BUILDINGS_GEOJSON_URL, { cache: 'no-store' });
+    data = await resp.json();
+  } catch (err) {
+    console.warn('Could not load buildings GeoJSON for roof tiles', err);
+    return;
+  }
+  if (!data || !Array.isArray(data.features)) return;
+
+  const target = data.features.find((f) => String(f.id) === String(TARGET_BUILDING_ID));
+  if (!target || !target.geometry) return;
+  const tileData = buildTargetRoofTiles(target);
+  if (!tileData.features.length) return;
+
+  if (!map.getSource('target-roof-tiles')) {
+    map.addSource('target-roof-tiles', {
+      type: 'geojson',
+      data: tileData
+    });
+  }
+
+  map.addLayer({
+    id: 'buildings-target-roof-tiles',
+    source: 'target-roof-tiles',
+    type: 'fill-extrusion',
+    minzoom: 9,
+    paint: {
+      'fill-extrusion-color': [
+        'match',
+        ['get', 'shade'],
+        0, '#7f5a3f',
+        '#6b4934'
+      ],
+      'fill-extrusion-height': ['get', 'top'],
+      'fill-extrusion-base': ['get', 'base'],
+      'fill-extrusion-opacity': 0.88
+    }
+  }, labelLayer ? labelLayer.id : undefined);
+}
+
+async function ensure3DBuildingsLayer() {
+  if (
+    map.getLayer('buildings-all') &&
+    map.getLayer('buildings-all-roof') &&
+    map.getLayer('buildings-target') &&
+    map.getLayer('buildings-target-roof') &&
+    map.getLayer('buildings-target-roof-grain') &&
+    map.getLayer('buildings-target-roof-tiles') &&
+    map.getLayer('buildings-edges')
+  ) return;
+  const style = map.getStyle();
+  if (!style || !style.layers) return;
+
+  if (!map.getSource('buildings-local')) {
+    map.addSource('buildings-local', {
+      type: 'geojson',
+      data: BUILDINGS_GEOJSON_URL
+    });
+  }
+
+  for (const layer of style.layers) {
+    const sourceLayer = ((layer['source-layer']) || '').toLowerCase();
+    if (
+      layer.type === 'fill-extrusion' &&
+      sourceLayer.includes('building') &&
+      layer.id !== 'buildings-all' &&
+      layer.id !== 'buildings-all-roof' &&
+      layer.id !== 'buildings-target' &&
+      layer.id !== 'buildings-target-roof' &&
+      layer.id !== 'buildings-target-roof-grain' &&
+      layer.id !== 'buildings-target-roof-tiles'
+    ) {
+      map.setLayoutProperty(layer.id, 'visibility', 'none');
+    }
+  }
+
+  const labelLayer = style.layers.find((layer) => layer.type === 'symbol');
+  const baseHeightExpr = ['coalesce', ['get', 'height'], 8];
+  const baseMinHeightExpr = ['coalesce', ['get', 'min_height'], 0];
+  const targetHeightExpr = ['*', baseHeightExpr, TARGET_BUILDING_HEIGHT_SCALE];
+  const targetBaseExpr = ['*', baseMinHeightExpr, TARGET_BUILDING_HEIGHT_SCALE];
+  const allColorExpr = [
+    'match',
+    ['%', ['to-number', ['id'], 0], 5],
+    0, '#3a3a3a',
+    1, '#404040',
+    2, '#353535',
+    3, '#474747',
+    '#3f3f3f'
+  ];
+
+  map.addLayer({
+    id: 'buildings-all',
+    source: 'buildings-local',
+    filter: [
+      '==', ['to-string', ['get', 'extrude']], 'true'
+    ],
+    type: 'fill-extrusion',
+    minzoom: 8,
+    paint: {
+      'fill-extrusion-color': allColorExpr,
+      'fill-extrusion-height': baseHeightExpr,
+      'fill-extrusion-base': baseMinHeightExpr,
+      'fill-extrusion-vertical-gradient': true,
+      'fill-extrusion-opacity': 0.95
+    }
+  }, labelLayer ? labelLayer.id : undefined);
+
+  map.addLayer({
+    id: 'buildings-all-roof',
+    source: 'buildings-local',
+    filter: [
+      'all',
+      ['==', ['to-string', ['get', 'extrude']], 'true'],
+      ['!=', ['id'], TARGET_BUILDING_ID]
+    ],
+    type: 'fill-extrusion',
+    minzoom: 9,
+    paint: {
+      'fill-extrusion-color': '#5a5a5a',
+      'fill-extrusion-height': baseHeightExpr,
+      'fill-extrusion-base': ['max', 0, ['-', baseHeightExpr, ROOF_CAP_M]],
+      'fill-extrusion-vertical-gradient': true,
+      'fill-extrusion-opacity': 0.9
+    }
+  }, labelLayer ? labelLayer.id : undefined);
+
+  map.addLayer({
+    id: 'buildings-target',
+    source: 'buildings-local',
+    filter: [
+      'all',
+      ['==', ['to-string', ['get', 'extrude']], 'true'],
+      ['==', ['id'], TARGET_BUILDING_ID]
+    ],
+    type: 'fill-extrusion',
+    minzoom: 8,
+    paint: {
+      'fill-extrusion-color': '#4a2e1f',
+      'fill-extrusion-height': targetHeightExpr,
+      'fill-extrusion-base': targetBaseExpr,
+      'fill-extrusion-vertical-gradient': true,
+      'fill-extrusion-opacity': 1.0
+    }
+  }, labelLayer ? labelLayer.id : undefined);
+
+  map.addLayer({
+    id: 'buildings-target-roof',
+    source: 'buildings-local',
+    filter: [
+      'all',
+      ['==', ['to-string', ['get', 'extrude']], 'true'],
+      ['==', ['id'], TARGET_BUILDING_ID]
+    ],
+    type: 'fill-extrusion',
+    minzoom: 9,
+    paint: {
+      'fill-extrusion-color': '#6a4630',
+      'fill-extrusion-height': targetHeightExpr,
+      'fill-extrusion-base': ['max', 0, ['-', targetHeightExpr, ROOF_CAP_M * TARGET_BUILDING_HEIGHT_SCALE]],
+      'fill-extrusion-vertical-gradient': true,
+      'fill-extrusion-opacity': 0.95
+    }
+  }, labelLayer ? labelLayer.id : undefined);
+
+  map.addLayer({
+    id: 'buildings-target-roof-grain',
+    source: 'buildings-local',
+    filter: [
+      'all',
+      ['==', ['to-string', ['get', 'extrude']], 'true'],
+      ['==', ['id'], TARGET_BUILDING_ID]
+    ],
+    type: 'fill-extrusion',
+    minzoom: 9,
+    paint: {
+      'fill-extrusion-color': '#8a664b',
+      'fill-extrusion-height': ['-', targetHeightExpr, 0.02],
+      'fill-extrusion-base': ['max', 0, ['-', targetHeightExpr, ROOF_CAP_M * TARGET_BUILDING_HEIGHT_SCALE * 0.45]],
+      'fill-extrusion-vertical-gradient': true,
+      'fill-extrusion-opacity': 0.55
+    }
+  }, labelLayer ? labelLayer.id : undefined);
+
+  map.addLayer({
+    id: 'buildings-edges',
+    source: 'buildings-local',
+    filter: ['==', ['to-string', ['get', 'extrude']], 'true'],
+    type: 'line',
+    minzoom: 8,
+    paint: {
+      'line-color': 'rgba(18,18,18,0.65)',
+      'line-width': ['interpolate', ['linear'], ['zoom'], 8, 0.35, 14, 0.9],
+      'line-opacity': 0.55
+    }
+  }, labelLayer ? labelLayer.id : undefined);
+
+  await ensureTargetRoofTilesLayer(labelLayer);
+}
+
+function pointInBBox(coord, bbox) {
+  return coord[0] >= bbox.w && coord[0] <= bbox.e && coord[1] >= bbox.s && coord[1] <= bbox.n;
+}
+
+function geometryTouchesBBox(geometry, bbox) {
+  if (!geometry || !geometry.coordinates) return false;
+  const type = geometry.type;
+
+  if (type === 'Polygon') {
+    for (const ring of geometry.coordinates) {
+      for (const pt of ring) {
+        if (pointInBBox(pt, bbox)) return true;
+      }
+    }
+    return false;
+  }
+  if (type === 'MultiPolygon') {
+    for (const poly of geometry.coordinates) {
+      for (const ring of poly) {
+        for (const pt of ring) {
+          if (pointInBBox(pt, bbox)) return true;
+        }
+      }
+    }
+    return false;
+  }
+  return false;
+}
+
+function dedupeKeyForFeature(feature) {
+  const coords = feature.geometry && feature.geometry.coordinates;
+  return `geom:${JSON.stringify(coords)}`;
+}
+
+function polygonsFromGeometry(geometry) {
+  if (!geometry || !geometry.type || !geometry.coordinates) return [];
+  if (geometry.type === 'Polygon') return [geometry.coordinates];
+  if (geometry.type === 'MultiPolygon') return geometry.coordinates.slice();
+  return [];
+}
+
+async function exportBuildingsGeoJSON() {
+  if (!ready || exporting) return;
+  exporting = true;
+  exportBtn.disabled = true;
+
+  const wasPlaying = playing;
+  if (wasPlaying) pause();
+  const savedElapsed = elapsedMs;
+
+  const scanPoints = [];
+  for (let y = 0; y < EXPORT_SCAN_GRID; y += 1) {
+    const ty = y / (EXPORT_SCAN_GRID - 1);
+    for (let x = 0; x < EXPORT_SCAN_GRID; x += 1) {
+      const tx = x / (EXPORT_SCAN_GRID - 1);
+      scanPoints.push({
+        center: [
+          lerp(BUILDING_AREA_BBOX.w, BUILDING_AREA_BBOX.e, tx),
+          lerp(BUILDING_AREA_BBOX.s, BUILDING_AREA_BBOX.n, ty)
+        ]
+      });
+    }
+  }
+
+  const byId = new Map();
+  const byGeom = new Map();
+  for (const pt of scanPoints) {
+    map.jumpTo({
+      center: pt.center,
+      zoom: 16.2,
+      pitch: 0,
+      bearing: 0
+    });
+    await waitOneFrame();
+    await waitForIdleOrTimeout(1200);
+
+    const features = map.querySourceFeatures('composite', { sourceLayer: 'building' });
+    for (const feature of features) {
+      if (!feature || !feature.geometry) continue;
+      const extrude = String((feature.properties && feature.properties.extrude) || '').toLowerCase();
+      if (extrude !== 'true') continue;
+      if (!geometryTouchesBBox(feature.geometry, BUILDING_AREA_BBOX)) continue;
+
+      const featureId = feature.id;
+      if (featureId !== undefined && featureId !== null) {
+        const idKey = String(featureId);
+        let entry = byId.get(idKey);
+        if (!entry) {
+          entry = {
+            id: featureId,
+            properties: { ...(feature.properties || {}) },
+            polygons: [],
+            seen: new Set()
+          };
+          byId.set(idKey, entry);
+        }
+
+        const h = Number(feature.properties && feature.properties.height);
+        const b = Number(feature.properties && feature.properties.min_height);
+        if (Number.isFinite(h)) {
+          const prevH = Number(entry.properties.height);
+          if (!Number.isFinite(prevH) || h > prevH) entry.properties.height = h;
+        }
+        if (Number.isFinite(b)) {
+          const prevB = Number(entry.properties.min_height);
+          if (!Number.isFinite(prevB) || b < prevB) entry.properties.min_height = b;
+        }
+
+        for (const poly of polygonsFromGeometry(feature.geometry)) {
+          const polyKey = JSON.stringify(poly);
+          if (entry.seen.has(polyKey)) continue;
+          entry.seen.add(polyKey);
+          entry.polygons.push(poly);
+        }
+        continue;
+      }
+
+      const geomKey = dedupeKeyForFeature(feature);
+      if (!byGeom.has(geomKey)) {
+        byGeom.set(geomKey, {
+          type: 'Feature',
+          properties: { ...(feature.properties || {}) },
+          geometry: feature.geometry
+        });
+      }
+    }
+  }
+
+  const mergedFeatures = [];
+  for (const entry of byId.values()) {
+    if (!entry.polygons.length) continue;
+    const geometry = entry.polygons.length === 1
+      ? { type: 'Polygon', coordinates: entry.polygons[0] }
+      : { type: 'MultiPolygon', coordinates: entry.polygons };
+    mergedFeatures.push({
+      type: 'Feature',
+      id: entry.id,
+      properties: entry.properties,
+      geometry
+    });
+  }
+
+  const fc = {
+    type: 'FeatureCollection',
+    features: mergedFeatures.concat(Array.from(byGeom.values()))
+  };
+
+  const blob = new Blob([JSON.stringify(fc, null, 2)], { type: 'application/geo+json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'hoback_buildings_new.geojson';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  setCameraAtElapsed(savedElapsed);
+  await waitOneFrame();
+
+  if (wasPlaying) play();
+  exporting = false;
+  exportBtn.disabled = !ready;
+}
+
+function applyPoiLabelFilter() {
+  const style = map.getStyle();
+  if (!style || !style.layers) return;
+
+  const poiNameFilter = [
+    'any',
+    ['==', ['downcase', ['coalesce', ['get', 'name_en'], ['get', 'name'], '']], TARGET_POI_NAME],
+    ['==', ['downcase', ['coalesce', ['get', 'name'], ['get', 'name_en'], '']], TARGET_POI_NAME]
+  ];
+
+  for (const layer of style.layers) {
+    if (layer.type !== 'symbol') continue;
+
+    const id = layer.id;
+    const idLower = (id || '').toLowerCase();
+    const sourceLower = ((layer['source-layer']) || '').toLowerCase();
+    const isPoi = /poi|landmark|point[-_]?of[-_]?interest/.test(idLower) || /poi|landmark|point[-_]?of[-_]?interest/.test(sourceLower);
+
+    if (isPoi) {
+      map.setLayoutProperty(id, 'visibility', 'visible');
+      if (!(id in poiBaseFilters)) {
+        poiBaseFilters[id] = map.getFilter(id) || null;
+      }
+      const base = poiBaseFilters[id];
+      map.setFilter(id, base ? ['all', base, poiNameFilter] : poiNameFilter);
+    } else {
+      map.setLayoutProperty(id, 'visibility', 'none');
+    }
+  }
+}
+
+async function prepareFlight() {
+  keyframes = [];
+  buildSegmentTimings();
+
+  for (const point of ROUTE_POINTS) {
+    map.jumpTo({
+      center: point.center,
+      zoom: point.zoom,
+      pitch: point.pitch,
+      bearing: point.bearing
+    });
+    await waitForIdle();
+    await waitOneFrame();
+    keyframes.push(captureKeyframe());
+  }
+
+  elapsedMs = 0;
+  setCameraAtElapsed(0);
+  await waitOneFrame();
+}
+
+function updateButtonLabel() {
+  playPauseBtn.textContent = playing ? 'Pause' : 'Play';
+}
+
+function stopAnimation() {
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+}
+
+function pause() {
+  if (!playing) return;
+  playing = false;
+  stopAnimation();
+  updateButtonLabel();
+}
+
+function play() {
+  if (!ready || playing) return;
+
+  if (elapsedMs >= totalDurationMs) {
+    elapsedMs = 0;
+    setCameraAtElapsed(0);
+  }
+
+  playing = true;
+  startedAtMs = performance.now() - elapsedMs;
+  updateButtonLabel();
+
+  function frame(now) {
+    if (!playing) return;
+
+    elapsedMs = Math.min(now - startedAtMs, totalDurationMs);
+    setCameraAtElapsed(elapsedMs);
+
+    if (elapsedMs >= totalDurationMs) {
+      playing = false;
+      stopAnimation();
+      updateButtonLabel();
+      return;
+    }
+
+    rafId = requestAnimationFrame(frame);
+  }
+
+  rafId = requestAnimationFrame(frame);
+}
+
+playPauseBtn.addEventListener('click', () => {
+  if (!ready) return;
+  if (playing) pause();
+  else play();
+});
+exportBtn.addEventListener('click', exportBuildingsGeoJSON);
+
+map.on('style.load', async () => {
+  if (!map.getSource('mapbox-dem')) {
+    map.addSource('mapbox-dem', {
+      type: 'raster-dem',
+      url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+      tileSize: 512,
+      maxzoom: 14
+    });
+  }
+
+  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+  await ensure3DBuildingsLayer();
+  applyPoiLabelFilter();
+
+  await prepareFlight();
+
+  ready = true;
+  playPauseBtn.disabled = false;
+  exportBtn.disabled = false;
+  updateButtonLabel();
+});
+</script>
+</body>
+</html>
