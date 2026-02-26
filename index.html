@@ -1925,20 +1925,19 @@ footer {
 
 <!-- MAP 3: Jackson Hole Village — Scroll-triggered Zoom -->
 <style>
-.village-scroll-section { position: relative; height: 300vh; background: #000; }
-.village-scroll-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
-.village-scroll-video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.village-scroll-section { position: relative; background: #000; }
+.village-scroll-video { width: 100%; height: 60vh; object-fit: cover; display: block; }
 .village-scroll-header { position: absolute; top: 0; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; padding: 30px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 70%, transparent 100%); }
 .village-scroll-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
 .village-scroll-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; letter-spacing: 0.05em; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
 /* map3 removed — replaced by flyover video */
 </style>
 <section class="village-scroll-section" id="flyoverSection">
-  <div class="village-scroll-sticky">
+  <div style="position:relative;">
     <div class="village-scroll-header">
       <h2>Through the Valley</h2>
     </div>
-    <video class="village-scroll-video" id="flyoverVideo" src="images/flyover.mp4" muted playsinline preload="auto"></video>
+    <video class="village-scroll-video" id="flyoverVideo" src="images/flyover-hq.mp4" muted playsinline preload="auto" loop></video>
   </div>
 </section>
 
@@ -2311,24 +2310,34 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     });
   });
 
-  // FLYOVER VIDEO — scroll-driven playback
+  // FLYOVER VIDEO — auto-play when visible, 2s pause between loops
   (function() {
     const video = document.getElementById('flyoverVideo');
-    const section = document.getElementById('flyoverSection');
-    
-    // Ensure video is ready
+    video.loop = false; // we handle looping manually
     video.pause();
     video.currentTime = 0;
-    
-    window.addEventListener('scroll', () => {
-      requestAnimationFrame(() => {
-        const rect = section.getBoundingClientRect();
-        const scrollRange = section.offsetHeight - window.innerHeight;
-        if (scrollRange <= 0 || !video.duration) return;
-        const t = Math.max(0, Math.min(1, -rect.top / scrollRange));
-        video.currentTime = t * video.duration;
+    let playing = false;
+
+    video.addEventListener('ended', () => {
+      setTimeout(() => {
+        video.currentTime = 0;
+        video.play();
+      }, 2000);
+    });
+
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !playing) {
+          playing = true;
+          video.currentTime = 0;
+          video.play();
+        } else if (!entry.isIntersecting && playing) {
+          playing = false;
+          video.pause();
+        }
       });
-    }, { passive: true });
+    }, { threshold: 0.3 });
+    obs.observe(document.getElementById('flyoverSection'));
   })();
 })();
 

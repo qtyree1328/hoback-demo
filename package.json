@@ -1,0 +1,24 @@
+{
+  "name": "hoback-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "capture-flythrough.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qtyree1328/hoback-demo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/qtyree1328/hoback-demo/issues"
+  },
+  "homepage": "https://github.com/qtyree1328/hoback-demo#readme",
+  "dependencies": {
+    "playwright": "^1.58.2"
+  }
+}
