@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Come & Stay - Hoback Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Lato', sans-serif; color: #272f36; background: #fff; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: background 0.3s; }
+header.scrolled { background: #1e2d3a; }
+nav { display: flex; align-items: center; justify-content: center; padding: 22px 50px; background: transparent; transition: background 0.4s, backdrop-filter 0.4s; }
+header.scrolled nav { background: rgba(30,45,58,0.85); backdrop-filter: blur(4px); }
+.nav-left, .nav-right { display: flex; gap: 30px; flex: 1; }
+.nav-right { justify-content: flex-end; }
+nav a { color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; transition: opacity 0.3s; }
+nav a:hover { opacity: 0.7; }
+.nav-logo { margin: 0 40px; flex-shrink: 0; }
+.nav-logo-shield { height: 100px; width: auto; transition: opacity 0.4s; }
+.nav-logo-text-img { height: 30px; width: auto; display: none; }
+header.scrolled .nav-logo-shield { display: none; }
+header.scrolled .nav-logo-text-img { display: block; }
+
+.hero { position: relative; height: 70vh; min-height: 400px; background: url('https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=1920&h=1080&fit=crop') center/cover; display: flex; align-items: flex-end; justify-content: center; }
+.hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,45,58,0.7), transparent 60%); }
+.hero h1 { position: relative; z-index: 2; color: #fff; font-size: 3.2rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.25em; margin-bottom: 60px; text-align: center; }
+
+.section { padding: 80px 60px; }
+.section-beige { background: #f7f5f2; }
+.section-white { background: #fff; }
+.section h2 { font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; text-align: center; color: #1e2d3a; }
+.section-subtitle { font-size: 0.9rem; color: #5a6d7a; text-align: center; letter-spacing: 0.05em; margin-bottom: 50px; }
+
+/* ACCOMMODATION CARDS */
+.acc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 1100px; margin: 0 auto; }
+.acc-card { border-radius: 4px; overflow: hidden; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s; }
+.acc-card:hover { transform: translateY(-4px); }
+.acc-card img { width: 100%; height: 280px; object-fit: cover; }
+.acc-card-body { padding: 28px; }
+.acc-card-body h3 { font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #1e2d3a; margin-bottom: 10px; }
+.acc-card-body p { font-size: 0.95rem; color: #3a4f5e; line-height: 1.7; margin-bottom: 18px; }
+.btn-outline { display: inline-block; padding: 12px 28px; border: 2px solid #1e2d3a; color: #1e2d3a; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; transition: all 0.3s; cursor: pointer; background: none; }
+.btn-outline:hover { background: #1e2d3a; color: #fff; }
+
+/* FORM */
+.form-section { max-width: 800px; margin: 0 auto; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { display: flex; flex-direction: column; }
+.form-group.full { grid-column: 1 / -1; }
+.form-group label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #1e2d3a; margin-bottom: 8px; }
+.form-group input, .form-group textarea, .form-group select { font-family: 'Lato', sans-serif; padding: 14px 16px; border: 1px solid #d0cbc5; background: #fff; font-size: 0.95rem; color: #272f36; border-radius: 2px; transition: border-color 0.3s; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1e2d3a; }
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-submit { text-align: center; margin-top: 30px; }
+.btn-primary { display: inline-block; padding: 16px 50px; background: #1e2d3a; color: #fff; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; border: none; cursor: pointer; transition: background 0.3s; font-family: 'Lato', sans-serif; }
+.btn-primary:hover { background: #365e75; }
+
+footer { background: #1e2d3a; padding: 60px; color: #fff; }
+.footer-inner { display: flex; align-items: flex-start; gap: 50px; }
+.footer-logo img { height: 90px; width: auto; opacity: 0.9; }
+.footer-info { flex: 1; }
+.footer-info-top { display: flex; gap: 60px; margin-bottom: 30px; }
+.footer-contact strong { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px; }
+.footer-contact a { display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.8; transition: color 0.3s; }
+.footer-contact a:hover { color: #fff; }
+.footer-links a { display: block; color: rgba(255,255,255,0.7); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; line-height: 2.5; transition: color 0.3s; }
+.footer-links a:hover { color: #fff; }
+.footer-social { display: flex; gap: 15px; }
+.footer-social a { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.9rem; transition: all 0.3s; }
+.footer-social a:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+.footer-bottom { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+.back-to-top { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: #fff; font-size: 1.2rem; background: none; }
+.back-to-top:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+
+@media (max-width: 768px) {
+  nav { padding: 12px 20px; } .nav-left, .nav-right { display: none; }
+  .hero h1 { font-size: 1.8rem; letter-spacing: 0.15em; }
+  .section { padding: 50px 24px; }
+  .acc-grid { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  footer { padding: 40px 30px; } .footer-inner { flex-direction: column; } .footer-info-top { flex-direction: column; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<header id="mainHeader">
+<nav>
+  <div class="nav-left">
+    <a href="discover.html">Discover Us</a>
+    <a href="stay.html">Come &amp; Stay</a>
+    <a href="amenities.html">Amenities</a>
+  </div>
+  <div class="nav-logo">
+    <a href="index.html">
+      <img src="images/logo-shield.svg" alt="Hoback Club" class="nav-logo-shield">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
+    </a>
+  </div>
+  <div class="nav-right">
+    <a href="lifestyle.html">Lifestyle</a>
+    <a href="membership.html">Membership</a>
+    <a href="stay.html#contact">Contact Us</a>
+    <a href="login.html">Member Login</a>
+  </div>
+</nav>
+</header>
+
+<section class="hero">
+  <h1>Come &amp; Stay</h1>
+</section>
+
+<section class="section section-white">
+  <h2>Accommodations</h2>
+  <p class="section-subtitle">From intimate lodge suites to expansive mountain residences, every stay is crafted for comfort and distinction.</p>
+  <div class="acc-grid">
+    <div class="acc-card">
+      <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=500&fit=crop" alt="Lodge Suites">
+      <div class="acc-card-body">
+        <h3>Lodge Suites</h3>
+        <p>Elegant suites within the main lodge featuring mountain views, fireplaces, and curated interiors that blend rustic warmth with modern luxury.</p>
+        <button class="btn-outline" onclick="alert('Room details are not available at this time. Please contact us at (307) 249-1000.')">View Details</button>
+      </div>
+    </div>
+    <div class="acc-card">
+      <img src="https://images.unsplash.com/photo-1518732714860-b62714ce0c59?w=800&h=500&fit=crop" alt="Mountain Cabins">
+      <div class="acc-card-body">
+        <h3>Mountain Cabins</h3>
+        <p>Secluded timber-frame cabins nestled among the aspens, offering privacy and direct access to trails, with full kitchens and private hot tubs.</p>
+        <button class="btn-outline" onclick="alert('Room details are not available at this time. Please contact us at (307) 249-1000.')">View Details</button>
+      </div>
+    </div>
+    <div class="acc-card">
+      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=500&fit=crop" alt="Residences">
+      <div class="acc-card-body">
+        <h3>Residences</h3>
+        <p>Spacious multi-bedroom residences designed for families and gatherings, with gourmet kitchens, great rooms, and ski-in/ski-out convenience.</p>
+        <button class="btn-outline" onclick="alert('Room details are not available at this time. Please contact us at (307) 249-1000.')">View Details</button>
+      </div>
+    </div>
+    <div class="acc-card">
+      <img src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=800&h=500&fit=crop" alt="The Homestead">
+      <div class="acc-card-body">
+        <h3>The Homestead</h3>
+        <p>Our signature estate property — a grand mountain retreat for the most discerning guests, with dedicated staff, private dining, and panoramic views.</p>
+        <button class="btn-outline" onclick="alert('Room details are not available at this time. Please contact us at (307) 249-1000.')">View Details</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-beige" id="contact">
+  <h2>Reservation Inquiry</h2>
+  <p class="section-subtitle">Plan your escape to the Tetons. Complete the form below and our concierge team will be in touch.</p>
+  <div class="form-section">
+    <form onsubmit="event.preventDefault(); alert('Reservation inquiry is not available at this time. Please contact us at (307) 249-1000.');">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="First Name">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Last Name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="email@example.com">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" placeholder="(000) 000-0000">
+        </div>
+        <div class="form-group">
+          <label>Check-In Date</label>
+          <input type="date">
+        </div>
+        <div class="form-group">
+          <label>Check-Out Date</label>
+          <input type="date">
+        </div>
+        <div class="form-group">
+          <label>Number of Guests</label>
+          <select>
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Accommodation Preference</label>
+          <select>
+            <option>Lodge Suite</option><option>Mountain Cabin</option><option>Residence</option><option>The Homestead</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Message</label>
+          <textarea placeholder="Tell us about your ideal stay..."></textarea>
+        </div>
+      </div>
+      <div class="form-submit">
+        <button type="submit" class="btn-primary">Submit Inquiry</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="images/logo-footer.svg" alt="Hoback Club"></div>
+    <div class="footer-info">
+      <div class="footer-info-top">
+        <div class="footer-contact">
+          <strong>Contact Us</strong>
+          <a href="#">P.O. Box 158, Teton Village, WY 83025</a>
+          <a href="tel:+13072491000">(307) 249-1000</a>
+        </div>
+        <div class="footer-links">
+          <a href="#">Employment Opportunities</a>
+          <a href="membership.html">Membership Inquiries</a>
+        </div>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">ig</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color: rgba(255,255,255,0.5);">Clubessential</a></span>
+        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  const header = document.getElementById('mainHeader');
+  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 50), { passive: true });
+  header.classList.toggle('scrolled', window.scrollY > 50);
+})();
+</script>
+</body>
+</html>

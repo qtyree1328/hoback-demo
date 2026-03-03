@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lifestyle - Hoback Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Lato', sans-serif; color: #272f36; background: #fff; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: background 0.3s; }
+header.scrolled { background: #1e2d3a; }
+nav { display: flex; align-items: center; justify-content: center; padding: 22px 50px; background: transparent; transition: background 0.4s, backdrop-filter 0.4s; }
+header.scrolled nav { background: rgba(30,45,58,0.85); backdrop-filter: blur(4px); }
+.nav-left, .nav-right { display: flex; gap: 30px; flex: 1; }
+.nav-right { justify-content: flex-end; }
+nav a { color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; transition: opacity 0.3s; }
+nav a:hover { opacity: 0.7; }
+.nav-logo { margin: 0 40px; flex-shrink: 0; }
+.nav-logo-shield { height: 100px; width: auto; transition: opacity 0.4s; }
+.nav-logo-text-img { height: 30px; width: auto; display: none; }
+header.scrolled .nav-logo-shield { display: none; }
+header.scrolled .nav-logo-text-img { display: block; }
+
+.hero { position: relative; height: 70vh; min-height: 400px; background: url('https://images.unsplash.com/photo-1551524559-8af4e6624178?w=1920&h=1080&fit=crop') center/cover; display: flex; align-items: flex-end; justify-content: center; }
+.hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,45,58,0.7), transparent 60%); }
+.hero h1 { position: relative; z-index: 2; color: #fff; font-size: 3.2rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.25em; margin-bottom: 60px; text-align: center; }
+
+.section { padding: 80px 60px; }
+.section-beige { background: #f7f5f2; }
+.section-white { background: #fff; }
+.section-navy { background: #1e2d3a; color: #fff; }
+.section h2 { font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; text-align: center; color: #1e2d3a; }
+.section-navy h2 { color: #fff; }
+.section-subtitle { font-size: 0.9rem; color: #5a6d7a; text-align: center; letter-spacing: 0.05em; margin-bottom: 50px; }
+.section-navy .section-subtitle { color: rgba(255,255,255,0.5); }
+
+/* SEASONS */
+.seasons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 1100px; margin: 0 auto; }
+.season-card { position: relative; height: 420px; border-radius: 4px; overflow: hidden; }
+.season-card img { width: 100%; height: 100%; object-fit: cover; }
+.season-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,45,58,0.85) 30%, transparent 70%); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; }
+.season-overlay h3 { color: #fff; font-size: 1.8rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+.season-overlay ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+.season-overlay li { background: rgba(255,255,255,0.15); color: #fff; padding: 6px 14px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 999px; }
+
+/* EVENTS */
+.events-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+.event-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 30px; transition: background 0.3s; }
+.event-card:hover { background: rgba(255,255,255,0.1); }
+.event-date { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+.event-card h4 { font-size: 1.1rem; font-weight: 400; color: #fff; margin-bottom: 8px; }
+.event-card p { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+/* CULTURE */
+.culture-split { display: flex; gap: 60px; align-items: center; max-width: 1100px; margin: 0 auto; }
+.culture-img { flex: 1; border-radius: 4px; overflow: hidden; }
+.culture-img img { width: 100%; height: 450px; object-fit: cover; }
+.culture-text { flex: 1; }
+.culture-text h3 { font-size: 2rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; color: #1e2d3a; margin-bottom: 20px; }
+.culture-text p { font-size: 1.05rem; line-height: 1.8; color: #3a4f5e; }
+
+footer { background: #1e2d3a; padding: 60px; color: #fff; }
+.footer-inner { display: flex; align-items: flex-start; gap: 50px; }
+.footer-logo img { height: 90px; width: auto; opacity: 0.9; }
+.footer-info { flex: 1; }
+.footer-info-top { display: flex; gap: 60px; margin-bottom: 30px; }
+.footer-contact strong { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px; }
+.footer-contact a { display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.8; transition: color 0.3s; }
+.footer-contact a:hover { color: #fff; }
+.footer-links a { display: block; color: rgba(255,255,255,0.7); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; line-height: 2.5; transition: color 0.3s; }
+.footer-links a:hover { color: #fff; }
+.footer-social { display: flex; gap: 15px; }
+.footer-social a { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.9rem; transition: all 0.3s; }
+.footer-social a:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+.footer-bottom { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+.back-to-top { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: #fff; font-size: 1.2rem; background: none; }
+.back-to-top:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+
+@media (max-width: 768px) {
+  nav { padding: 12px 20px; } .nav-left, .nav-right { display: none; }
+  .hero h1 { font-size: 1.8rem; }
+  .section { padding: 50px 24px; }
+  .seasons-grid { grid-template-columns: 1fr; }
+  .events-grid { grid-template-columns: 1fr; }
+  .culture-split { flex-direction: column; gap: 30px; }
+  footer { padding: 40px 30px; } .footer-inner { flex-direction: column; } .footer-info-top { flex-direction: column; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<header id="mainHeader">
+<nav>
+  <div class="nav-left">
+    <a href="discover.html">Discover Us</a>
+    <a href="stay.html">Come &amp; Stay</a>
+    <a href="amenities.html">Amenities</a>
+  </div>
+  <div class="nav-logo">
+    <a href="index.html">
+      <img src="images/logo-shield.svg" alt="Hoback Club" class="nav-logo-shield">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
+    </a>
+  </div>
+  <div class="nav-right">
+    <a href="lifestyle.html">Lifestyle</a>
+    <a href="membership.html">Membership</a>
+    <a href="stay.html#contact">Contact Us</a>
+    <a href="login.html">Member Login</a>
+  </div>
+</nav>
+</header>
+
+<section class="hero">
+  <h1>Lifestyle</h1>
+</section>
+
+<!-- FOUR SEASONS -->
+<section class="section section-white">
+  <h2>Four Seasons of Adventure</h2>
+  <p class="section-subtitle">Every season brings a new way to experience the Tetons.</p>
+  <div class="seasons-grid">
+    <div class="season-card">
+      <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop" alt="Winter">
+      <div class="season-overlay">
+        <h3>Winter</h3>
+        <ul>
+          <li>Skiing</li><li>Snowshoeing</li><li>Ice Fishing</li><li>Sleigh Rides</li>
+        </ul>
+      </div>
+    </div>
+    <div class="season-card">
+      <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&h=600&fit=crop" alt="Spring">
+      <div class="season-overlay">
+        <h3>Spring</h3>
+        <ul>
+          <li>Hiking</li><li>Fly Fishing</li><li>Wildlife Tours</li><li>Mountain Biking</li>
+        </ul>
+      </div>
+    </div>
+    <div class="season-card">
+      <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&h=600&fit=crop" alt="Summer">
+      <div class="season-overlay">
+        <h3>Summer</h3>
+        <ul>
+          <li>Golf</li><li>Horseback Riding</li><li>Rafting</li><li>Tennis</li>
+        </ul>
+      </div>
+    </div>
+    <div class="season-card">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop" alt="Fall">
+      <div class="season-overlay">
+        <h3>Fall</h3>
+        <ul>
+          <li>Hunting</li><li>Foliage Tours</li><li>Wine Events</li><li>Photography</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="section section-navy">
+  <h2>Community &amp; Events</h2>
+  <p class="section-subtitle">A calendar of curated experiences that bring our community together.</p>
+  <div class="events-grid">
+    <div class="event-card">
+      <div class="event-date">March 2026</div>
+      <h4>Spring Equinox Dinner</h4>
+      <p>A farm-to-table dining experience celebrating the arrival of spring in the Tetons.</p>
+    </div>
+    <div class="event-card">
+      <div class="event-date">June 2026</div>
+      <h4>Summer Solstice Golf Tournament</h4>
+      <p>A member-only tournament followed by an outdoor celebration under the longest day's light.</p>
+    </div>
+    <div class="event-card">
+      <div class="event-date">August 2026</div>
+      <h4>Hoback Music Festival</h4>
+      <p>An intimate mountain music festival featuring world-class artists in an unparalleled setting.</p>
+    </div>
+    <div class="event-card">
+      <div class="event-date">September 2026</div>
+      <h4>Harvest Wine Weekend</h4>
+      <p>Renowned winemakers paired with our culinary team for a weekend of tastings and pairings.</p>
+    </div>
+    <div class="event-card">
+      <div class="event-date">November 2026</div>
+      <h4>First Tracks Celebration</h4>
+      <p>Welcome winter's return with the first runs of the season and a fireside après gathering.</p>
+    </div>
+    <div class="event-card">
+      <div class="event-date">December 2026</div>
+      <h4>Holiday Gala</h4>
+      <p>An elegant evening of dining, dancing, and holiday magic in the heart of the mountains.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CULTURE -->
+<section class="section section-beige">
+  <div class="culture-split">
+    <div class="culture-img">
+      <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=900&h=600&fit=crop" alt="The Hoback Lifestyle">
+    </div>
+    <div class="culture-text">
+      <h3>The Hoback Lifestyle</h3>
+      <p>Life at the Hoback Club is defined by a shared reverence for the extraordinary. It's mornings spent carving fresh tracks through pristine powder. Afternoons on the river, fly rod in hand. Evenings gathered around a fire with friends old and new. Here, luxury is not about excess — it's about intention, connection, and the quiet thrill of living close to the wild.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="images/logo-footer.svg" alt="Hoback Club"></div>
+    <div class="footer-info">
+      <div class="footer-info-top">
+        <div class="footer-contact">
+          <strong>Contact Us</strong>
+          <a href="#">P.O. Box 158, Teton Village, WY 83025</a>
+          <a href="tel:+13072491000">(307) 249-1000</a>
+        </div>
+        <div class="footer-links">
+          <a href="#">Employment Opportunities</a>
+          <a href="membership.html">Membership Inquiries</a>
+        </div>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">ig</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color: rgba(255,255,255,0.5);">Clubessential</a></span>
+        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  const header = document.getElementById('mainHeader');
+  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 50), { passive: true });
+  header.classList.toggle('scrolled', window.scrollY > 50);
+})();
+</script>
+</body>
+</html>

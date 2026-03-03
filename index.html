@@ -1396,25 +1396,38 @@ footer {
 <header id="mainHeader">
 <nav>
   <div class="nav-left">
-    <a href="#">Discover Us</a>
-    <a href="#">Come &amp; Stay</a>
-    <a href="#">Amenities</a>
+    <a href="discover.html">Discover Us</a>
+    <a href="stay.html">Come &amp; Stay</a>
+    <a href="amenities.html">Amenities</a>
   </div>
   <div class="nav-logo">
-    <a href="#">
+    <a href="index.html">
       <img src="images/logo-shield.svg" alt="Hoback Club" class="nav-logo-shield">
       <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
     </a>
   </div>
   <div class="nav-right">
-    <a href="#">Lifestyle</a>
-    <a href="#">Membership</a>
-    <a href="#">Contact Us</a>
-    <a href="#">Member Login</a>
+    <a href="lifestyle.html">Lifestyle</a>
+    <a href="membership.html">Membership</a>
+    <a href="#" onclick="event.preventDefault();document.getElementById('contactSection')?.scrollIntoView({behavior:'smooth'})||alert('Contact section coming soon')">Contact Us</a>
+    <a href="login.html">Member Login</a>
   </div>
 </nav>
 <div class="weather-badge">Current Weather: ❄ 23º F</div>
 </header>
+<a href="extra-features.html" class="extra-features-float">✦ Extra Features</a>
+<style>
+.extra-features-float {
+  position: fixed; top: 90px; left: 20px; z-index: 999;
+  background: rgba(30,45,58,0.85); color: #fff;
+  padding: 10px 18px; border-radius: 999px; font-size: 0.7rem;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  text-decoration: none; backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: background 0.3s, transform 0.3s;
+}
+.extra-features-float:hover { background: rgba(30,45,58,1); transform: scale(1.05); }
+</style>
 
 <!-- HERO BANNER -->
 <section class="hero">
@@ -1996,8 +2009,8 @@ footer {
   <div class="panel-2-bg" style="background-image: url('images/panel2-bg.jpg')"></div>
   <div class="panel-2-overlay">
     <div class="panel-2-left">
-      <h2>Inquire to Become a Member</h2>
-      <a href="#" class="btn-outline">Learn More</a>
+      <h2>Reserve Your Stay</h2>
+      <a href="stay.html" class="btn-outline">Inquire About a Stay</a>
     </div>
     <div class="panel-2-right">
       <img src="images/panel2-image.jpg" alt="Hoback Club Membership">

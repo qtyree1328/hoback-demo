@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Member Login - Hoback Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Lato', sans-serif; color: #272f36; background: #1e2d3a; min-height: 100vh; display: flex; flex-direction: column; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #1e2d3a; }
+nav { display: flex; align-items: center; justify-content: center; padding: 22px 50px; background: rgba(30,45,58,0.85); backdrop-filter: blur(4px); }
+.nav-left, .nav-right { display: flex; gap: 30px; flex: 1; }
+.nav-right { justify-content: flex-end; }
+nav a { color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; transition: opacity 0.3s; }
+nav a:hover { opacity: 0.7; }
+.nav-logo { margin: 0 40px; flex-shrink: 0; }
+.nav-logo-shield { height: 100px; width: auto; display: none; }
+.nav-logo-text-img { height: 30px; width: auto; display: block; }
+
+.login-wrapper {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&h=1080&fit=crop') center/cover;
+  position: relative; padding: 120px 20px 60px;
+}
+.login-wrapper::after { content: ''; position: absolute; inset: 0; background: rgba(30,45,58,0.8); }
+
+.login-card {
+  position: relative; z-index: 2; background: #fff; padding: 50px 40px; max-width: 420px; width: 100%;
+  border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center;
+}
+.login-card .logo { margin: 0 auto 30px; }
+.login-card .logo img { height: 80px; margin: 0 auto; }
+.login-card h2 { font-size: 1.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; color: #1e2d3a; margin-bottom: 30px; }
+.login-group { text-align: left; margin-bottom: 20px; }
+.login-group label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #1e2d3a; margin-bottom: 8px; }
+.login-group input {
+  width: 100%; padding: 14px 16px; border: 1px solid #d0cbc5; font-family: 'Lato', sans-serif;
+  font-size: 0.95rem; color: #272f36; border-radius: 2px; transition: border-color 0.3s;
+}
+.login-group input:focus { outline: none; border-color: #1e2d3a; }
+.btn-login {
+  width: 100%; padding: 16px; background: #1e2d3a; color: #fff; border: none; cursor: pointer;
+  font-family: 'Lato', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.2em; transition: background 0.3s; margin-top: 10px;
+}
+.btn-login:hover { background: #365e75; }
+.forgot { display: block; margin-top: 20px; font-size: 0.8rem; color: #5a6d7a; cursor: pointer; transition: color 0.3s; }
+.forgot:hover { color: #1e2d3a; }
+
+@media (max-width: 768px) {
+  nav { padding: 12px 20px; } .nav-left, .nav-right { display: none; }
+  .login-card { padding: 40px 24px; }
+}
+</style>
+</head>
+<body>
+
+<header id="mainHeader">
+<nav>
+  <div class="nav-left">
+    <a href="discover.html">Discover Us</a>
+    <a href="stay.html">Come &amp; Stay</a>
+    <a href="amenities.html">Amenities</a>
+  </div>
+  <div class="nav-logo">
+    <a href="index.html">
+      <img src="images/logo-shield.svg" alt="Hoback Club" class="nav-logo-shield">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
+    </a>
+  </div>
+  <div class="nav-right">
+    <a href="lifestyle.html">Lifestyle</a>
+    <a href="membership.html">Membership</a>
+    <a href="stay.html#contact">Contact Us</a>
+    <a href="login.html">Member Login</a>
+  </div>
+</nav>
+</header>
+
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="logo">
+      <img src="images/logo-shield.svg" alt="Hoback Club">
+    </div>
+    <h2>Member Login</h2>
+    <form onsubmit="event.preventDefault(); alert('Member login is not available at this time. This is a demo site.');">
+      <div class="login-group">
+        <label>Email</label>
+        <input type="email" placeholder="member@hobackclub.com">
+      </div>
+      <div class="login-group">
+        <label>Password</label>
+        <input type="password" placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn-login">Sign In</button>
+    </form>
+    <a class="forgot" onclick="alert('Member login is not available at this time. This is a demo site.');">Forgot Password?</a>
+  </div>
+</div>
+
+</body>
+</html>
