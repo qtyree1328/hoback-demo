@@ -61,6 +61,27 @@ header.scrolled .nav-logo-text-img { display: block; }
 .btn-primary { display: inline-block; padding: 16px 50px; background: #1e2d3a; color: #fff; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; border: none; cursor: pointer; transition: background 0.3s; font-family: 'Lato', sans-serif; }
 .btn-primary:hover { background: #365e75; }
 
+/* RENTAL AMENITIES */
+.amenities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; max-width: 1100px; margin: 0 auto; }
+.amenity-card { text-align: center; padding: 40px 24px; background: #fff; border: 1px solid #e8e4df; border-radius: 4px; transition: transform 0.3s, box-shadow 0.3s; }
+.amenity-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+.amenity-icon { font-size: 2.4rem; margin-bottom: 18px; }
+.amenity-card h4 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #1e2d3a; margin-bottom: 12px; }
+.amenity-card p { font-size: 0.9rem; color: #3a4f5e; line-height: 1.6; }
+
+/* SERVICES */
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+.service-card { display: flex; gap: 18px; align-items: flex-start; padding: 28px; background: #fff; border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: transform 0.3s; }
+.service-card:hover { transform: translateY(-3px); }
+.service-icon { font-size: 1.8rem; flex-shrink: 0; width: 44px; height: 44px; background: #f7f5f2; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.service-info h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #1e2d3a; margin-bottom: 6px; }
+.service-info p { font-size: 0.88rem; color: #3a4f5e; line-height: 1.6; }
+
+@media (max-width: 768px) {
+  .amenities-grid { grid-template-columns: 1fr 1fr; }
+  .services-grid { grid-template-columns: 1fr; }
+}
+
 footer { background: #1e2d3a; padding: 60px; color: #fff; }
 .footer-inner { display: flex; align-items: flex-start; gap: 50px; }
 .footer-logo img { height: 90px; width: auto; opacity: 0.9; }
@@ -150,6 +171,84 @@ footer { background: #1e2d3a; padding: 60px; color: #fff; }
         <h3>The Homestead</h3>
         <p>Our signature estate property — a grand mountain retreat for the most discerning guests, with dedicated staff, private dining, and panoramic views.</p>
         <button class="btn-outline" onclick="alert('Room details are not available at this time. Please contact us at (307) 249-1000.')">View Details</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RENTAL AMENITIES -->
+<section class="section section-beige">
+  <h2>Included with Your Stay</h2>
+  <p class="section-subtitle">Every reservation includes access to our signature amenities.</p>
+  <div class="amenities-grid">
+    <div class="amenity-card">
+      <div class="amenity-icon">🧖</div>
+      <h4>Spa Access</h4>
+      <p>Full access to the Hoback Spa — thermal circuit, steam rooms, and relaxation lounges with mountain views.</p>
+    </div>
+    <div class="amenity-card">
+      <div class="amenity-icon">🏊</div>
+      <h4>Pools</h4>
+      <p>Heated outdoor infinity pool overlooking the Tetons and a year-round indoor lap pool with hot tubs.</p>
+    </div>
+    <div class="amenity-card">
+      <div class="amenity-icon">💪</div>
+      <h4>Fitness Center</h4>
+      <p>World-class equipment, personal training, and group fitness classes in our state-of-the-art facility.</p>
+    </div>
+    <div class="amenity-card">
+      <div class="amenity-icon">🍽️</div>
+      <h4>Dining Room</h4>
+      <p>Complimentary breakfast at The Lodge and priority reservations across all three dining venues.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GUEST SERVICES -->
+<section class="section section-white">
+  <h2>Guest Services</h2>
+  <p class="section-subtitle">Let our team handle the details so you can focus on the experience.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🎿</div>
+      <div class="service-info">
+        <h4>Equipment Rental</h4>
+        <p>Premium ski and snowboard gear, golf clubs, mountain bikes, and fly fishing equipment — fitted and delivered to your door.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏔️</div>
+      <div class="service-info">
+        <h4>Ski Passes</h4>
+        <p>Jackson Hole Mountain Resort lift tickets arranged in advance. Discounted multi-day passes available for guests.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🧭</div>
+      <div class="service-info">
+        <h4>Guided Tours</h4>
+        <p>Backcountry skiing, fly fishing expeditions, wildlife safaris, and private photography tours led by expert local guides.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">✈️</div>
+      <div class="service-info">
+        <h4>Airport Transfers</h4>
+        <p>Complimentary luxury shuttle service to and from Jackson Hole Airport, just 30 minutes from the club.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛎️</div>
+      <div class="service-info">
+        <h4>Concierge</h4>
+        <p>Restaurant reservations, activity bookings, event tickets, and personalized itinerary planning by our dedicated team.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">👶</div>
+      <div class="service-info">
+        <h4>Childcare &amp; Kids Programs</h4>
+        <p>Supervised adventures for ages 3–12 including nature exploration, junior ski lessons, and creative workshops.</p>
       </div>
     </div>
   </div>
