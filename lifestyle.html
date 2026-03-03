@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lifestyle - Hoback Club</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,81 +13,78 @@ img { max-width: 100%; display: block; }
 
 header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: background 0.3s; }
 header.scrolled { background: #1e2d3a; }
-nav { display: flex; align-items: center; justify-content: center; padding: 22px 50px; background: transparent; transition: background 0.4s, backdrop-filter 0.4s; }
+nav { display: flex; align-items: center; justify-content: center; padding: 22px 50px; background: transparent; transition: background 0.4s; }
 header.scrolled nav { background: rgba(30,45,58,0.85); backdrop-filter: blur(4px); }
-.nav-left, .nav-right { display: flex; gap: 30px; flex: 1; }
+.nav-left, .nav-right { display: flex; gap: 30px; flex: 1; align-items: center; }
 .nav-right { justify-content: flex-end; }
 nav a { color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; transition: opacity 0.3s; }
 nav a:hover { opacity: 0.7; }
 .nav-logo { margin: 0 40px; flex-shrink: 0; }
-.nav-logo-shield { height: 100px; width: auto; transition: opacity 0.4s; }
-.nav-logo-text-img { height: 30px; width: auto; display: none; }
-header.scrolled .nav-logo-shield { display: none; }
-header.scrolled .nav-logo-text-img { display: block; }
+.nav-logo-default { height: 80px; width: auto; }
+.nav-logo-scroll { height: 30px; width: auto; display: none; }
+header.scrolled .nav-logo-default { display: none; }
+header.scrolled .nav-logo-scroll { display: block; }
+.nav-dropdown { position: relative; }
+.nav-dropdown-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: rgba(30,45,58,0.95); backdrop-filter: blur(8px); padding: 12px 0; min-width: 180px; border-radius: 4px; margin-top: 10px; }
+.nav-dropdown:hover .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a { display: block; padding: 8px 20px; font-size: 0.65rem; white-space: nowrap; }
+.nav-dropdown-menu a:hover { background: rgba(255,255,255,0.1); }
 
-.hero { position: relative; height: 70vh; min-height: 400px; background: url('https://images.unsplash.com/photo-1551524559-8af4e6624178?w=1920&h=1080&fit=crop') center/cover; display: flex; align-items: flex-end; justify-content: center; }
-.hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,45,58,0.7), transparent 60%); }
-.hero h1 { position: relative; z-index: 2; color: #fff; font-size: 3.2rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.25em; margin-bottom: 60px; text-align: center; }
+/* Season Cards - scroll snap */
+.season-cards { height: 400vh; }
+.season-card { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; background-size: cover; background-position: center; background-attachment: fixed; }
+.season-card::after { content: ''; position: absolute; inset: 0; background: rgba(30,45,58,0.45); }
+.season-card-content { position: relative; z-index: 2; text-align: center; color: #fff; }
+.season-card-content h2 { font-size: 4rem; font-weight: 100; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 10px; }
+.season-card-content p { font-size: 1.1rem; font-weight: 300; letter-spacing: 0.1em; opacity: 0.8; }
 
-.section { padding: 80px 60px; }
-.section-beige { background: #f7f5f2; }
-.section-white { background: #fff; }
-.section-navy { background: #1e2d3a; color: #fff; }
-.section h2 { font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; text-align: center; color: #1e2d3a; }
-.section-navy h2 { color: #fff; }
-.section-subtitle { font-size: 0.9rem; color: #5a6d7a; text-align: center; letter-spacing: 0.05em; margin-bottom: 50px; }
-.section-navy .section-subtitle { color: rgba(255,255,255,0.5); }
+/* Sections */
+.section-intro { max-width: 900px; margin: 0 auto; padding: 100px 40px 60px; text-align: center; }
+.section-intro h2 { font-size: 2.2rem; font-weight: 300; color: #1e2d3a; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 30px; }
+.section-intro p { font-size: 1.05rem; line-height: 1.9; color: #444; margin-bottom: 15px; }
+.concierge-note { background: #f7f5f2; padding: 20px 30px; border-left: 3px solid #1e2d3a; margin: 30px 0; font-size: 0.95rem; color: #555; font-style: italic; }
 
-/* SEASONS */
-.seasons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 1100px; margin: 0 auto; }
-.season-card { position: relative; height: 420px; border-radius: 4px; overflow: hidden; }
-.season-card img { width: 100%; height: 100%; object-fit: cover; }
-.season-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,45,58,0.85) 30%, transparent 70%); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; }
-.season-overlay h3 { color: #fff; font-size: 1.8rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
-.season-overlay ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
-.season-overlay li { background: rgba(255,255,255,0.15); color: #fff; padding: 6px 14px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 999px; }
+.activities-grid { max-width: 1200px; margin: 0 auto; padding: 0 40px 80px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.activity-card { background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 20px rgba(0,0,0,0.08); transition: transform 0.4s, box-shadow 0.4s; }
+.activity-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+.activity-card img { width: 100%; height: 220px; object-fit: cover; }
+.activity-card-body { padding: 24px; }
+.activity-card h4 { font-size: 0.9rem; font-weight: 700; color: #1e2d3a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.activity-card p { font-size: 0.85rem; line-height: 1.7; color: #555; }
 
-/* EVENTS */
-.events-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
-.event-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 30px; transition: background 0.3s; }
-.event-card:hover { background: rgba(255,255,255,0.1); }
-.event-date { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
-.event-card h4 { font-size: 1.1rem; font-weight: 400; color: #fff; margin-bottom: 8px; }
-.event-card p { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+.section-divider { height: 50vh; background-size: cover; background-position: center; background-attachment: fixed; position: relative; }
+.section-divider::after { content: ''; position: absolute; inset: 0; background: rgba(30,45,58,0.4); }
 
-/* CULTURE */
-.culture-split { display: flex; gap: 60px; align-items: center; max-width: 1100px; margin: 0 auto; }
-.culture-img { flex: 1; border-radius: 4px; overflow: hidden; }
-.culture-img img { width: 100%; height: 450px; object-fit: cover; }
-.culture-text { flex: 1; }
-.culture-text h3 { font-size: 2rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; color: #1e2d3a; margin-bottom: 20px; }
-.culture-text p { font-size: 1.05rem; line-height: 1.8; color: #3a4f5e; }
+.sub-heading { max-width: 1200px; margin: 0 auto; padding: 50px 40px 30px; }
+.sub-heading h3 { font-size: 1.3rem; font-weight: 300; color: #1e2d3a; text-transform: uppercase; letter-spacing: 0.1em; }
 
-footer { background: #1e2d3a; padding: 60px; color: #fff; }
-.footer-inner { display: flex; align-items: flex-start; gap: 50px; }
-.footer-logo img { height: 90px; width: auto; opacity: 0.9; }
+footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 30px; }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 60px; align-items: flex-start; }
+.footer-logo img { height: 60px; margin-bottom: 20px; }
 .footer-info { flex: 1; }
 .footer-info-top { display: flex; gap: 60px; margin-bottom: 30px; }
-.footer-contact strong { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px; }
-.footer-contact a { display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.8; transition: color 0.3s; }
-.footer-contact a:hover { color: #fff; }
-.footer-links a { display: block; color: rgba(255,255,255,0.7); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; line-height: 2.5; transition: color 0.3s; }
-.footer-links a:hover { color: #fff; }
-.footer-social { display: flex; gap: 15px; }
-.footer-social a { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.9rem; transition: all 0.3s; }
-.footer-social a:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
-.footer-bottom { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(255,255,255,0.5); }
-.back-to-top { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: #fff; font-size: 1.2rem; background: none; }
-.back-to-top:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+.footer-contact strong { display: block; color: #fff; margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.footer-contact a, .footer-links a { display: block; font-size: 0.85rem; margin-bottom: 4px; transition: color 0.3s; }
+.footer-contact a:hover, .footer-links a:hover { color: #fff; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+.back-to-top { background: rgba(255,255,255,0.15); border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; }
+.hamburger { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
 
+@media (max-width: 900px) {
+  .activities-grid { grid-template-columns: 1fr 1fr; }
+  .season-card-content h2 { font-size: 2.5rem; }
+}
 @media (max-width: 768px) {
-  nav { padding: 12px 20px; } .nav-left, .nav-right { display: none; }
-  .hero h1 { font-size: 1.8rem; }
-  .section { padding: 50px 24px; }
-  .seasons-grid { grid-template-columns: 1fr; }
-  .events-grid { grid-template-columns: 1fr; }
-  .culture-split { flex-direction: column; gap: 30px; }
-  footer { padding: 40px 30px; } .footer-inner { flex-direction: column; } .footer-info-top { flex-direction: column; gap: 20px; }
+  .nav-left, .nav-right { display: none; }
+  .hamburger { display: block; position: absolute; right: 20px; top: 22px; }
+  nav { padding: 15px 20px; }
+  .activities-grid { grid-template-columns: 1fr; padding: 0 20px 60px; }
+  .section-intro { padding: 60px 20px 40px; }
+  .season-card-content h2 { font-size: 2rem; }
+  .season-card { background-attachment: scroll; }
+  .section-divider { background-attachment: scroll; }
+  .footer-inner { flex-direction: column; }
+  .footer-info-top { flex-direction: column; gap: 20px; }
 }
 </style>
 </head>
@@ -104,117 +99,291 @@ footer { background: #1e2d3a; padding: 60px; color: #fff; }
   </div>
   <div class="nav-logo">
     <a href="index.html">
-      <img src="images/logo-shield.svg" alt="Hoback Club" class="nav-logo-shield">
-      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
+      <img src="images/logo-footer.svg" alt="Hoback Club" class="nav-logo-default">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-scroll">
     </a>
   </div>
   <div class="nav-right">
-    <a href="lifestyle.html">Lifestyle</a>
+    <div class="nav-dropdown">
+      <a href="lifestyle.html" class="nav-dropdown-toggle">Lifestyle</a>
+      <div class="nav-dropdown-menu">
+        <a href="#winter">Winter Activities</a>
+        <a href="#summer">Summer Activities</a>
+      </div>
+    </div>
     <a href="membership.html">Membership</a>
-    <a href="stay.html#contact">Contact Us</a>
+    <a href="contact-us.html">Contact Us</a>
     <a href="login.html">Member Login</a>
   </div>
+  <button class="hamburger" onclick="document.querySelector('.nav-left').style.display=document.querySelector('.nav-left').style.display==='flex'?'none':'flex';document.querySelector('.nav-right').style.display=document.querySelector('.nav-right').style.display==='flex'?'none':'flex'">&#9776;</button>
 </nav>
 </header>
 
-<section class="hero">
-  <h1>Lifestyle</h1>
-</section>
+<!-- Season Cards -->
+<div class="season-cards">
+  <div class="season-card" style="background-image:url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100068')">
+    <div class="season-card-content"><h2>Winter</h2><p>Pristine powder and legendary terrain</p></div>
+  </div>
+  <div class="season-card" style="background-image:url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100076')">
+    <div class="season-card-content"><h2>Spring</h2><p>Last runs and alpine awakening</p></div>
+  </div>
+  <div class="season-card" style="background-image:url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100077')">
+    <div class="season-card-content"><h2>Summer</h2><p>Sun-drenched days and endless adventure</p></div>
+  </div>
+  <div class="season-card" style="background-image:url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100134')">
+    <div class="season-card-content"><h2>Autumn</h2><p>Golden aspens and quiet grandeur</p></div>
+  </div>
+</div>
 
-<!-- FOUR SEASONS -->
-<section class="section section-white">
-  <h2>Four Seasons of Adventure</h2>
-  <p class="section-subtitle">Every season brings a new way to experience the Tetons.</p>
-  <div class="seasons-grid">
-    <div class="season-card">
-      <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop" alt="Winter">
-      <div class="season-overlay">
-        <h3>Winter</h3>
-        <ul>
-          <li>Skiing</li><li>Snowshoeing</li><li>Ice Fishing</li><li>Sleigh Rides</li>
-        </ul>
+<!-- WINTER -->
+<div id="winter">
+  <div class="section-intro">
+    <h2>Winter Activities</h2>
+    <p>Winter in Jackson Hole is more than a season -- It's a way of life. From the first snowfall to the last run of spring, the valley transforms into a world-class winter playground, framed by the iconic peaks of the Tetons and the quiet luxury of mountain living.</p>
+    <p>Step out your door into pristine powder and legendary terrain, with ski-in/ski-out access to Jackson Hole Mountain Resort. Beyond the slopes, discover the rhythm of winter at your own pace -- snowshoe through silent forests, ride a horse-drawn sleigh, or witness wildlife in the serenity of snow-covered landscapes.</p>
+    <div class="concierge-note">Let our Club Concierge take care of every detail -- every activity below can be arranged for you.</div>
+  </div>
+
+  <div class="sub-heading"><h3>Skiing</h3></div>
+  <div class="activities-grid">
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100100" alt="Ski Passes">
+      <div class="activity-card-body">
+        <h4>Ski Passes</h4>
+        <p>As daily ski passes may be limited, we will assist you in lift passes for you and your family.</p>
       </div>
     </div>
-    <div class="season-card">
-      <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&h=600&fit=crop" alt="Spring">
-      <div class="season-overlay">
-        <h3>Spring</h3>
-        <ul>
-          <li>Hiking</li><li>Fly Fishing</li><li>Wildlife Tours</li><li>Mountain Biking</li>
-        </ul>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100101" alt="Ski Lessons">
+      <div class="activity-card-body">
+        <h4>Ski Lessons</h4>
+        <p>If you require full or half day lessons, please reach out to our Club Concierge.</p>
       </div>
     </div>
-    <div class="season-card">
-      <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&h=600&fit=crop" alt="Summer">
-      <div class="season-overlay">
-        <h3>Summer</h3>
-        <ul>
-          <li>Golf</li><li>Horseback Riding</li><li>Rafting</li><li>Tennis</li>
-        </ul>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100102" alt="Private Ski Fitting">
+      <div class="activity-card-body">
+        <h4>Private Ski Fitting</h4>
+        <p>Access private demo fleet and premium gear, all in the comfort and privacy of your residence. Contact our Club Concierge to reserve your personal fitting.</p>
       </div>
     </div>
-    <div class="season-card">
-      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop" alt="Fall">
-      <div class="season-overlay">
-        <h3>Fall</h3>
-        <ul>
-          <li>Hunting</li><li>Foliage Tours</li><li>Wine Events</li><li>Photography</li>
-        </ul>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100103" alt="Backcountry Ski Guiding">
+      <div class="activity-card-body">
+        <h4>Backcountry Ski Guiding</h4>
+        <p>Takes you beyond the resort gates into untouched terrain, with small-group adventures with lift access coordinated at booking to ensure a seamless experience.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100104" alt="Heli Skiing">
+      <div class="activity-card-body">
+        <h4>Heli Skiing</h4>
+        <p>Embark on the ultimate heli-skiing or snowboarding adventure in Jackson Hole, with small groups, epic terrain, and a full day of powder including lunch.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100105" alt="Cross-Country Skiing">
+      <div class="activity-card-body">
+        <h4>Cross-Country / Nordic Skiing</h4>
+        <p>Explore over 14 miles of groomed Nordic trails in Grand Teton National Park with expert-led or self-guided cross-country ski tours, perfect for all levels and available in half- or full-day experiences with lunch included.</p>
       </div>
     </div>
   </div>
-</section>
 
-<!-- EVENTS -->
-<section class="section section-navy">
-  <h2>Community &amp; Events</h2>
-  <p class="section-subtitle">A calendar of curated experiences that bring our community together.</p>
-  <div class="events-grid">
-    <div class="event-card">
-      <div class="event-date">March 2026</div>
-      <h4>Spring Equinox Dinner</h4>
-      <p>A farm-to-table dining experience celebrating the arrival of spring in the Tetons.</p>
+  <div class="section-divider" style="background-image:url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100089')"></div>
+
+  <div class="sub-heading"><h3>Other Fun Winter Activities</h3></div>
+  <div class="activities-grid">
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100106" alt="Snowmobiling">
+      <div class="activity-card-body">
+        <h4>Snowmobiling</h4>
+        <p>Ignite the thrill of snowmobiling with guided or self-guided tours through Yellowstone, Grand Teton, or the Gros Ventre, with all gear, transport, and routes tailored to any skill level.</p>
+      </div>
     </div>
-    <div class="event-card">
-      <div class="event-date">June 2026</div>
-      <h4>Summer Solstice Golf Tournament</h4>
-      <p>A member-only tournament followed by an outdoor celebration under the longest day's light.</p>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100107" alt="Sleigh Rides">
+      <div class="activity-card-body">
+        <h4>Sleigh Rides</h4>
+        <p>Ride through crisp mountain air in a vintage horse-drawn sleigh, with sunset or twilight rides enhanced by alpenglow skies, starry nights, and optional fireside apres or gourmet hot chocolate.</p>
+      </div>
     </div>
-    <div class="event-card">
-      <div class="event-date">August 2026</div>
-      <h4>Hoback Music Festival</h4>
-      <p>An intimate mountain music festival featuring world-class artists in an unparalleled setting.</p>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100108" alt="Wildlife Safaris">
+      <div class="activity-card-body">
+        <h4>Wildlife Safaris</h4>
+        <p>Experience the natural beauty and wildlife of Grand Teton National Park on full- or half-day tours timed for optimal sightings during early mornings or golden hour, with lunch included.</p>
+      </div>
     </div>
-    <div class="event-card">
-      <div class="event-date">September 2026</div>
-      <h4>Harvest Wine Weekend</h4>
-      <p>Renowned winemakers paired with our culinary team for a weekend of tastings and pairings.</p>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100109" alt="Dog Sledding">
+      <div class="activity-card-body">
+        <h4>Dog Sledding</h4>
+        <p>Experience the thrill of dog mushing through Wyoming's stunning wilderness with hourly one-hour tours from Teton Village, offering couples and families a scenic ride powered by a skilled husky team.</p>
+      </div>
     </div>
-    <div class="event-card">
-      <div class="event-date">November 2026</div>
-      <h4>First Tracks Celebration</h4>
-      <p>Welcome winter's return with the first runs of the season and a fireside après gathering.</p>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100110" alt="Snowshoeing">
+      <div class="activity-card-body">
+        <h4>Snowshoeing</h4>
+        <p>Offering a serene alternative to skiing with guided full- or half-day tours, custom routes, all gear provided, and optional wellness or photography experiences arranged by your Club Concierge.</p>
+      </div>
     </div>
-    <div class="event-card">
-      <div class="event-date">December 2026</div>
-      <h4>Holiday Gala</h4>
-      <p>An elegant evening of dining, dancing, and holiday magic in the heart of the mountains.</p>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100111" alt="Snowcoach">
+      <div class="activity-card-body">
+        <h4>Snowcoach</h4>
+        <p>Explore Yellowstone's iconic Old Faithful and geothermal wonders in a luxurious snowcoach -- an all-ages, full-day adventure with a relaxed, scenic route.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100112" alt="Ice Skating">
+      <div class="activity-card-body">
+        <h4>Ice Skating</h4>
+        <p>Enjoy scenic outdoor skating at Teton Village's Warming Hut rink, open daily from 4-9PM with breathtaking mountain views.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100113" alt="Tubing">
+      <div class="activity-card-body">
+        <h4>Tubing</h4>
+        <p>Experience thrilling toboggan, tubing, and alpine slide rides at Jackson Hole's family-friendly terrain park, open 10AM-4PM tickets are available.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100114" alt="Alpine Climbing">
+      <div class="activity-card-body">
+        <h4>Alpine Climbing</h4>
+        <p>Jackson Hole offers world-class alpine climbing in the Tetons with technical ascents, custom itineraries, and gear provided for individuals and small groups, including multi-day climbs.</p>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- CULTURE -->
-<section class="section section-beige">
-  <div class="culture-split">
-    <div class="culture-img">
-      <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=900&h=600&fit=crop" alt="The Hoback Lifestyle">
+<!-- SUMMER -->
+<div id="summer">
+  <div class="section-divider" style="background-image:url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100078')"></div>
+
+  <div class="section-intro">
+    <h2>Summer Activities</h2>
+    <p>Summer is where beauty meets the Wild West. As the snow melts and wildflowers bloom, Jackson Hole awakens to a summer season filled with sun-drenched days and endless opportunity for adventure. From fly-fishing on the Snake River to horseback rides, mountain biking and peaceful scenic floats, every moment is framed by the towering Tetons.</p>
+    <p>Here, the pace is yours to set -- where your Club Concierge can arrange the best guides for you and your family. All activities below can be seamlessly coordinated so you and your family can maximize your stay.</p>
+  </div>
+
+  <div class="activities-grid">
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100116" alt="Wildlife Safaris">
+      <div class="activity-card-body">
+        <h4>Wildlife Safaris</h4>
+        <p>Embark on a wildlife safari through Yellowstone or Grand Teton National Parks with expert naturalist guides, including transportation and gourmet lunches for full-day or prime-time sunrise and sunset tours.</p>
+      </div>
     </div>
-    <div class="culture-text">
-      <h3>The Hoback Lifestyle</h3>
-      <p>Life at the Hoback Club is defined by a shared reverence for the extraordinary. It's mornings spent carving fresh tracks through pristine powder. Afternoons on the river, fly rod in hand. Evenings gathered around a fire with friends old and new. Here, luxury is not about excess — it's about intention, connection, and the quiet thrill of living close to the wild.</p>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100117" alt="Horseback Riding">
+      <div class="activity-card-body">
+        <h4>Horseback Riding</h4>
+        <p>Enjoy a private, guided horseback ride through alpine meadows with expert wranglers, available mornings, afternoons, or sunsets for ages 6 and up, with optional gourmet cast-iron cooking.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100118" alt="Whitewater Rafting">
+      <div class="activity-card-body">
+        <h4>Whitewater Rafting / Scenic Floats</h4>
+        <p>Whether seeking whitewater thrills or scenic floats, Jackson Hole's Snake River offers daily full- or half-day trips for all ages and skill levels, with all gear -- including wetsuits and splash jackets -- provided.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100119" alt="Fly-Fishing">
+      <div class="activity-card-body">
+        <h4>Fly-Fishing</h4>
+        <p>Enjoy world-class guided fly fishing on the Snake, Green, Salt Rivers, or local spring creeks, with all gear, transport, and expert instruction tailored to your skill level. A valid Wyoming fishing license is required for all participants.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100120" alt="Hiking">
+      <div class="activity-card-body">
+        <h4>Hiking Jackson Hole Valley</h4>
+        <p>Start your hike from Teton Village or atop the gondola for sweeping mountain views, then venture beyond the crowds to tranquil trails like Phelps Lake or Hidden Falls within the nearby national parks.</p>
+      </div>
     </div>
   </div>
-</section>
+
+  <div class="section-divider" style="background-image:url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100143')"></div>
+
+  <div class="sub-heading"><h3>Other Fun Summer Activities</h3></div>
+  <div class="activities-grid">
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100121" alt="Climbing">
+      <div class="activity-card-body">
+        <h4>Climbing / Via Ferrata</h4>
+        <p>Explore the Tetons with expert guides or take on the thrilling Via Ferrata just steps from your door -- an exhilarating mix of hiking and climbing, with all gear provided for full, half, or multi-day adventures.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100122" alt="Mountain Biking">
+      <div class="activity-card-body">
+        <h4>Mountain Biking / Ebike Tours</h4>
+        <p>Whether you prefer a leisurely ride or a thrilling adventure, there's a trail for everyone. Enjoy breathtaking scenic views while riding, even on uncrowded trails. Our Club Concierge will arrange for rentals or scenic tours.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100123" alt="ATV Tours">
+      <div class="activity-card-body">
+        <h4>ATV / Side-By-Sides Tours</h4>
+        <p>Set out on an ATV or side-by-side adventure through the stunning Gros Ventre wilderness and Curtis Canyon, uncovering hidden gems along the way. Drivers must be 16 with a valid license, passengers 8 or older.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100124" alt="Golf and Tennis">
+      <div class="activity-card-body">
+        <h4>Golf &amp; Tennis</h4>
+        <p>Hit the links and have access to three private golf courses exclusively to the Hoback Club.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100125" alt="Wooden Boat Floats">
+      <div class="activity-card-body">
+        <h4>Wooden Boat Floats</h4>
+        <p>Unwind on a private late-afternoon Snake River float, complete with on-site, chef-prepared meals and sunset views -- perfect for couples, families, or small groups, with transportation available and advanced booking recommended.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100126" alt="Natural Hot Springs">
+      <div class="activity-card-body">
+        <h4>Natural Hot Springs</h4>
+        <p>Journey by car, snowmobile or dog sled as you travel to secluded hot spring oasis. Full or half day excursions are available to fit your schedule for every season.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100127" alt="Helicopter Tours">
+      <div class="activity-card-body">
+        <h4>Flying / Helicopter Tours</h4>
+        <p>Charter a private helicopter or Kodiak flight over Jackson Hole with year-round launch options, custom routes, and optional champagne toasts -- ideal for 3-6 passengers, with advance booking recommended.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100128" alt="Hot Air Balloon">
+      <div class="activity-card-body">
+        <h4>Hot Air Balloon Tours</h4>
+        <p>Lift off at first light for a serene 3-hour hot air balloon experience over the Tetons, taking advantage of calm morning winds and ending with a celebratory landing. Transportation available upon request.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100129" alt="Paragliding">
+      <div class="activity-card-body">
+        <h4>Paragliding</h4>
+        <p>Soar above Jackson Hole and the Teton Range on a 20-minute tandem paragliding flight with expert pilots -- no experience needed and all gear included for ages 6 and up.</p>
+      </div>
+    </div>
+    <div class="activity-card">
+      <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100130" alt="Stargazing">
+      <div class="activity-card-body">
+        <h4>Stargazing</h4>
+        <p>Enjoy year-round evening stargazing tours with astronomy experts, featuring top equipment, cozy blankets, and gourmet beverages -- book through your Club Concierge for prime celestial events.</p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div class="footer-inner">
@@ -227,28 +396,22 @@ footer { background: #1e2d3a; padding: 60px; color: #fff; }
           <a href="tel:+13072491000">(307) 249-1000</a>
         </div>
         <div class="footer-links">
-          <a href="#">Employment Opportunities</a>
           <a href="membership.html">Membership Inquiries</a>
-        </div>
-        <div class="footer-social">
-          <a href="#" aria-label="Facebook">f</a>
-          <a href="#" aria-label="Instagram">ig</a>
+          <a href="contact-us.html">Contact Us</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color: rgba(255,255,255,0.5);">Clubessential</a></span>
-        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+        <span>&copy; 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color:rgba(255,255,255,0.5);">Clubessential</a></span>
+        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
       </div>
     </div>
   </div>
 </footer>
 
 <script>
-(function() {
-  const header = document.getElementById('mainHeader');
-  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 50), { passive: true });
-  header.classList.toggle('scrolled', window.scrollY > 50);
-})();
+window.addEventListener('scroll', () => {
+  document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 50);
+});
 </script>
 </body>
 </html>

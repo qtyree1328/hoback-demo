@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Amenities - Hoback Club</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,55 +13,67 @@ img { max-width: 100%; display: block; }
 
 header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: background 0.3s; }
 header.scrolled { background: #1e2d3a; }
-nav { display: flex; align-items: center; justify-content: center; padding: 22px 50px; background: transparent; transition: background 0.4s, backdrop-filter 0.4s; }
+nav { display: flex; align-items: center; justify-content: center; padding: 22px 50px; background: transparent; transition: background 0.4s; }
 header.scrolled nav { background: rgba(30,45,58,0.85); backdrop-filter: blur(4px); }
-.nav-left, .nav-right { display: flex; gap: 30px; flex: 1; }
+.nav-left, .nav-right { display: flex; gap: 30px; flex: 1; align-items: center; }
 .nav-right { justify-content: flex-end; }
 nav a { color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; transition: opacity 0.3s; }
 nav a:hover { opacity: 0.7; }
 .nav-logo { margin: 0 40px; flex-shrink: 0; }
-.nav-logo-shield { height: 100px; width: auto; transition: opacity 0.4s; }
-.nav-logo-text-img { height: 30px; width: auto; display: none; }
-header.scrolled .nav-logo-shield { display: none; }
-header.scrolled .nav-logo-text-img { display: block; }
+.nav-logo-default { height: 80px; width: auto; }
+.nav-logo-scroll { height: 30px; width: auto; display: none; }
+header.scrolled .nav-logo-default { display: none; }
+header.scrolled .nav-logo-scroll { display: block; }
+.nav-dropdown { position: relative; }
+.nav-dropdown-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: rgba(30,45,58,0.95); backdrop-filter: blur(8px); padding: 12px 0; min-width: 180px; border-radius: 4px; margin-top: 10px; }
+.nav-dropdown:hover .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a { display: block; padding: 8px 20px; font-size: 0.65rem; white-space: nowrap; }
+.nav-dropdown-menu a:hover { background: rgba(255,255,255,0.1); }
 
-.hero { position: relative; height: 70vh; min-height: 400px; background: url('https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=1920&h=1080&fit=crop') center/cover; display: flex; align-items: flex-end; justify-content: center; }
-.hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,45,58,0.7), transparent 60%); }
-.hero h1 { position: relative; z-index: 2; color: #fff; font-size: 3.2rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.25em; margin-bottom: 60px; text-align: center; }
+.hero { position: relative; height: 70vh; min-height: 400px; background: url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100067') center/cover no-repeat; display: flex; align-items: center; justify-content: center; }
+.hero::after { content: ''; position: absolute; inset: 0; background: rgba(30,45,58,0.4); }
+.hero-content { position: relative; z-index: 2; text-align: center; color: #fff; max-width: 800px; padding: 0 40px; }
+.hero h1 { font-size: 3rem; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 20px; }
+.hero p { font-size: 1.1rem; line-height: 1.8; font-weight: 300; opacity: 0.9; }
 
-.amenity-row { display: flex; min-height: 500px; }
-.amenity-row.reverse { flex-direction: row-reverse; }
-.amenity-img { flex: 1; min-height: 500px; background-size: cover; background-position: center; }
-.amenity-text { flex: 1; padding: 60px 60px; display: flex; flex-direction: column; justify-content: center; }
-.amenity-text.bg-white { background: #fff; }
-.amenity-text.bg-beige { background: #f7f5f2; }
-.amenity-text h3 { font-size: 2rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; color: #1e2d3a; margin-bottom: 20px; }
-.amenity-text p { font-size: 1.05rem; line-height: 1.8; color: #3a4f5e; }
+.amenity-section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+.amenity-block { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-bottom: 100px; opacity: 0; transform: translateX(-60px); transition: opacity 0.8s, transform 0.8s; }
+.amenity-block.from-right { transform: translateX(60px); }
+.amenity-block.visible { opacity: 1; transform: translateX(0); }
+.amenity-block.reverse { direction: rtl; }
+.amenity-block.reverse > * { direction: ltr; }
+.amenity-block img { width: 100%; height: 400px; object-fit: cover; border-radius: 4px; }
+.amenity-text h3 { font-size: 1.5rem; font-weight: 300; color: #1e2d3a; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
+.amenity-text p { font-size: 1rem; line-height: 1.9; color: #444; margin-bottom: 15px; }
+.amenity-text ul { list-style: none; padding: 0; }
+.amenity-text ul li { font-size: 0.95rem; color: #444; padding: 6px 0; padding-left: 16px; position: relative; }
+.amenity-text ul li::before { content: '--'; position: absolute; left: 0; color: #1e2d3a; }
 
-footer { background: #1e2d3a; padding: 60px; color: #fff; }
-.footer-inner { display: flex; align-items: flex-start; gap: 50px; }
-.footer-logo img { height: 90px; width: auto; opacity: 0.9; }
+.full-width-image { width: 100%; height: 50vh; object-fit: cover; margin: 0; }
+
+footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 30px; }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 60px; align-items: flex-start; }
+.footer-logo img { height: 60px; margin-bottom: 20px; }
 .footer-info { flex: 1; }
 .footer-info-top { display: flex; gap: 60px; margin-bottom: 30px; }
-.footer-contact strong { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px; }
-.footer-contact a { display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.8; transition: color 0.3s; }
-.footer-contact a:hover { color: #fff; }
-.footer-links a { display: block; color: rgba(255,255,255,0.7); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; line-height: 2.5; transition: color 0.3s; }
-.footer-links a:hover { color: #fff; }
-.footer-social { display: flex; gap: 15px; }
-.footer-social a { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.9rem; transition: all 0.3s; }
-.footer-social a:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
-.footer-bottom { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(255,255,255,0.5); }
-.back-to-top { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: #fff; font-size: 1.2rem; background: none; }
-.back-to-top:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+.footer-contact strong { display: block; color: #fff; margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.footer-contact a, .footer-links a { display: block; font-size: 0.85rem; margin-bottom: 4px; transition: color 0.3s; }
+.footer-contact a:hover, .footer-links a:hover { color: #fff; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+.back-to-top { background: rgba(255,255,255,0.15); border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; }
+.hamburger { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
 
+@media (max-width: 900px) {
+  .amenity-block { grid-template-columns: 1fr; gap: 30px; }
+  .amenity-block.reverse { direction: ltr; }
+}
 @media (max-width: 768px) {
-  nav { padding: 12px 20px; } .nav-left, .nav-right { display: none; }
+  .nav-left, .nav-right { display: none; }
+  .hamburger { display: block; position: absolute; right: 20px; top: 22px; }
+  nav { padding: 15px 20px; }
   .hero h1 { font-size: 1.8rem; }
-  .amenity-row, .amenity-row.reverse { flex-direction: column; }
-  .amenity-img { min-height: 300px; }
-  .amenity-text { padding: 40px 24px; }
-  footer { padding: 40px 30px; } .footer-inner { flex-direction: column; } .footer-info-top { flex-direction: column; gap: 20px; }
+  .footer-inner { flex-direction: column; }
+  .footer-info-top { flex-direction: column; gap: 20px; }
 }
 </style>
 </head>
@@ -78,76 +88,110 @@ footer { background: #1e2d3a; padding: 60px; color: #fff; }
   </div>
   <div class="nav-logo">
     <a href="index.html">
-      <img src="images/logo-shield.svg" alt="Hoback Club" class="nav-logo-shield">
-      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
+      <img src="images/logo-footer.svg" alt="Hoback Club" class="nav-logo-default">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-scroll">
     </a>
   </div>
   <div class="nav-right">
-    <a href="lifestyle.html">Lifestyle</a>
+    <div class="nav-dropdown">
+      <a href="lifestyle.html" class="nav-dropdown-toggle">Lifestyle</a>
+      <div class="nav-dropdown-menu">
+        <a href="lifestyle.html#winter">Winter Activities</a>
+        <a href="lifestyle.html#summer">Summer Activities</a>
+      </div>
+    </div>
     <a href="membership.html">Membership</a>
-    <a href="stay.html#contact">Contact Us</a>
+    <a href="contact-us.html">Contact Us</a>
     <a href="login.html">Member Login</a>
   </div>
+  <button class="hamburger" onclick="document.querySelector('.nav-left').style.display=document.querySelector('.nav-left').style.display==='flex'?'none':'flex';document.querySelector('.nav-right').style.display=document.querySelector('.nav-right').style.display==='flex'?'none':'flex'">&#9776;</button>
 </nav>
 </header>
 
 <section class="hero">
-  <h1>Amenities</h1>
+  <div class="hero-content">
+    <h1>Amenities</h1>
+    <p>Welcome to Elevated Living</p>
+  </div>
 </section>
 
-<!-- Golf -->
-<div class="amenity-row">
-  <div class="amenity-img" style="background-image: url('https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=1000&h=700&fit=crop')"></div>
-  <div class="amenity-text bg-white">
-    <h3>Championship Golf</h3>
-    <p>Our 18-hole championship course winds through alpine meadows with the Teton Range as its backdrop. Designed to challenge and inspire, the course features dramatic elevation changes, natural water features, and immaculate conditioning from spring through fall. A state-of-the-art practice facility and private instruction from PGA professionals complete the experience.</p>
+<div class="amenity-section">
+
+  <div class="amenity-block">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100091" alt="Member Dining">
+    <div class="amenity-text">
+      <h3>Member Dining &amp; Gathering Spaces</h3>
+      <p>Year-round private dining at the Hoback Club offers members signature meals from sunrise to apres and dinner, all served with refined mountain hospitality.</p>
+      <p>Exquisite cuisine masterly curated by our Michelin Star Chef, Jean-Louis Dumonet.</p>
+      <ul>
+        <li>Hand selected Old and New World wine cellar features rare vintages and perfect pairings.</li>
+        <li>The Great Hall Dining Room and Deck, with luxe seating and eight private firepits, offers members an exclusive, fireside setting to unwind, dine, and connect year-round.</li>
+        <li>Our Fireside Lounge atmosphere transforms into Jackson Hole's premier apres-ski destination with handcrafted cocktails and hors d'oeuvres.</li>
+      </ul>
+    </div>
   </div>
+
+  <div class="amenity-block reverse from-right">
+    <div class="amenity-text">
+      <h3>Private Dining</h3>
+      <p>Private Residence Dining, exclusively for Hoback Club members, offers in-residence chef service and elegant private dining spaces tailored for everything from intimate gatherings to grand celebrations.</p>
+    </div>
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100092" alt="Private Dining">
+  </div>
+
+  <div class="amenity-block">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100093" alt="Ski Services">
+    <div class="amenity-text">
+      <h3>Ski</h3>
+      <p>Premium ski lockers and slopeside valet, private garage parking, and direct tram/gondola access -- seamless mountain living.</p>
+      <p>Seamless ski-in/ski-out access with dedicated ski valet service at the Hoback Club, where every detail -- from gear prep to boot adjustments -- is designed to elevate your mountain experience from slope to suite.</p>
+    </div>
+  </div>
+
+  <div class="amenity-block reverse from-right">
+    <div class="amenity-text">
+      <h3>Spa</h3>
+      <p>Lux Euro Spa -- Enhance your experience with spa treatments from our world-ranked massage artists available on-call for you. Residents and guests may request appointments through our Club Concierge.</p>
+      <p>Premier Wellness Centre with hot cold hydrotherapy circuit, a Himalayan salt relaxation room, and dedicated treatment suites.</p>
+    </div>
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100094" alt="Spa">
+  </div>
+
+  <div class="amenity-block">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100096" alt="Pools">
+    <div class="amenity-text">
+      <h3>Pools</h3>
+      <p>Indoor and outdoor pools, hot tubs, and a yoga lawn -- a full year-round sanctuary for the body, mind and season.</p>
+    </div>
+  </div>
+
+  <div class="amenity-block reverse from-right">
+    <div class="amenity-text">
+      <h3>Golf</h3>
+      <p>Trackman Golf Simulator where you can play virtual rounds on hundreds of famous courses or use detailed analytics for game improvement.</p>
+    </div>
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100097" alt="Golf Simulator">
+  </div>
+
+  <div class="amenity-block">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100099" alt="Concierge">
+    <div class="amenity-text">
+      <h3>Concierge Services</h3>
+      <p>Personalized Concierge Services -- From bespoke dining reservations to tailored local experiences, our dedicated concierge team is available around the clock to assist with your every need.</p>
+    </div>
+  </div>
+
+  <div class="amenity-block reverse from-right">
+    <div class="amenity-text">
+      <h3>Fun for the Family</h3>
+      <p>A children's gaming room and dedicated family spaces, ensuring multi-generational comfort with a sophisticated edge.</p>
+    </div>
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100142" alt="Family Fun">
+  </div>
+
 </div>
 
-<!-- Spa -->
-<div class="amenity-row reverse">
-  <div class="amenity-img" style="background-image: url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1000&h=700&fit=crop')"></div>
-  <div class="amenity-text bg-beige">
-    <h3>Spa &amp; Wellness</h3>
-    <p>The Hoback Spa is a sanctuary of restoration. Drawing on the healing traditions of the mountain West, our treatments incorporate locally sourced botanicals, mineral-rich waters, and expert therapists. Facilities include treatment rooms with mountain views, a thermal circuit, meditation garden, and a fully equipped yoga and Pilates studio.</p>
-  </div>
-</div>
-
-<!-- Dining -->
-<div class="amenity-row">
-  <div class="amenity-img" style="background-image: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1000&h=700&fit=crop')"></div>
-  <div class="amenity-text bg-white">
-    <h3>Dining</h3>
-    <p>Three distinctive dining venues await. <strong>The Lodge</strong> offers refined mountain cuisine with seasonal tasting menus. <strong>Mountain Grill</strong> provides casual slope-side fare and craft cocktails. <strong>Après Bar</strong> is the perfect gathering place after a day on the mountain, featuring local microbrews, fireside seating, and live music on weekends.</p>
-  </div>
-</div>
-
-<!-- Fitness -->
-<div class="amenity-row reverse">
-  <div class="amenity-img" style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1000&h=700&fit=crop')"></div>
-  <div class="amenity-text bg-beige">
-    <h3>Fitness Center</h3>
-    <p>A world-class fitness facility featuring the latest cardio and strength equipment, personal training suites, and a dedicated group fitness studio. From high-altitude conditioning to recovery sessions, our certified trainers design programs tailored to the mountain lifestyle.</p>
-  </div>
-</div>
-
-<!-- Pool -->
-<div class="amenity-row">
-  <div class="amenity-img" style="background-image: url('https://images.unsplash.com/photo-1572331165267-854da2b021b1?w=1000&h=700&fit=crop')"></div>
-  <div class="amenity-text bg-white">
-    <h3>Pool &amp; Hot Springs</h3>
-    <p>Our outdoor heated infinity pool and natural hot springs sit at the edge of the wilderness, offering panoramic mountain views in every season. Imagine soaking under a canopy of stars while snow falls gently around you — this is the Hoback experience at its finest.</p>
-  </div>
-</div>
-
-<!-- Kids Club -->
-<div class="amenity-row reverse">
-  <div class="amenity-img" style="background-image: url('https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=1000&h=700&fit=crop')"></div>
-  <div class="amenity-text bg-beige">
-    <h3>Kids Club</h3>
-    <p>The Hoback Kids Club offers supervised adventures for our youngest members and guests. From nature exploration and arts programs to junior ski instruction and campfire nights, every activity is designed to foster a lifelong love of the outdoors in a safe, nurturing environment.</p>
-  </div>
-</div>
+<img class="full-width-image" src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100067" alt="Hoback Club Amenities">
 
 <footer>
   <div class="footer-inner">
@@ -160,28 +204,29 @@ footer { background: #1e2d3a; padding: 60px; color: #fff; }
           <a href="tel:+13072491000">(307) 249-1000</a>
         </div>
         <div class="footer-links">
-          <a href="#">Employment Opportunities</a>
           <a href="membership.html">Membership Inquiries</a>
-        </div>
-        <div class="footer-social">
-          <a href="#" aria-label="Facebook">f</a>
-          <a href="#" aria-label="Instagram">ig</a>
+          <a href="contact-us.html">Contact Us</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color: rgba(255,255,255,0.5);">Clubessential</a></span>
-        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+        <span>&copy; 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color:rgba(255,255,255,0.5);">Clubessential</a></span>
+        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
       </div>
     </div>
   </div>
 </footer>
 
 <script>
-(function() {
-  const header = document.getElementById('mainHeader');
-  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 50), { passive: true });
-  header.classList.toggle('scrolled', window.scrollY > 50);
-})();
+window.addEventListener('scroll', () => {
+  document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 50);
+
+  document.querySelectorAll('.amenity-block').forEach(block => {
+    const rect = block.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.85) {
+      block.classList.add('visible');
+    }
+  });
+});
 </script>
 </body>
 </html>

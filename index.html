@@ -91,6 +91,30 @@ header.scrolled .nav-logo-text-img { display: block; }
 
 .weather-badge { display: none; }
 
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { cursor: pointer; }
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 45, 58, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 12px 0;
+  min-width: 180px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+.nav-dropdown:hover .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a {
+  display: block;
+  padding: 8px 20px;
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+.nav-dropdown-menu a:hover { background: rgba(255,255,255,0.1); }
+
 /* ===== HERO BANNER ===== */
 .hero {
   position: relative;
@@ -1402,20 +1426,25 @@ footer {
   </div>
   <div class="nav-logo">
     <a href="index.html">
-      <img src="images/logo-shield.svg" alt="Hoback Club" class="nav-logo-shield">
+      <img src="images/logo-footer.svg" alt="Hoback Club" class="nav-logo-shield">
       <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
     </a>
   </div>
   <div class="nav-right">
-    <a href="lifestyle.html">Lifestyle</a>
+    <div class="nav-dropdown">
+      <a href="lifestyle.html" class="nav-dropdown-toggle">Lifestyle</a>
+      <div class="nav-dropdown-menu">
+        <a href="lifestyle.html#winter">Winter Activities</a>
+        <a href="lifestyle.html#summer">Summer Activities</a>
+      </div>
+    </div>
     <a href="membership.html">Membership</a>
-    <a href="#" onclick="event.preventDefault();document.getElementById('contactSection')?.scrollIntoView({behavior:'smooth'})||alert('Contact section coming soon')">Contact Us</a>
+    <a href="contact-us.html">Contact Us</a>
     <a href="login.html">Member Login</a>
   </div>
 </nav>
-<div class="weather-badge">Current Weather: ❄ 23º F</div>
 </header>
-<a href="extra-features.html" class="extra-features-float">✦ Extra Features</a>
+<a href="extra-features.html" class="extra-features-float">Extra Features</a>
 <style>
 .extra-features-float {
   position: fixed; top: 90px; left: 20px; z-index: 999;
@@ -1450,27 +1479,27 @@ footer {
     <div class="forecast-day">
       <div class="day">Mon</div>
       <div class="date">23</div>
-      <div class="temp">⛅ 23º F</div>
+      <div class="temp">23º F</div>
     </div>
     <div class="forecast-day">
       <div class="day">Tue</div>
       <div class="date">24</div>
-      <div class="temp">☁ 19º F</div>
+      <div class="temp">19º F</div>
     </div>
     <div class="forecast-day">
       <div class="day">Wed</div>
       <div class="date">25</div>
-      <div class="temp">❄ 16º F</div>
+      <div class="temp">16 F</div>
     </div>
     <div class="forecast-day">
       <div class="day">Thu</div>
       <div class="date">26</div>
-      <div class="temp">⛅ 22º F</div>
+      <div class="temp">22º F</div>
     </div>
     <div class="forecast-day">
       <div class="day">Fri</div>
       <div class="date">27</div>
-      <div class="temp">☀ 28º F</div>
+      <div class="temp">28º F</div>
     </div>
   </div>
   <div class="weather-bar-btns">
@@ -1484,7 +1513,7 @@ footer {
   <div class="mtn-report-inner">
     <div class="mtn-report-updated">
       <span>Updated 2/23/26, 5:54 AM</span>
-      <span>⛅ Mostly Cloudy, Some Sun</span>
+      <span>Mostly Cloudy, Some Sun</span>
     </div>
 
     <!-- COLUMN 1: Snow & Current Weather -->
@@ -1513,7 +1542,7 @@ footer {
     <!-- COLUMN 2: Tram & Lift Status -->
     <div class="mtn-status-col">
       <div class="tram-status">
-        <span class="tram-icon">🚡</span>
+        <span class="tram-icon"></span>
         <span class="tram-label">Aerial Tram</span>
         <span class="tram-open"><span class="tram-open-dot"></span> Open</span>
       </div>
@@ -1825,7 +1854,7 @@ footer {
     <div class="trail-explorer-map" id="trailExplorerMap"></div>
     <div id="mapInteractBlocker" style="position:absolute;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);cursor:default;transition:opacity 0.3s;">
       <button id="mapInteractBtn" style="padding:14px 32px;background:#1e2d3a;color:#fff;border:2px solid #fff;border-radius:6px;font-family:'Lato',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:all 0.2s;">
-        ✦ Interact with Map
+        Interact with Map
       </button>
     </div>
     <div id="trailExplorerSpinner">
@@ -2525,10 +2554,10 @@ document.querySelectorAll('.cam-fade').forEach(img => {
 
         // Flags
         const flags = [];
-        if (p.grooming) flags.push('🏔 ' + (typeof p.grooming === 'string' ? p.grooming.replace(/_/g,' ') : 'Groomed'));
-        if (p.snowmaking === true || p.snowmaking === 'yes') flags.push('❄️ Snowmaking');
+        if (p.grooming) flags.push('Mountain: ' + (typeof p.grooming === 'string' ? p.grooming.replace(/_/g,' ') : 'Groomed'));
+        if (p.snowmaking === true || p.snowmaking === 'yes') flags.push('Snowmaking');
         if (p.lit === true || p.lit === 'yes') flags.push('💡 Night skiing');
-        if (p.gladed === true || p.gladed === 'yes') flags.push('🌲 Gladed');
+        if (p.gladed === true || p.gladed === 'yes') flags.push('Gladed');
         if (flags.length) html += '<div class="te-flags">' + flags.map(f => '<span class="te-flag">' + f + '</span>').join('') + '</div>';
 
         html += '</div>';
@@ -2539,7 +2568,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
       teMap.on('click', 'te-lifts-line', (e) => {
         const p = e.features[0].properties;
         const liftType = (p.liftType || '').replace(/_/g, ' ');
-        let html = '<div class="te-popup"><h3>🚡 ' + (p.name || 'Unnamed Lift') + '</h3>';
+        let html = '<div class="te-popup"><h3> ' + (p.name || 'Unnamed Lift') + '</h3>';
         if (liftType) html += '<div class="te-lift-type">' + liftType + '</div>';
         html += '<div class="te-stats">';
         if (p.distance) html += '<div class="te-stat"><strong>Length:</strong> ' + (p.distance >= 1000 ? (p.distance/1000).toFixed(1) + ' km' : p.distance + ' m') + '</div>';
@@ -2548,7 +2577,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
         if (p.duration) html += '<div class="te-stat"><strong>Ride time:</strong> ' + Math.round(p.duration/60) + ' min</div>';
         html += '</div>';
         const flags = [];
-        if (p.heating) flags.push('🔥 Heated');
+        if (p.heating) flags.push('Heated');
         if (p.bubble) flags.push('🫧 Bubble');
         if (flags.length) html += '<div class="te-flags">' + flags.map(f => '<span class="te-flag">' + f + '</span>').join('') + '</div>';
         html += '</div>';

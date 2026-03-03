@@ -13,83 +13,69 @@ body { font-family: 'Lato', sans-serif; color: #272f36; background: #fff; overfl
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
 
-/* NAV */
 header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: background 0.3s; }
 header.scrolled { background: #1e2d3a; }
 nav { display: flex; align-items: center; justify-content: center; padding: 22px 50px; background: transparent; transition: background 0.4s, backdrop-filter 0.4s; }
-header.scrolled nav { background: rgba(30,45,58,0.85); backdrop-filter: blur(4px); }
-.nav-left, .nav-right { display: flex; gap: 30px; flex: 1; }
+header.scrolled nav { background: rgba(30, 45, 58, 0.85); backdrop-filter: blur(4px); }
+.nav-left, .nav-right { display: flex; gap: 30px; flex: 1; align-items: center; }
 .nav-right { justify-content: flex-end; }
 nav a { color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; transition: opacity 0.3s; }
 nav a:hover { opacity: 0.7; }
 .nav-logo { margin: 0 40px; flex-shrink: 0; }
-.nav-logo-shield { height: 100px; width: auto; transition: opacity 0.4s; }
-.nav-logo-text-img { height: 30px; width: auto; display: none; }
-header.scrolled .nav-logo-shield { display: none; }
-header.scrolled .nav-logo-text-img { display: block; }
+.nav-logo-default { height: 80px; width: auto; transition: opacity 0.4s; }
+.nav-logo-scroll { height: 30px; width: auto; display: none; }
+header.scrolled .nav-logo-default { display: none; }
+header.scrolled .nav-logo-scroll { display: block; }
+.nav-dropdown { position: relative; }
+.nav-dropdown-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: rgba(30,45,58,0.95); backdrop-filter: blur(8px); padding: 12px 0; min-width: 180px; border-radius: 4px; margin-top: 10px; }
+.nav-dropdown:hover .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a { display: block; padding: 8px 20px; font-size: 0.65rem; white-space: nowrap; }
+.nav-dropdown-menu a:hover { background: rgba(255,255,255,0.1); }
 
-/* HERO */
-.hero { position: relative; height: 70vh; min-height: 400px; background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop') center/cover; display: flex; align-items: flex-end; justify-content: center; }
-.hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,45,58,0.7), transparent 60%); }
-.hero h1 { position: relative; z-index: 2; color: #fff; font-size: 3.2rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.25em; margin-bottom: 60px; text-align: center; }
+.hero { position: relative; height: 70vh; min-height: 400px; background: url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100048') center/cover no-repeat; display: flex; align-items: center; justify-content: center; }
+.hero::after { content: ''; position: absolute; inset: 0; background: rgba(30,45,58,0.4); }
+.hero h1 { position: relative; z-index: 2; color: #fff; font-size: 3rem; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; }
 
-/* SECTIONS */
-.section { padding: 80px 60px; }
-.section-beige { background: #f7f5f2; }
-.section-white { background: #fff; }
-.section-navy { background: #1e2d3a; color: #fff; }
-.section h2 { font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 30px; text-align: center; }
-.section p { font-size: 1.05rem; line-height: 1.8; color: #3a4f5e; max-width: 800px; margin: 0 auto; text-align: center; }
-.section-navy p { color: rgba(255,255,255,0.7); }
+.content { max-width: 1100px; margin: 0 auto; padding: 80px 40px; }
+.content h2 { font-size: 2rem; font-weight: 300; color: #1e2d3a; margin-bottom: 30px; letter-spacing: 0.1em; text-transform: uppercase; }
+.content p { font-size: 1.05rem; line-height: 1.9; color: #444; margin-bottom: 25px; }
 
-/* SPLIT */
-.split { display: flex; gap: 60px; align-items: center; max-width: 1100px; margin: 0 auto; }
-.split-img { flex: 1; border-radius: 4px; overflow: hidden; }
-.split-img img { width: 100%; height: 400px; object-fit: cover; }
-.split-text { flex: 1; }
-.split-text h3 { font-size: 1.6rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; color: #1e2d3a; }
-.split-text p { text-align: left; margin: 0; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin: 60px 0; }
+.two-col img { border-radius: 4px; width: 100%; height: 400px; object-fit: cover; }
 
-/* STATS */
-.stats-grid { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; margin-top: 40px; }
-.stat-item { text-align: center; }
-.stat-num { font-size: 3.5rem; font-weight: 100; color: #fff; font-variant-numeric: tabular-nums; }
-.stat-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.5); margin-top: 8px; }
+.events-section { background: #f7f5f2; padding: 60px 40px; margin: 60px 0; border-radius: 4px; }
+.events-section h3 { font-size: 1.4rem; font-weight: 300; color: #1e2d3a; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; }
+.events-section p { font-size: 1rem; color: #444; line-height: 1.8; }
 
-/* TIMELINE */
-.timeline { max-width: 700px; margin: 40px auto 0; position: relative; padding-left: 40px; }
-.timeline::before { content: ''; position: absolute; left: 12px; top: 0; bottom: 0; width: 1px; background: #d0cbc5; }
-.timeline-item { position: relative; margin-bottom: 40px; }
-.timeline-item::before { content: ''; position: absolute; left: -33px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: #1e2d3a; border: 2px solid #f7f5f2; }
-.timeline-year { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #5a6d7a; margin-bottom: 4px; }
-.timeline-title { font-size: 1.2rem; font-weight: 400; color: #1e2d3a; margin-bottom: 6px; }
-.timeline-desc { font-size: 0.95rem; color: #3a4f5e; line-height: 1.6; text-align: left; margin: 0; }
+.image-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 60px 0; }
+.image-grid img { width: 100%; height: 300px; object-fit: cover; border-radius: 4px; }
 
-/* FOOTER */
-footer { background: #1e2d3a; padding: 60px; color: #fff; }
-.footer-inner { display: flex; align-items: flex-start; gap: 50px; }
-.footer-logo img { height: 90px; width: auto; opacity: 0.9; }
+footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 30px; }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 60px; align-items: flex-start; }
+.footer-logo img { height: 60px; margin-bottom: 20px; }
 .footer-info { flex: 1; }
 .footer-info-top { display: flex; gap: 60px; margin-bottom: 30px; }
-.footer-contact strong { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px; }
-.footer-contact a { display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.8; transition: color 0.3s; }
+.footer-contact strong { display: block; color: #fff; margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.footer-contact a { display: block; font-size: 0.85rem; margin-bottom: 4px; transition: color 0.3s; }
 .footer-contact a:hover { color: #fff; }
-.footer-links a { display: block; color: rgba(255,255,255,0.7); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; line-height: 2.5; transition: color 0.3s; }
+.footer-links a { display: block; font-size: 0.85rem; margin-bottom: 6px; transition: color 0.3s; }
 .footer-links a:hover { color: #fff; }
-.footer-social { display: flex; gap: 15px; }
-.footer-social a { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.9rem; transition: all 0.3s; }
-.footer-social a:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
-.footer-bottom { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(255,255,255,0.5); }
-.back-to-top { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: #fff; font-size: 1.2rem; background: none; }
-.back-to-top:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+.back-to-top { background: rgba(255,255,255,0.15); border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem; }
 
+.hamburger { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+
+@media (max-width: 900px) {
+  .two-col { grid-template-columns: 1fr; }
+  .image-grid { grid-template-columns: 1fr 1fr; }
+}
 @media (max-width: 768px) {
-  nav { padding: 12px 20px; }
   .nav-left, .nav-right { display: none; }
-  .hero h1 { font-size: 1.8rem; letter-spacing: 0.15em; }
-  .section { padding: 50px 24px; }
-  .split { flex-direction: column; gap: 30px; }
-  footer { padding: 40px 30px; }
+  .hamburger { display: block; position: absolute; right: 20px; top: 22px; }
+  nav { padding: 15px 20px; }
+  .hero h1 { font-size: 1.8rem; }
+  .content { padding: 40px 20px; }
+  .image-grid { grid-template-columns: 1fr; }
   .footer-inner { flex-direction: column; }
   .footer-info-top { flex-direction: column; gap: 20px; }
 }
@@ -106,16 +92,23 @@ footer { background: #1e2d3a; padding: 60px; color: #fff; }
   </div>
   <div class="nav-logo">
     <a href="index.html">
-      <img src="images/logo-shield.svg" alt="Hoback Club" class="nav-logo-shield">
-      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
+      <img src="images/logo-footer.svg" alt="Hoback Club" class="nav-logo-default">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-scroll">
     </a>
   </div>
   <div class="nav-right">
-    <a href="lifestyle.html">Lifestyle</a>
+    <div class="nav-dropdown">
+      <a href="lifestyle.html" class="nav-dropdown-toggle">Lifestyle</a>
+      <div class="nav-dropdown-menu">
+        <a href="lifestyle.html#winter">Winter Activities</a>
+        <a href="lifestyle.html#summer">Summer Activities</a>
+      </div>
+    </div>
     <a href="membership.html">Membership</a>
-    <a href="stay.html#contact">Contact Us</a>
+    <a href="contact-us.html">Contact Us</a>
     <a href="login.html">Member Login</a>
   </div>
+  <button class="hamburger" onclick="document.querySelector('.nav-left').style.display=document.querySelector('.nav-left').style.display==='flex'?'none':'flex';document.querySelector('.nav-right').style.display=document.querySelector('.nav-right').style.display==='flex'?'none':'flex'">&#9776;</button>
 </nav>
 </header>
 
@@ -123,75 +116,37 @@ footer { background: #1e2d3a; padding: 60px; color: #fff; }
   <h1>Discover Us</h1>
 </section>
 
-<!-- OUR STORY -->
-<section class="section section-white">
-  <h2>Our Story</h2>
-  <p>Born from a reverence for the untamed beauty of the Teton Valley, the Hoback Club was founded in 2024 with a singular vision: to create a sanctuary where refined living meets the grandeur of the American West. Nestled at the base of the Jackson Hole Mountain Resort, our 2,900-acre retreat offers an unparalleled connection to nature, community, and the extraordinary.</p>
-</section>
+<div class="content">
+  <h2>An Exclusive Club in Jackson Hole</h2>
+  <p>Discover an exclusive club in Jackson Hole where authentic connection meets luxury. With personal access to premier amenities and the solitude to retreat, reconnect and take in the breathtaking surroundings, the Hoback Club opens the door to a lifestyle that's both elevated and grounded in the spirit of the West.</p>
 
-<!-- THE SETTING -->
-<section class="section section-beige">
-  <h2>The Setting</h2>
-  <div class="split">
-    <div class="split-img">
-      <img src="https://images.unsplash.com/photo-1472396961693-142e6e269027?w=900&h=600&fit=crop" alt="Grand Tetons">
+  <div class="two-col">
+    <div>
+      <p>The Jackson Hole lifestyle is unlike any other. It's a place to retreat or reconnect, with breathtaking surroundings that both ground us and inspire. Once in a lifetime, an opportunity arises that elevates the way we escape and explore together. The Hoback Club is that opportunity.</p>
+      <p>The embodiment of refined grandeur, this private club offers the pinnacle of amenities and service -- not just in Jackson Hole, but in all the ski world.</p>
     </div>
-    <div class="split-text">
-      <h3>Jackson Hole &amp; The Grand Tetons</h3>
-      <p>Set against the dramatic backdrop of the Teton Range — where peaks rise to nearly 14,000 feet — the Hoback Club occupies one of the most spectacular settings in North America. The Snake River winds through the valley below, offering world-class fly fishing, while the surrounding wilderness provides year-round adventure for those who seek it.</p>
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100068" alt="Hoback Club Jackson Hole">
+  </div>
+
+  <div class="two-col">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100088" alt="Mountain Living at Hoback Club">
+    <div>
+      <p>Step into a world where refined comfort meets elevated mountain living. The Hoback Club offers an exclusive retreat designed for those who seek more than just a place to stay -- it's a place to unwind, reconnect and indulge. With pinnacle amenities, expansive gathering spaces and personalized services, the Hoback Club is a sanctuary in the heart of Jackson Hole.</p>
+      <p>From ski-in/ski-out access to Jackson Hole Mountain Resort and world-class dining curated by Michelin Star Chef Jean-Louis Dumonet, to a full-service Lux Euro Spa and personalized concierge -- every detail is designed to elevate your mountain experience.</p>
     </div>
   </div>
-</section>
 
-<!-- BY THE NUMBERS -->
-<section class="section section-navy">
-  <h2 style="color:#fff;">By the Numbers</h2>
-  <div class="stats-grid">
-    <div class="stat-item">
-      <div class="stat-num" data-target="2900">0</div>
-      <div class="stat-label">Acres</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num" data-target="4">0</div>
-      <div class="stat-label">Seasons</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num" data-target="13775">0</div>
-      <div class="stat-label">Ft Peak Elevation</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num" data-target="2024">0</div>
-      <div class="stat-label">Established</div>
-    </div>
+  <div class="events-section">
+    <h3>Upcoming Events</h3>
+    <p>Rendezvous Music Festival! March 28th at Jackson Hole Mountain Resort.</p>
   </div>
-</section>
 
-<!-- TIMELINE -->
-<section class="section section-beige">
-  <h2>Our Journey</h2>
-  <div class="timeline">
-    <div class="timeline-item">
-      <div class="timeline-year">2024</div>
-      <div class="timeline-title">The Founding</div>
-      <p class="timeline-desc">The Hoback Club is conceived as a world-class private mountain retreat in the heart of Jackson Hole, Wyoming.</p>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-year">2024</div>
-      <div class="timeline-title">First Winter Season</div>
-      <p class="timeline-desc">Founding members experience the inaugural ski season with private access to unmatched terrain and luxury amenities.</p>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-year">2025</div>
-      <div class="timeline-title">Summer Programs Launch</div>
-      <p class="timeline-desc">Golf, equestrian, fly fishing, and wellness programs debut, establishing the club as a true four-season destination.</p>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-year">2026</div>
-      <div class="timeline-title">Expansion &amp; Growth</div>
-      <p class="timeline-desc">New residences, enhanced amenities, and a growing community of members who share a passion for the extraordinary.</p>
-    </div>
+  <div class="image-grid">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100133" alt="Hoback Club">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100048" alt="Jackson Hole">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100068" alt="Teton Views">
   </div>
-</section>
+</div>
 
 <footer>
   <div class="footer-inner">
@@ -206,55 +161,22 @@ footer { background: #1e2d3a; padding: 60px; color: #fff; }
           <a href="tel:+13072491000">(307) 249-1000</a>
         </div>
         <div class="footer-links">
-          <a href="#">Employment Opportunities</a>
           <a href="membership.html">Membership Inquiries</a>
-        </div>
-        <div class="footer-social">
-          <a href="#" aria-label="Facebook">f</a>
-          <a href="#" aria-label="Instagram">ig</a>
+          <a href="contact-us.html">Contact Us</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color: rgba(255,255,255,0.5);">Clubessential</a></span>
-        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+        <span>&copy; 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color:rgba(255,255,255,0.5);">Clubessential</a></span>
+        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
       </div>
     </div>
   </div>
 </footer>
 
 <script>
-// Nav scroll
-(function() {
-  const header = document.getElementById('mainHeader');
-  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 50), { passive: true });
-  header.classList.toggle('scrolled', window.scrollY > 50);
-})();
-
-// Count-up animation
-(function() {
-  const nums = document.querySelectorAll('.stat-num[data-target]');
-  let animated = false;
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !animated) {
-        animated = true;
-        nums.forEach(el => {
-          const target = parseInt(el.dataset.target);
-          const duration = 2000;
-          const start = performance.now();
-          function tick(now) {
-            const p = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - p, 3);
-            el.textContent = Math.round(eased * target).toLocaleString();
-            if (p < 1) requestAnimationFrame(tick);
-          }
-          requestAnimationFrame(tick);
-        });
-      }
-    });
-  }, { threshold: 0.3 });
-  nums.forEach(n => observer.observe(n.closest('.section')));
-})();
+window.addEventListener('scroll', () => {
+  document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 50);
+});
 </script>
 </body>
 </html>
