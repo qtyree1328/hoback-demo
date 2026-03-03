@@ -15,8 +15,7 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: 
 header.scrolled { background: #1e2d3a; }
 nav { display: flex; align-items: center; justify-content: center; padding: 22px 50px; background: transparent; transition: background 0.4s; }
 header.scrolled nav { background: rgba(30,45,58,0.85); backdrop-filter: blur(4px); }
-.nav-left, .nav-right { display: flex; gap: 30px; flex: 1; align-items: center; }
-.nav-right { justify-content: flex-end; }
+.nav-left, .nav-right { display: flex; align-items: center; justify-content: center; gap: 36px; flex: 1; }
 nav a { color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; transition: opacity 0.3s; }
 nav a:hover { opacity: 0.7; }
 .nav-logo { margin: 0 40px; flex-shrink: 0; }
@@ -101,13 +100,11 @@ footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 3
     </a>
   </div>
   <div class="nav-right">
-    <div class="nav-dropdown">
-      <a href="lifestyle.html" class="nav-dropdown-toggle">Lifestyle</a>
-      <div class="nav-dropdown-menu">
-        <a href="lifestyle.html#winter">Winter Activities</a>
-        <a href="lifestyle.html#summer">Summer Activities</a>
-      </div>
-    </div>
+    <a href="lifestyle.html">Lifestyle</a>
+    <a href="membership.html">Membership</a>
+    <a href="contact-us.html">Contact Us</a>
+    <a href="login.html">Member Login</a>
+  </div>
     <a href="membership.html">Membership</a>
     <a href="contact-us.html">Contact Us</a>
     <a href="login.html">Member Login</a>
@@ -193,6 +190,40 @@ footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 3
     </div>
   </div>
 </div>
+
+<!-- Reservation Inquiry -->
+<style>
+.inquiry-section { background: #1e2d3a; padding: 80px 40px; }
+.inquiry-inner { max-width: 700px; margin: 0 auto; text-align: center; }
+.inquiry-inner h2 { font-size: 2rem; font-weight: 300; color: #fff; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px; }
+.inquiry-inner p { color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-bottom: 40px; }
+.inquiry-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.inquiry-form input, .inquiry-form textarea { width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-family: 'Lato', sans-serif; font-size: 0.85rem; border-radius: 3px; transition: border-color 0.3s; }
+.inquiry-form input::placeholder, .inquiry-form textarea::placeholder { color: rgba(255,255,255,0.4); }
+.inquiry-form input:focus, .inquiry-form textarea:focus { outline: none; border-color: rgba(255,255,255,0.5); }
+.inquiry-form .full-width { grid-column: 1 / -1; }
+.inquiry-form textarea { min-height: 120px; resize: vertical; }
+.inquiry-submit { grid-column: 1 / -1; padding: 14px 40px; background: transparent; border: 1px solid rgba(255,255,255,0.4); color: #fff; font-family: 'Lato', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; transition: background 0.3s; border-radius: 3px; }
+.inquiry-submit:hover { background: rgba(255,255,255,0.1); }
+@media (max-width: 768px) { .inquiry-form { grid-template-columns: 1fr; } .inquiry-section { padding: 60px 20px; } }
+</style>
+<section class="inquiry-section">
+  <div class="inquiry-inner">
+    <h2>Reservation Inquiry</h2>
+    <p>Interested in a stay at the Hoback Club? Complete the form below and our team will be in touch.</p>
+    <form class="inquiry-form" onsubmit="event.preventDefault();alert('Reservation inquiries are not available at this time. This is a demo site. Please contact us at (307) 249-1000.');">
+      <input type="text" placeholder="First Name *" required>
+      <input type="text" placeholder="Last Name *" required>
+      <input type="email" placeholder="Email Address *" required>
+      <input type="tel" placeholder="Phone Number">
+      <input type="date" placeholder="Check-in Date" class="full-width" style="color:rgba(255,255,255,0.4);">
+      <input type="date" placeholder="Check-out Date" class="full-width" style="color:rgba(255,255,255,0.4);">
+      <input type="number" placeholder="Number of Guests" min="1" class="full-width">
+      <textarea placeholder="Comments / Questions" class="full-width"></textarea>
+      <button type="submit" class="inquiry-submit">Submit Inquiry</button>
+    </form>
+  </div>
+</section>
 
 <footer>
   <div class="footer-inner">
