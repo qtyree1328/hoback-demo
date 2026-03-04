@@ -115,6 +115,74 @@ header.scrolled .nav-logo-text-img { display: block; }
 }
 .nav-dropdown-menu a:hover { background: rgba(255,255,255,0.1); }
 
+/* Hamburger button */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 6px;
+  line-height: 1;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+/* When nav is collapsed */
+.nav-collapsed .nav-left,
+.nav-collapsed .nav-right { display: none; }
+.nav-collapsed .hamburger { display: block; }
+.nav-collapsed nav { padding: 15px 20px; }
+
+/* Mobile menu overlay */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30,45,58,0.97);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.mobile-menu.open { display: flex; }
+
+.mobile-menu a {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  padding: 16px 0;
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+
+.mobile-menu a:hover { opacity: 0.6; }
+
+.mobile-menu-close {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.6rem;
+  cursor: pointer;
+  padding: 6px;
+  line-height: 1;
+}
+
 /* ===== HERO BANNER ===== */
 .hero {
   position: relative;
@@ -1219,8 +1287,6 @@ footer {
 }
 
 @media (max-width: 768px) {
-  nav { padding: 12px 20px; }
-  .nav-left, .nav-right { display: none; }
   .hero { min-height: 400px; }
   .hero-text h1 { font-size: 1.8rem; letter-spacing: 0.15em; }
   .hero-text { bottom: 60px; }
@@ -1279,8 +1345,22 @@ footer {
     <a href="contact-us.html">Contact Us</a>
     <a href="login.html">Member Login</a>
   </div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu">&#9776;</button>
 </nav>
 </header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close">&times;</button>
+  <a href="index.html">Home</a>
+  <a href="discover.html">Discover Us</a>
+  <a href="stay.html">Come &amp; Stay</a>
+  <a href="amenities.html">Amenities</a>
+  <a href="mountain.html">Mountain</a>
+  <a href="lifestyle.html">Lifestyle</a>
+  <a href="membership.html">Membership</a>
+  <a href="contact-us.html">Contact Us</a>
+  <a href="login.html">Member Login</a>
+</div>
 
 <!-- VIDEO HERO -->
 <section class="hero" id="heroSection">
@@ -1564,6 +1644,55 @@ footer {
   window.addEventListener('scroll', checkScroll, { passive: true });
   checkScroll();
 })();
+
+// ===== RESPONSIVE NAV — collapse when links are too tight =====
+(function() {
+  var header = document.getElementById('mainHeader');
+  var navLeft = header.querySelector('.nav-left');
+  var navRight = header.querySelector('.nav-right');
+  var navLogo = header.querySelector('.nav-logo');
+  var hamburger = document.getElementById('hamburgerBtn');
+  var mobileMenu = document.getElementById('mobileMenu');
+  var mobileClose = document.getElementById('mobileMenuClose');
+
+  function checkNavFit() {
+    // Temporarily show links to measure
+    header.classList.remove('nav-collapsed');
+    var navWidth = header.querySelector('nav').offsetWidth;
+    var leftW = navLeft.scrollWidth;
+    var rightW = navRight.scrollWidth;
+    var logoW = navLogo.offsetWidth + 80; // logo + margins
+    var needed = leftW + rightW + logoW + 40; // 40px breathing room
+
+    if (needed > navWidth) {
+      header.classList.add('nav-collapsed');
+    }
+  }
+
+  // Hamburger opens mobile menu
+  hamburger.addEventListener('click', function() {
+    mobileMenu.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  // Close mobile menu
+  mobileClose.addEventListener('click', function() {
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  // Close on link click
+  mobileMenu.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  window.addEventListener('resize', checkNavFit);
+  checkNavFit();
+})();
+
 // Image Gallery — built from gallery-config.js
 (function() {
   var track = document.getElementById('imgCarouselTrack');
