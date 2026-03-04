@@ -21,17 +21,17 @@ header.scrolled nav { background: rgba(30, 45, 58, 0.85); backdrop-filter: blur(
 nav a { color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; transition: opacity 0.3s; }
 nav a:hover { opacity: 0.7; }
 .nav-logo { margin: 0 40px; flex-shrink: 0; }
-.nav-logo-default { height: 80px; width: auto; transition: opacity 0.4s; }
-.nav-logo-scroll { height: 30px; width: auto; display: none; }
-header.scrolled .nav-logo-default { display: none; }
-header.scrolled .nav-logo-scroll { display: block; }
+.nav-logo-shield { height: 80px; width: auto; transition: opacity 0.4s; }
+.nav-logo-text-img { height: 30px; width: auto; display: none; }
+header.scrolled .nav-logo-shield { display: none; }
+header.scrolled .nav-logo-text-img { display: block; }
 .nav-dropdown { position: relative; }
 .nav-dropdown-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: rgba(30,45,58,0.95); backdrop-filter: blur(8px); padding: 12px 0; min-width: 180px; border-radius: 4px; margin-top: 10px; }
 .nav-dropdown:hover .nav-dropdown-menu { display: block; }
 .nav-dropdown-menu a { display: block; padding: 8px 20px; font-size: 0.65rem; white-space: nowrap; }
 .nav-dropdown-menu a:hover { background: rgba(255,255,255,0.1); }
 
-.hero { position: relative; height: 70vh; min-height: 400px; background: url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100048') center/cover no-repeat; display: flex; align-items: center; justify-content: center; }
+.hero { position: relative; height: 70vh; min-height: 400px; background: url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100068') center/cover no-repeat; display: flex; align-items: center; justify-content: center; }
 .hero::after { content: ''; position: absolute; inset: 0; background: rgba(30,45,58,0.4); }
 .hero h1 { position: relative; z-index: 2; color: #fff; font-size: 3rem; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; }
 
@@ -43,8 +43,16 @@ header.scrolled .nav-logo-scroll { display: block; }
 .two-col img { border-radius: 4px; width: 100%; height: 400px; object-fit: cover; }
 
 .events-section { background: #f7f5f2; padding: 60px 40px; margin: 60px 0; border-radius: 4px; }
-.events-section h3 { font-size: 1.4rem; font-weight: 300; color: #1e2d3a; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; }
+.events-section h3 { font-size: 1.4rem; font-weight: 300; color: #1e2d3a; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 30px; }
 .events-section p { font-size: 1rem; color: #444; line-height: 1.8; }
+.events-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.event-card { background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.08); transition: transform 0.4s, box-shadow 0.4s; }
+.event-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+.event-card img { width: 100%; height: 240px; object-fit: cover; }
+.event-card-body { padding: 20px 24px; }
+.event-card-body h4 { font-size: 1rem; font-weight: 700; color: #1e2d3a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.event-card-body .event-date { font-size: 0.8rem; color: #7a8d98; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+.event-card-body p { font-size: 0.9rem; color: #555; line-height: 1.6; margin: 0; }
 
 .image-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 60px 0; }
 .image-grid img { width: 100%; height: 300px; object-fit: cover; border-radius: 4px; }
@@ -88,11 +96,12 @@ footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 3
     <a href="discover.html">Discover Us</a>
     <a href="stay.html">Come &amp; Stay</a>
     <a href="amenities.html">Amenities</a>
+    <a href="mountain.html">Mountain</a>
   </div>
   <div class="nav-logo">
     <a href="index.html">
-      <img src="images/logo-footer.svg" alt="Hoback Club" class="nav-logo-default">
-      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-scroll">
+      <img src="images/logo-footer.svg" alt="Hoback Club" class="nav-logo-shield">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
     </a>
   </div>
   <div class="nav-right">
@@ -101,11 +110,6 @@ footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 3
     <a href="contact-us.html">Contact Us</a>
     <a href="login.html">Member Login</a>
   </div>
-    <a href="membership.html">Membership</a>
-    <a href="contact-us.html">Contact Us</a>
-    <a href="login.html">Member Login</a>
-  </div>
-  <button class="hamburger" onclick="document.querySelector('.nav-left').style.display=document.querySelector('.nav-left').style.display==='flex'?'none':'flex';document.querySelector('.nav-right').style.display=document.querySelector('.nav-right').style.display==='flex'?'none':'flex'">&#9776;</button>
 </nav>
 </header>
 
@@ -116,6 +120,11 @@ footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 3
 <div class="content">
   <h2>An Exclusive Club in Jackson Hole</h2>
   <p>Discover an exclusive club in Jackson Hole where authentic connection meets luxury. With personal access to premier amenities and the solitude to retreat, reconnect and take in the breathtaking surroundings, the Hoback Club opens the door to a lifestyle that's both elevated and grounded in the spirit of the West.</p>
+
+  <div class="two-col" style="margin-top: 40px; margin-bottom: 40px;">
+    <img src="https://media.assettype.com/resident%2F2025-10-08%2Fx5guk5jw%2F1911_Teton_Great_Hall_02_40.jpg?rect=1%2C0%2C2999%2C1687" alt="The Great Hall">
+    <img src="https://bloximages.newyork1.vip.townnews.com/jhnewsandguide.com/content/tncms/assets/v3/editorial/1/d7/1d768df0-f5da-43da-b43d-a4c721ffbec8/5e3a42ed3329f.image.jpg?resize=1396%2C785" alt="Hoback Club Jackson Hole">
+  </div>
 
   <div class="two-col">
     <div>
@@ -135,7 +144,32 @@ footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 3
 
   <div class="events-section">
     <h3>Upcoming Events</h3>
-    <p>Rendezvous Music Festival! March 28th at Jackson Hole Mountain Resort.</p>
+    <div class="events-cards">
+      <div class="event-card">
+        <img src="https://www.datocms-assets.com/50871/1765062442-jh_2026rendezvous_digitalgraphics_announcement_infeed_1080x1350_v11.png?fit=crop&w=960" alt="Rendezvous Festival">
+        <div class="event-card-body">
+          <h4>Rendezvous Music Festival</h4>
+          <div class="event-date">March 28, 2026</div>
+          <p>Jackson Hole Mountain Resort's annual celebration of music, skiing, and mountain culture. Live performances across multiple stages in Teton Village.</p>
+        </div>
+      </div>
+      <div class="event-card">
+        <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100133" alt="Spring Wine Dinner">
+        <div class="event-card-body">
+          <h4>Spring Wine Dinner</h4>
+          <div class="event-date">April 12, 2026</div>
+          <p>An intimate evening of fine wines paired with a curated multi-course dinner by Chef Jean-Louis Dumonet in The Great Hall.</p>
+        </div>
+      </div>
+      <div class="event-card">
+        <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100077" alt="Last Day on Snow">
+        <div class="event-card-body">
+          <h4>Last Day on Snow</h4>
+          <div class="event-date">April 20, 2026</div>
+          <p>Celebrate the end of an incredible ski season with live music, apres festivities, and one final legendary run.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="image-grid">

@@ -19,10 +19,10 @@ header.scrolled nav { background: rgba(30,45,58,0.85); backdrop-filter: blur(4px
 nav a { color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; transition: opacity 0.3s; }
 nav a:hover { opacity: 0.7; }
 .nav-logo { margin: 0 40px; flex-shrink: 0; }
-.nav-logo-default { height: 80px; width: auto; }
-.nav-logo-scroll { height: 30px; width: auto; display: none; }
-header.scrolled .nav-logo-default { display: none; }
-header.scrolled .nav-logo-scroll { display: block; }
+.nav-logo-shield { height: 80px; width: auto; }
+.nav-logo-text-img { height: 30px; width: auto; display: none; }
+header.scrolled .nav-logo-shield { display: none; }
+header.scrolled .nav-logo-text-img { display: block; }
 .nav-dropdown { position: relative; }
 .nav-dropdown-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: rgba(30,45,58,0.95); backdrop-filter: blur(8px); padding: 12px 0; min-width: 180px; border-radius: 4px; margin-top: 10px; }
 .nav-dropdown:hover .nav-dropdown-menu { display: block; }
@@ -75,11 +75,12 @@ footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 3
     <a href="discover.html">Discover Us</a>
     <a href="stay.html">Come &amp; Stay</a>
     <a href="amenities.html">Amenities</a>
+    <a href="mountain.html">Mountain</a>
   </div>
   <div class="nav-logo">
     <a href="index.html">
-      <img src="images/logo-footer.svg" alt="Hoback Club" class="nav-logo-default">
-      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-scroll">
+      <img src="images/logo-footer.svg" alt="Hoback Club" class="nav-logo-shield">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
     </a>
   </div>
   <div class="nav-right">
@@ -88,11 +89,6 @@ footer { background: #1e2d3a; color: rgba(255,255,255,0.6); padding: 60px 50px 3
     <a href="contact-us.html">Contact Us</a>
     <a href="login.html">Member Login</a>
   </div>
-    <a href="membership.html">Membership</a>
-    <a href="contact-us.html">Contact Us</a>
-    <a href="login.html">Member Login</a>
-  </div>
-  <button class="hamburger" onclick="document.querySelector('.nav-left').style.display=document.querySelector('.nav-left').style.display==='flex'?'none':'flex';document.querySelector('.nav-right').style.display=document.querySelector('.nav-right').style.display==='flex'?'none':'flex'">&#9776;</button>
 </nav>
 </header>
 

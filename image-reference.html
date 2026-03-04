@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Reference - Hoback Club</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; padding: 40px; color: #333; }
+h1 { font-size: 1.8rem; margin-bottom: 10px; }
+h2 { font-size: 1.3rem; margin: 50px 0 20px; padding-bottom: 10px; border-bottom: 2px solid #1e2d3a; color: #1e2d3a; }
+h3 { font-size: 1rem; margin: 30px 0 15px; color: #555; text-transform: uppercase; letter-spacing: 0.1em; }
+.subtitle { color: #777; margin-bottom: 40px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; }
+.card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+.card video { width: 100%; height: 220px; object-fit: cover; display: block; }
+.card-info { padding: 14px 16px; }
+.card-info .label { font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; color: #1e2d3a; }
+.card-info .url { font-size: 0.7rem; color: #888; word-break: break-all; line-height: 1.4; font-family: monospace; background: #f9f9f9; padding: 6px 8px; border-radius: 4px; }
+.card-info .section { font-size: 0.7rem; color: #aaa; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+.local-note { display: inline-block; background: #e8f4e8; color: #2a7a2a; font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; margin-bottom: 4px; }
+.external-note { display: inline-block; background: #e8ecf4; color: #2a4a7a; font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Image Reference Sheet</h1>
+<p class="subtitle">All images used in index.html and lifestyle.html</p>
+
+<!-- ======================== INDEX.HTML ======================== -->
+<h2>index.html</h2>
+
+<h3>Video Hero</h3>
+<div class="grid">
+  <div class="card">
+    <video autoplay muted loop playsinline><source src="images/hoback-video.mp4" type="video/mp4"></video>
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">Hero Video</div>
+      <div class="url">images/hoback-video.mp4</div>
+      <div class="section">Video Hero</div>
+    </div>
+  </div>
+</div>
+
+<h3>Mountain Drawing Section ("An Experience Unlike Any Other")</h3>
+<div class="grid">
+  <div class="card">
+    <img src="images/tetons_drawing4.png" alt="Teton Mountains Sketch">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">Teton Mountains Sketch</div>
+      <div class="url">images/tetons_drawing4.png</div>
+      <div class="section">Mountain Drawing (top)</div>
+    </div>
+  </div>
+</div>
+
+<h3>Image Gallery (from gallery-config.js)</h3>
+<div class="grid">
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100091" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hoback Club</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100091</div>
+      <div class="section">Gallery - scale 1.1</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://clubandresortbusiness.com/wp-content/uploads/2026/01/The-Great-Hall-scaled.jpg" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">The Great Hall</div>
+      <div class="url">https://clubandresortbusiness.com/wp-content/uploads/2026/01/The-Great-Hall-scaled.jpg</div>
+      <div class="section">Gallery - scale 1.4</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://www.travelandleisure.com/thmb/ZjRFOW0DWIkp6sff2gJL_5hReiY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-great-hall-dining-room-hoback-club-wyoming-HOBACKCLUB0126-5840b58b21504db0b6120803d33d2afe.jpg" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Great Hall Dining</div>
+      <div class="url">https://www.travelandleisure.com/thmb/ZjRFOW0DWIkp6sff2gJL_5hReiY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-great-hall-dining-room-hoback-club-wyoming-HOBACKCLUB0126-5840b58b21504db0b6120803d33d2afe.jpg</div>
+      <div class="section">Gallery - scale 1.0</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://www.travelandleisure.com/thmb/YiylyFMlqZz6kD-78-4g_dHdxHU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-deck-hoback-club-wyoming-HOBACKCLUB0126-16ecbcfb0dcf4eceb5f9cb6c44323a13.jpg" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Mountain Deck</div>
+      <div class="url">https://www.travelandleisure.com/thmb/YiylyFMlqZz6kD-78-4g_dHdxHU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-deck-hoback-club-wyoming-HOBACKCLUB0126-16ecbcfb0dcf4eceb5f9cb6c44323a13.jpg</div>
+      <div class="section">Gallery - scale 1.3</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100109" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hoback Club</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100109</div>
+      <div class="section">Gallery - scale 0.85</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100089" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hoback Club</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100089</div>
+      <div class="section">Gallery - scale 1.2</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100007" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hoback Club</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100007</div>
+      <div class="section">Gallery - scale 0.9</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100031" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hoback Club</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100031</div>
+      <div class="section">Gallery - scale 1.1</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100038" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hoback Club</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100038</div>
+      <div class="section">Gallery - scale 1.35</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100077" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hoback Club</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100077</div>
+      <div class="section">Gallery - scale 1.0</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100120" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hoback Club</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100120</div>
+      <div class="section">Gallery - scale 1.15</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100124" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hoback Club</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100124</div>
+      <div class="section">Gallery - scale 0.8</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://www.aman.com/sites/default/files/styles/central_carousel_large/public/2023-10/amangani-bar_0.jpg?itok=4DNgSB8V" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Amangani Bar</div>
+      <div class="url">https://www.aman.com/sites/default/files/styles/central_carousel_large/public/2023-10/amangani-bar_0.jpg?itok=4DNgSB8V</div>
+      <div class="section">Gallery - scale 1.25</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://www.aman.com/sites/default/files/styles/central_carousel_large/public/2024-01/amangani-dining.jpg?itok=VOzM6zpG" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Amangani Dining</div>
+      <div class="url">https://www.aman.com/sites/default/files/styles/central_carousel_large/public/2024-01/amangani-dining.jpg?itok=VOzM6zpG</div>
+      <div class="section">Gallery - scale 1.0</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100102" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hoback Club</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100102</div>
+      <div class="section">Gallery - scale 1.1</div>
+    </div>
+  </div>
+</div>
+
+<h3>Life at Hoback (Showcase Panels)</h3>
+<div class="grid">
+  <div class="card">
+    <img src="images/hero-1.jpg" alt="">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">01 - World-Class Dining</div>
+      <div class="url">images/hero-1.jpg</div>
+      <div class="section">Showcase Panel 01</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="images/hero-2.jpg" alt="">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">02 - Premium Spa & Wellness</div>
+      <div class="url">images/hero-2.jpg</div>
+      <div class="section">Showcase Panel 02</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="images/card-discover.jpg" alt="">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">03 - Ski-In / Ski-Out Access</div>
+      <div class="url">images/card-discover.jpg</div>
+      <div class="section">Showcase Panel 03</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://www.travelandleisure.com/thmb/YiylyFMlqZz6kD-78-4g_dHdxHU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-deck-hoback-club-wyoming-HOBACKCLUB0126-16ecbcfb0dcf4eceb5f9cb6c44323a13.jpg" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">04 - Indoor & Outdoor Apres</div>
+      <div class="url">https://www.travelandleisure.com/thmb/YiylyFMlqZz6kD-78-4g_dHdxHU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-deck-hoback-club-wyoming-HOBACKCLUB0126-16ecbcfb0dcf4eceb5f9cb6c44323a13.jpg</div>
+      <div class="section">Showcase Panel 04</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="images/card-summer.jpg" alt="">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">05 - Year-Round Adventure</div>
+      <div class="url">images/card-summer.jpg</div>
+      <div class="section">Showcase Panel 05</div>
+    </div>
+  </div>
+</div>
+
+<h3>Sliding Callout Cards ("Explore Our Exclusive Club")</h3>
+<div class="grid">
+  <div class="card">
+    <img src="images/card-discover.jpg" alt="">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">Discover Us</div>
+      <div class="url">images/card-discover.jpg</div>
+      <div class="section">Callout Card</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="images/card-stay.jpg" alt="">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">Come & Stay</div>
+      <div class="url">images/card-stay.jpg</div>
+      <div class="section">Callout Card</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="images/card-amenities.jpg" alt="">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">Amenities</div>
+      <div class="url">images/card-amenities.jpg</div>
+      <div class="section">Callout Card</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="images/card-winter.jpg" alt="">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">Winter Activities</div>
+      <div class="url">images/card-winter.jpg</div>
+      <div class="section">Callout Card</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="images/card-summer.jpg" alt="">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">Summer Activities</div>
+      <div class="url">images/card-summer.jpg</div>
+      <div class="section">Callout Card</div>
+    </div>
+  </div>
+</div>
+
+<h3>Seasons Section</h3>
+<div class="grid">
+  <div class="card">
+    <img src="https://www.datocms-assets.com/50871/1680193117-skier-winter-promo-box-ajimmerson_powder_12-3-2022-1103-jpg.jpg" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Winter</div>
+      <div class="url">https://www.datocms-assets.com/50871/1680193117-skier-winter-promo-box-ajimmerson_powder_12-3-2022-1103-jpg.jpg</div>
+      <div class="section">Seasons</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100077" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Spring</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100077</div>
+      <div class="section">Seasons</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100120" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Summer</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100120</div>
+      <div class="section">Seasons</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://realestate.theclearcreekgroup.com/wp-content/uploads/sites/2/2016/09/Fall-Colors-Jackson-Hole-1030x579.jpg" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Fall</div>
+      <div class="url">https://realestate.theclearcreekgroup.com/wp-content/uploads/sites/2/2016/09/Fall-Colors-Jackson-Hole-1030x579.jpg</div>
+      <div class="section">Seasons</div>
+    </div>
+  </div>
+</div>
+
+<h3>Reserve Your Stay (Bottom Drawing)</h3>
+<div class="grid">
+  <div class="card">
+    <img src="images/hoback_drawing1.png" alt="">
+    <div class="card-info">
+      <span class="local-note">Local</span>
+      <div class="label">Hoback Drawing</div>
+      <div class="url">images/hoback_drawing1.png</div>
+      <div class="section">Reserve Your Stay</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== LIFESTYLE.HTML ======================== -->
+<h2>lifestyle.html</h2>
+
+<h3>Season Hero Panels</h3>
+<div class="grid">
+  <div class="card">
+    <img src="https://www.datocms-assets.com/50871/1680193117-skier-winter-promo-box-ajimmerson_powder_12-3-2022-1103-jpg.jpg" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Winter Panel</div>
+      <div class="url">https://www.datocms-assets.com/50871/1680193117-skier-winter-promo-box-ajimmerson_powder_12-3-2022-1103-jpg.jpg</div>
+      <div class="section">Season Hero</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100077" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Spring Panel</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100077</div>
+      <div class="section">Season Hero</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100120" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Summer Panel</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100120</div>
+      <div class="section">Season Hero</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://realestate.theclearcreekgroup.com/wp-content/uploads/sites/2/2016/09/Fall-Colors-Jackson-Hole-1030x579.jpg" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Fall Panel</div>
+      <div class="url">https://realestate.theclearcreekgroup.com/wp-content/uploads/sites/2/2016/09/Fall-Colors-Jackson-Hole-1030x579.jpg</div>
+      <div class="section">Season Hero</div>
+    </div>
+  </div>
+</div>
+
+<h3>Winter Activities - Skiing</h3>
+<div class="grid">
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100100" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Ski Passes</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100100</div>
+      <div class="section">Winter - Skiing</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100101" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Ski Lessons</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100101</div>
+      <div class="section">Winter - Skiing</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100102" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Private Ski Fitting</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100102</div>
+      <div class="section">Winter - Skiing</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100103" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Backcountry Ski Guiding</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100103</div>
+      <div class="section">Winter - Skiing</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100104" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Heli Skiing</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100104</div>
+      <div class="section">Winter - Skiing</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100105" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Cross-Country / Nordic Skiing</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100105</div>
+      <div class="section">Winter - Skiing</div>
+    </div>
+  </div>
+</div>
+
+<h3>Winter Activities - Section Divider</h3>
+<div class="grid">
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100089" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Winter Divider (parallax)</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100089</div>
+      <div class="section">Section Divider</div>
+    </div>
+  </div>
+</div>
+
+<h3>Winter Activities - Other</h3>
+<div class="grid">
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100106" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Snowmobiling</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100106</div>
+      <div class="section">Winter - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100107" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Sleigh Rides</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100107</div>
+      <div class="section">Winter - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100108" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Wildlife Safaris</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100108</div>
+      <div class="section">Winter - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100109" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Dog Sledding</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100109</div>
+      <div class="section">Winter - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100110" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Snowshoeing</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100110</div>
+      <div class="section">Winter - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100111" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Snowcoach</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100111</div>
+      <div class="section">Winter - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100112" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Ice Skating</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100112</div>
+      <div class="section">Winter - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100113" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Tubing</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100113</div>
+      <div class="section">Winter - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100114" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Alpine Climbing</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100114</div>
+      <div class="section">Winter - Other</div>
+    </div>
+  </div>
+</div>
+
+<h3>Summer Activities - Main</h3>
+<div class="grid">
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100116" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Wildlife Safaris</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100116</div>
+      <div class="section">Summer - Main</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100117" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Horseback Riding</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100117</div>
+      <div class="section">Summer - Main</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100118" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Whitewater Rafting / Scenic Floats</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100118</div>
+      <div class="section">Summer - Main</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100119" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Fly-Fishing</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100119</div>
+      <div class="section">Summer - Main</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100120" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hiking Jackson Hole Valley</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100120</div>
+      <div class="section">Summer - Main</div>
+    </div>
+  </div>
+</div>
+
+<h3>Summer Activities - Section Divider</h3>
+<div class="grid">
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100143" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Summer Divider (parallax)</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100143</div>
+      <div class="section">Section Divider</div>
+    </div>
+  </div>
+</div>
+
+<h3>Summer Activities - Other</h3>
+<div class="grid">
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100121" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Climbing / Via Ferrata</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100121</div>
+      <div class="section">Summer - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100122" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Mountain Biking / Ebike Tours</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100122</div>
+      <div class="section">Summer - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100123" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">ATV / Side-By-Sides Tours</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100123</div>
+      <div class="section">Summer - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100124" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Golf & Tennis</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100124</div>
+      <div class="section">Summer - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100125" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Wooden Boat Floats</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100125</div>
+      <div class="section">Summer - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100126" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Natural Hot Springs</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100126</div>
+      <div class="section">Summer - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100127" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Helicopter Tours</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100127</div>
+      <div class="section">Summer - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100128" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Hot Air Balloon Tours</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100128</div>
+      <div class="section">Summer - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100129" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Paragliding</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100129</div>
+      <div class="section">Summer - Other</div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100130" alt="">
+    <div class="card-info">
+      <span class="external-note">External</span>
+      <div class="label">Stargazing</div>
+      <div class="url">https://hobackclub.com/images/dynamic/getImage.gif?ID=100130</div>
+      <div class="section">Summer - Other</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

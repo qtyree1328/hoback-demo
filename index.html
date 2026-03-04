@@ -7,7 +7,7 @@
 <meta name="description" content="Hoback Club - A Lifestyle Unlike Any Other">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -121,6 +121,60 @@ header.scrolled .nav-logo-text-img { display: block; }
   height: 100vh;
   min-height: 600px;
   overflow: hidden;
+  background: url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100032') center/cover no-repeat;
+}
+
+.hero-mask {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%);
+  overflow: hidden;
+}
+
+.hero-mask.open {
+  animation: maskReveal 0.8s cubic-bezier(.76,.09,.215,1) forwards;
+}
+
+@keyframes maskReveal {
+  to { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+}
+
+.hero-mask video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.05);
+}
+
+.hero-mask.open video {
+  animation: videoSettle 2s ease-out forwards;
+}
+
+@keyframes videoSettle {
+  to { transform: scale(1); }
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(30,45,58,0.65) 0%,
+    rgba(30,45,58,0.2) 40%,
+    transparent 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+}
+
+.hero-mask.open .hero-overlay {
+  animation: fadeIn 2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
 }
 
 .hero-slides {
@@ -139,17 +193,6 @@ header.scrolled .nav-logo-text-img { display: block; }
 
 .hero-slide.active { opacity: 1; }
 
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40%;
-  background: linear-gradient(to top, rgba(30,45,58,0.6), transparent);
-  pointer-events: none;
-}
-
 .hero-text {
   position: absolute;
   bottom: 80px;
@@ -157,6 +200,16 @@ header.scrolled .nav-logo-text-img { display: block; }
   right: 0;
   text-align: center;
   z-index: 2;
+  opacity: 0;
+  transform: translateY(20%);
+}
+
+.hero-text.visible {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .hero-text h1 {
@@ -182,7 +235,11 @@ header.scrolled .nav-logo-text-img { display: block; }
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  opacity: 0.8;
+  opacity: 0;
+}
+
+.scroll-down.visible {
+  animation: fadeIn 0.5s ease forwards;
 }
 
 .scroll-down span {
@@ -270,352 +327,6 @@ header.scrolled .nav-logo-text-img { display: block; }
 }
 
 .ski-conditions-btn:hover { background: #365e75; }
-.ski-conditions-btn .toggle-arrow { display: inline-block; transition: transform 0.3s; margin-left: 8px; }
-.ski-conditions-btn.open .toggle-arrow { transform: rotate(180deg); }
-
-.webcam-scroll-btn {
-  display: inline-block;
-  padding: 14px 30px;
-  background: transparent;
-  color: #1e2d3a;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  border: 2px solid #1e2d3a;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.webcam-scroll-btn:hover { background: #1e2d3a; color: #fff; }
-
-/* ===== MOUNTAIN REPORT (EXPANDABLE) ===== */
-.mtn-report-expand {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #f7f5f2;
-  border-bottom: 1px solid #e8e4df;
-}
-
-.mtn-report-expand.open {
-  max-height: 900px;
-}
-
-.mtn-report-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 50px;
-  padding: 35px 60px 45px;
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s;
-}
-
-.mtn-report-expand.open .mtn-report-inner {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.mtn-report-updated {
-  grid-column: 1 / -1;
-  font-size: 0.8rem;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e8e4df;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.mtn-section-title {
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #1e2d3a;
-  margin-bottom: 16px;
-  border-bottom: 2px solid #1e2d3a;
-  padding-bottom: 8px;
-}
-
-.snow-table, .weather-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-  margin-bottom: 16px;
-}
-
-.snow-table th, .weather-table th {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #888;
-  text-align: left;
-  padding: 8px 10px;
-  border-bottom: 1px solid #e8e4df;
-}
-
-.snow-table td, .weather-table td {
-  padding: 10px;
-  border-bottom: 1px solid #ece8e3;
-  color: #272f36;
-  font-size: 1rem;
-}
-
-.snow-table td[data-count] {
-  font-weight: 700;
-  font-size: 1.3rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.mtn-weather-desc {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  font-size: 1.05rem;
-  color: #272f36;
-}
-
-.mtn-weather-icon { font-size: 2.2rem; }
-
-/* Status circles */
-.mtn-status-col {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-}
-
-.status-circle {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.status-circle svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.status-circle svg circle.ring-bg {
-  stroke: #e0dcd7;
-}
-
-.status-circle svg circle.ring-fill {
-  transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
-}
-
-.status-circle .sc-big { font-size: 1.8rem; font-weight: 700; color: #1e2d3a; line-height: 1; }
-.status-circle .sc-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin-top: 3px; }
-
-.status-row { display: flex; gap: 20px; justify-content: center; }
-.status-row .status-circle { width: 100px; height: 100px; }
-.status-row .sc-big { font-size: 1.2rem; }
-
-.tram-status {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.tram-icon { font-size: 2rem; }
-.tram-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #1e2d3a; }
-.tram-open { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; color: #16a34a; text-transform: uppercase; }
-.tram-open-dot { width: 10px; height: 10px; border-radius: 50%; background: #16a34a; }
-
-/* Dropdown webcam preview */
-.dropdown-cam {
-  position: relative;
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-}
-
-.dropdown-cam img {
-  width: 100%;
-  aspect-ratio: 16/10;
-  object-fit: cover;
-  display: block;
-}
-
-.dropdown-cam .cam-label {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 10px 14px;
-  background: linear-gradient(to top, rgba(15,25,35,0.85), transparent);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.dropdown-cam .cam-label span {
-  color: #fff;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.dropdown-webcam-btn {
-  display: block;
-  width: 100%;
-  margin-top: 14px;
-  padding: 14px;
-  background: #1e2d3a;
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  text-align: center;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.dropdown-webcam-btn:hover { background: #365e75; }
-
-/* ===== PANEL 1 — SPLIT LAYOUT ===== */
-.panel-1 {
-  position: relative;
-  display: flex;
-  min-height: 750px;
-  overflow: hidden;
-  background-image: url('https://www.datocms-assets.com/50871/1654027458-20180227_es_jimryan-142-of-156-cropped-2.jpg?fit=crop&fm=webp&w=1920');
-  background-size: cover;
-  background-position: center;
-}
-
-.panel-1::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(247,245,242,0.7);
-}
-
-.panel-1-left {
-  position: relative;
-  z-index: 2;
-  flex: 0 0 55%;
-}
-
-.panel-1-carousel {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.panel-1-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: translateX(30px);
-  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.panel-1-slide.active {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.panel-1-slide.exit-left {
-  opacity: 0;
-  transform: translateX(-40px);
-}
-
-.panel-1-slide img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  border-radius: 0;
-}
-
-.panel-1-dots {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  z-index: 3;
-}
-
-.panel-1-dots span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.6);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.panel-1-dots span.active {
-  background: #fff;
-  border-color: #fff;
-  transform: scale(1.2);
-}
-
-.panel-1-right {
-  position: relative;
-  z-index: 2;
-  flex: 0 0 45%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 60px 50px 80px;
-}
-
-.panel-1-tagline {
-  font-size: 1.5rem;
-  font-weight: 300;
-  line-height: 1.7;
-  color: #1e2d3a;
-  margin-bottom: 20px;
-}
-
-.panel-1-body {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: #3a4f5e;
-}
-
-/* ===== WEBCAM SECTION TITLES ===== */
-.webcam-section-type {
-  text-align: center;
-  margin: 50px 0 20px;
-}
-
-.webcam-section-type h3 {
-  color: #fff;
-  font-size: 1.6rem;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-bottom: 6px;
-}
-
-.webcam-section-type p {
-  color: rgba(255,255,255,0.4);
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
 
 /* ===== SLIDING CALLOUTS ===== */
 .callouts {
@@ -811,7 +522,7 @@ header.scrolled .nav-logo-text-img { display: block; }
 }
 
 .card {
-  flex: 0 0 300px;
+  flex: 0 0 500px;
   position: relative;
   height: 420px;
   border-radius: 4px;
@@ -850,75 +561,7 @@ header.scrolled .nav-logo-text-img { display: block; }
   padding-bottom: 4px;
 }
 
-/* ===== MOUNTAIN CAMS ===== */
-.mountain-cams {
-  background: linear-gradient(180deg, #1e2d3a 0%, #162330 40%, #1a2b38 100%);
-  padding: 80px 60px 100px;
-}
-
-.cams-header {
-  text-align: center;
-  margin-bottom: 50px;
-}
-
-.cams-header h2 {
-  color: #fff;
-  font-size: 2.8rem;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin-bottom: 12px;
-}
-
-.cams-header p {
-  color: rgba(255,255,255,0.6);
-  font-size: 0.85rem;
-  font-weight: 300;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.cams-section-label {
-  color: rgba(255,255,255,0.4);
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  margin-bottom: 15px;
-  margin-top: 40px;
-}
-
-.cams-section-label:first-of-type { margin-top: 0; }
-
-.cams-livestream {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 10px;
-}
-
-.cam-card {
-  position: relative;
-  border-radius: 6px;
-  overflow: hidden;
-  background: #0d1a24;
-}
-
-.cam-card iframe {
-  width: 100%;
-  aspect-ratio: 16/9;
-  display: block;
-  border: none;
-}
-
-.cam-card img {
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  display: block;
-  transition: opacity 0.3s;
-}
-
+/* cam-label and cam-live-dot used by spotlight */
 .cam-label {
   position: absolute;
   bottom: 0;
@@ -951,54 +594,6 @@ header.scrolled .nav-logo-text-img { display: block; }
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
 }
-
-.cams-pano {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 10px;
-}
-
-.pano-card {
-  position: relative;
-  border-radius: 6px;
-  overflow: hidden;
-  background: #0d1a24;
-}
-
-.pano-card img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;
-}
-
-.cams-static {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-}
-
-.static-cam {
-  position: relative;
-  border-radius: 6px;
-  overflow: hidden;
-  background: #0d1a24;
-}
-
-.static-cam img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  display: block;
-}
-
-/* ===== FADE IN for cam images ===== */
-.cam-fade {
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-.cam-fade.loaded { opacity: 1; }
 
 /* ===== MEMBERSHIP PANEL ===== */
 .panel-2 {
@@ -1187,217 +782,452 @@ footer {
   border-color: #fff;
 }
 
-/* ===== WEBCAM CAROUSEL ===== */
-.cam-carousel-section {
-  background: #162330;
-  padding: 0 60px 60px;
+
+/* ===== MOUNTAIN DRAWING SECTION ===== */
+.mountain-drawing-section {
+  position: relative;
+  background: #ede9e1;
+  padding: 80px 0;
+  overflow: hidden;
 }
 
-.cam-carousel-title {
-  color: rgba(255,255,255,0.4);
-  font-size: 0.65rem;
+.mountain-drawing-inner {
+  display: flex;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.mountain-drawing-img {
+  flex: 0 0 60%;
+  margin-left: -80px;
+}
+
+.mountain-drawing-img img {
+  width: 100%;
+  max-width: 950px;
+  opacity: 0.55;
+}
+
+.mountain-drawing-text {
+  flex: 1;
+  padding: 0 60px 0 40px;
+  text-align: right;
+}
+
+.mountain-drawing-sub {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #7a8d98;
+  margin-bottom: 20px;
+}
+
+.mountain-drawing-headline {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 3.6rem;
+  font-weight: 300;
+  color: #1e2d3a;
+  line-height: 1.15;
+  margin-bottom: 40px;
+  text-transform: none;
+}
+
+.mountain-drawing-btn {
+  display: inline-block;
+  padding: 16px 40px;
+  background: #1e2d3a;
+  color: #fff;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  margin-bottom: 15px;
+  transition: background 0.3s;
+  text-decoration: none;
 }
 
-.cam-carousel-wrap {
-  position: relative;
+.mountain-drawing-btn:hover {
+  background: #365e75;
 }
 
-.cam-carousel-main {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/9;
-  border-radius: 8px;
+/* Reversed variant (Reserve Your Stay) */
+.mountain-drawing-reversed .mountain-drawing-inner {
+  flex-direction: row-reverse;
+}
+
+.mountain-drawing-reversed .mountain-drawing-img {
+  flex: 0 0 60%;
+  margin-left: 0;
+  margin-right: -250px;
+}
+
+.mountain-drawing-reversed .mountain-drawing-img img {
+  max-height: 250px;
+  width: auto;
+  max-width: 700px;
+}
+
+.mountain-drawing-reversed .mountain-drawing-text {
+  text-align: left;
+}
+
+/* ===== IMAGE GALLERY ===== */
+.img-carousel {
+  background: #ede9e1;
+  padding: 90px 0 80px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.img-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.img-carousel__track {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  padding: 0 60px;
+  width: max-content;
+}
+
+.img-carousel__slide {
+  flex-shrink: 0;
+  border-radius: 12px;
   overflow: hidden;
-  background: #0d1a24;
-  cursor: pointer;
 }
 
-.cam-carousel-main img,
-.cam-carousel-main iframe {
+.img-carousel__slide img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  border: none;
 }
 
-/* Smooth slide transition for carousel */
-.cam-carousel-main {
+@media (max-width: 768px) {
+  .img-carousel { padding: 60px 0 50px; }
+  .img-carousel__track { gap: 36px; padding: 0 30px; }
+}
+
+/* ===== LIFE AT HOBACK — CINEMATIC PANELS ===== */
+.showcase {
+  background: #ede9e1;
+}
+
+.showcase__header {
+  padding: 80px 6% 20px;
+}
+
+.showcase__header span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.2rem, 4.5vw, 5rem);
+  font-weight: 300;
+  color: #1e2d3a;
+  letter-spacing: 0.02em;
+}
+
+/* Each panel */
+.showcase__panel {
   position: relative;
-}
-
-.cam-carousel-main .cam-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.cam-carousel-main .cam-slide.active {
-  opacity: 1;
-  position: relative;
-}
-
-.cam-carousel-label {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 16px 20px;
-  background: linear-gradient(to top, rgba(15,25,35,0.9), transparent);
   display: flex;
   align-items: center;
-  gap: 8px;
+  min-height: auto;
+  overflow: hidden;
+  padding: 60px 6%;
+  gap: 5%;
+}
+
+/* Alternate layout direction */
+.showcase__panel:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+/* Image side */
+.showcase__img-wrap {
+  position: relative;
+  flex: 0 0 46%;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+/* Aspect ratio for image container */
+.showcase__img-wrap::before {
+  content: '';
+  display: block;
+  padding-top: 70%;
+}
+
+.showcase__img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.15);
+  transition: transform 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Wipe reveal on the image */
+.showcase__img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #ede9e1;
+  transform-origin: left;
+  transform: scaleX(1);
+  transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1) 0.1s;
   z-index: 2;
-  pointer-events: none;
 }
 
-.cam-carousel-label span {
-  color: #fff;
-  font-size: 0.85rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.showcase__panel:nth-child(even) .showcase__img-wrap::after {
+  transform-origin: right;
 }
 
-.cam-carousel-live {
-  background: #dc2626;
-  color: #fff;
-  font-size: 0.55rem;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 3px;
-  text-transform: uppercase;
+.showcase__panel.is-revealed .showcase__img-wrap::after {
+  transform: scaleX(0);
 }
 
-.cam-carousel-arrow {
+.showcase__panel.is-revealed .showcase__img {
+  transform: scale(1);
+}
+
+/* Text side */
+.showcase__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 0;
+  position: relative;
+  color: #1e2d3a;
+}
+
+/* Large watermark number */
+.showcase__number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(8rem, 14vw, 18rem);
+  font-weight: 300;
+  line-height: 1;
+  color: rgba(30,45,58,0.04);
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.4);
-  background: rgba(30,45,58,0.85);
-  color: #fff;
-  font-size: 2rem;
-  cursor: pointer;
-  transition: all 0.3s;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  transition: opacity 1s ease 0.2s, transform 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.showcase__panel.is-revealed .showcase__number {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Accent line */
+.showcase__line {
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(30,45,58,0.35), rgba(30,45,58,0));
+  margin-bottom: 28px;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s;
+}
+
+.showcase__panel.is-revealed .showcase__line {
+  width: 70px;
+}
+
+/* Headline */
+.showcase__heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.8rem, 3.5vw, 4.6rem);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  color: #1e2d3a;
+  position: relative;
+  z-index: 2;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1s cubic-bezier(0.22, 1, 0.36, 1) 0.4s;
+}
+
+.showcase__panel.is-revealed .showcase__heading {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* Description */
+.showcase__desc {
+  font-size: clamp(1.35rem, 1.4vw, 1.6rem);
+  font-weight: 300;
+  line-height: 1.75;
+  max-width: 420px;
+  margin-top: 22px;
+  color: rgba(30,45,58,0.6);
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease 0.8s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.8s;
+}
+
+.showcase__panel.is-revealed .showcase__desc {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .showcase__panel {
+    flex-direction: column !important;
+    padding: 40px 6%;
+    gap: 0;
+  }
+  .showcase__img-wrap {
+    flex: none;
+    width: 100%;
+  }
+  .showcase__img-wrap::before { padding-top: 60%; }
+  .showcase__text {
+    flex: none;
+    padding: 30px 0 0;
+  }
+  .showcase__number {
+    font-size: clamp(6rem, 20vw, 12rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .showcase__header { padding: 50px 6% 10px; }
+  .showcase__text { padding: 24px 0 0; }
+  .showcase__heading { font-size: clamp(2.4rem, 7vw, 3.2rem); }
+  .showcase__desc { font-size: 1.35rem; }
+  .showcase__number { display: none; }
+}
+
+/* ===== SEASONS SECTION ===== */
+.seasons-section {
+  padding: 0;
+  background: #f5f1eb;
+}
+
+.seasons-header {
+  text-align: center;
+  padding: 80px 30px 50px;
+}
+
+.seasons-header-sub {
+  display: block;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(30,45,58,0.4);
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+
+.seasons-header-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.6rem, 4vw, 4.2rem);
+  font-weight: 300;
+  color: #1e2d3a;
+  letter-spacing: 0.02em;
+}
+
+.seasons-grid {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-wrap: wrap;
+  overflow: hidden;
+  list-style: none;
 }
 
-.cam-carousel-arrow:hover {
-  background: rgba(30,45,58,1);
-  border-color: #fff;
-  transform: translateY(-50%) scale(1.08);
+.seasons-grid:hover .seasons-item:not(:hover) .seasons-img {
+  filter: brightness(0.35);
 }
 
-.cam-carousel-arrow.prev { left: 16px; }
-.cam-carousel-arrow.next { right: 16px; }
-
-.cam-carousel-thumbs {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-}
-
-.cam-carousel-thumb {
-  flex: 0 0 100px;
-  height: 60px;
-  border-radius: 4px;
+.seasons-item {
+  position: relative;
+  width: 25%;
   overflow: hidden;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: border-color 0.3s, opacity 0.3s;
-  opacity: 0.6;
-  background: #0d1a24;
-}
-
-.cam-carousel-thumb.active { border-color: #4ade80; opacity: 1; }
-.cam-carousel-thumb:hover { opacity: 1; }
-.cam-carousel-thumb img { width: 100%; height: 100%; object-fit: cover; }
-
-/* Lightbox */
-.cam-lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  background: rgba(0,0,0,0.92);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
+  transform: translateY(80px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.cam-lightbox.open { opacity: 1; pointer-events: auto; }
-
-.cam-lightbox-content {
-  width: 90vw;
-  max-width: 1200px;
-  aspect-ratio: 16/9;
-  position: relative;
+.seasons-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.cam-lightbox-content img,
-.cam-lightbox-content iframe {
+.seasons-item:nth-child(2) { transition-delay: 0.12s; }
+.seasons-item:nth-child(3) { transition-delay: 0.24s; }
+.seasons-item:nth-child(4) { transition-delay: 0.36s; }
+
+.seasons-item::before {
+  content: "";
+  display: block;
+  padding-top: 200%;
+}
+
+.seasons-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  border: none;
-  border-radius: 8px;
+  object-fit: cover;
+  --pos-x: 0;
+  --pos-y: 0;
+  object-position: calc(50% + var(--pos-x) * 50%) calc(50% + var(--pos-y) * 50%);
+  transition: filter 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.cam-lightbox-close {
+.seasons-item:hover .seasons-img {
+  transform: scale(1.04);
+  filter: brightness(0.75);
+}
+
+.seasons-label {
   position: absolute;
-  top: -40px;
-  right: 0;
-  background: none;
-  border: none;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
   color: #fff;
-  font-size: 2rem;
-  cursor: pointer;
+  text-decoration: none;
+}
+
+.seasons-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.8rem, 3.2vw, 4.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.35);
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1200px) {
-  .panel-1 { flex-direction: column; min-height: auto; }
-  .panel-1-left { flex: none; height: 350px; }
-  .panel-1-right { flex: none; }
-  .panel-1-right { flex: none; padding: 40px 30px 50px; }
   .callouts { flex-direction: column; padding: 60px 30px; }
   .callouts-left { flex: none; }
-  .card { flex: 0 0 280px; }
-  .mtn-report-inner { grid-template-columns: 1fr 1fr; gap: 30px; }
+  .card { flex: 0 0 380px; height: 360px; }
+  .mountain-drawing-inner { max-width: 100%; }
+  .mountain-drawing-headline { font-size: 2.8rem; }
 }
 
 @media (max-width: 768px) {
-  .cam-carousel-section { padding: 0 30px 40px; }
   nav { padding: 12px 20px; }
   .nav-left, .nav-right { display: none; }
+  .hero { min-height: 400px; }
   .hero-text h1 { font-size: 1.8rem; letter-spacing: 0.15em; }
+  .hero-text { bottom: 60px; }
   .weather-bar { flex-wrap: wrap; padding: 20px 30px; gap: 15px; }
-  .mtn-report-inner { grid-template-columns: 1fr; padding: 20px 30px 30px; }
-  .panel-1-left { height: 280px; }
-  .panel-1-right { padding: 30px 20px 40px; }
-  .panel-1-tagline { font-size: 1.1rem; }
-  .panel-1-body { font-size: 0.9rem; }
   .callouts { padding: 40px 20px; }
   .callouts-left h2 { font-size: 2.2rem; }
   .card { flex: 0 0 calc(100vw - 60px); height: 300px; }
-  .mountain-cams { padding: 50px 30px; }
-  .cams-livestream, .cams-pano { grid-template-columns: 1fr; }
-  .cams-static { grid-template-columns: 1fr 1fr; }
   .panel-2-overlay { flex-direction: column; }
   .panel-2-left { flex: none; padding: 35px 25px; }
   .panel-2-left h2 { font-size: 1.8rem; }
@@ -1405,12 +1235,24 @@ footer {
   footer { padding: 40px 30px; }
   .footer-inner { flex-direction: column; }
   .footer-info-top { flex-direction: column; gap: 20px; }
-  .cam-carousel-arrow { width: 50px; height: 50px; font-size: 1.5rem; }
   .live-cam-spotlight { padding: 40px 20px; }
   .live-cam-spotlight h2 { font-size: 1.6rem; }
   .video-overlay h2 { font-size: 1.6rem; letter-spacing: 0.1em; }
   .video-section { min-height: 300px; }
   .video-section video { min-height: 300px; }
+  .mountain-drawing-section { padding: 50px 0; }
+  .mountain-drawing-inner { flex-direction: column; }
+  .mountain-drawing-img { flex: none; margin-left: -30px; margin-bottom: 30px; }
+  .mountain-drawing-text { padding: 0 30px; }
+  .mountain-drawing-headline { font-size: 2.2rem; }
+  .mountain-drawing-reversed .mountain-drawing-inner { flex-direction: column; }
+  .mountain-drawing-reversed .mountain-drawing-img { flex: none; margin-right: -30px; margin-left: 0; margin-bottom: 30px; }
+  .mountain-drawing-reversed .mountain-drawing-img img { max-height: 250px; max-width: 100%; }
+  .mountain-drawing-reversed .mountain-drawing-text { text-align: center; padding: 0 30px; }
+  .seasons-item { width: 50%; }
+  .seasons-item:nth-child(3) { transition-delay: 0s; }
+  .seasons-item:nth-child(4) { transition-delay: 0.12s; }
+  .seasons-item::before { padding-top: 80%; }
 }
 </style>
 </head>
@@ -1423,6 +1265,7 @@ footer {
     <a href="discover.html">Discover Us</a>
     <a href="stay.html">Come &amp; Stay</a>
     <a href="amenities.html">Amenities</a>
+    <a href="mountain.html">Mountain</a>
   </div>
   <div class="nav-logo">
     <a href="index.html">
@@ -1438,31 +1281,20 @@ footer {
   </div>
 </nav>
 </header>
-<a href="extra-features.html" class="extra-features-float">Extra Features</a>
-<style>
-.extra-features-float {
-  position: fixed; top: 90px; left: 20px; z-index: 999;
-  background: rgba(30,45,58,0.85); color: #fff;
-  padding: 10px 18px; border-radius: 999px; font-size: 0.7rem;
-  font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
-  text-decoration: none; backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,0.2);
-  transition: background 0.3s, transform 0.3s;
-}
-.extra-features-float:hover { background: rgba(30,45,58,1); transform: scale(1.05); }
-</style>
 
-<!-- HERO BANNER -->
-<section class="hero">
-  <div class="hero-slides">
-    <div class="hero-slide active" style="background-image: url('images/hero-1.jpg')"></div>
-    <div class="hero-slide" style="background-image: url('images/hero-2.jpg')"></div>
-  </div>
-  <div class="hero-text">
-    <h1>A Lifestyle Unlike Any Other</h1>
-  </div>
-  <div class="scroll-down">
-    <span></span>
+<!-- VIDEO HERO -->
+<section class="hero" id="heroSection">
+  <div class="hero-mask" id="heroMask">
+    <video autoplay muted loop playsinline id="heroVideo">
+      <source src="images/hoback-video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-text" id="heroText">
+      <h1>Hoback Club, Jackson Hole</h1>
+    </div>
+    <div class="scroll-down" id="scrollDown">
+      <span></span>
+    </div>
   </div>
 </section>
 
@@ -1497,113 +1329,97 @@ footer {
     </div>
   </div>
   <div class="weather-bar-btns">
-    <button class="ski-conditions-btn" id="skiConditionsBtn">Ski Conditions <span class="toggle-arrow">▾</span></button>
-    <button class="webcam-scroll-btn" onclick="document.getElementById('mountain-cams').scrollIntoView({behavior:'smooth'})">Webcam</button>
+    <a href="mountain.html" class="ski-conditions-btn">Mountain Conditions</a>
   </div>
 </section>
 
-<!-- EXPANDABLE MOUNTAIN REPORT -->
-<div class="mtn-report-expand" id="mtnReport">
-  <div class="mtn-report-inner">
-    <div class="mtn-report-updated">
-      <span>Updated 2/23/26, 5:54 AM</span>
-      <span>Mostly Cloudy, Some Sun</span>
+<!-- MOUNTAIN DRAWING SECTION -->
+<section class="mountain-drawing-section">
+  <div class="mountain-drawing-inner">
+    <div class="mountain-drawing-img">
+      <img src="images/tetons_drawing4.png" alt="Teton Mountains Sketch">
     </div>
-
-    <!-- COLUMN 1: Snow & Current Weather -->
-    <div>
-      <div class="mtn-section-title">Snow Totals</div>
-      <table class="snow-table">
-        <thead><tr><th></th><th>Summit</th><th>Mid-Mountain</th></tr></thead>
-        <tbody>
-          <tr><td>Past 24 Hours</td><td data-count="0">0"</td><td data-count="0">0"</td></tr>
-          <tr><td>Season Totals</td><td data-count="269">0"</td><td data-count="183">0"</td></tr>
-          <tr><td>Snow Depth</td><td data-count="91">0"</td><td data-count="59">0"</td></tr>
-        </tbody>
-      </table>
-
-      <div class="mtn-section-title" style="margin-top:24px">Current Weather</div>
-      <table class="weather-table">
-        <thead><tr><th>Location</th><th>Temp</th><th>Wind</th></tr></thead>
-        <tbody>
-          <tr><td>Summit</td><td>23°F</td><td>18 mph</td></tr>
-          <tr><td>Mid Mountain</td><td>28°F</td><td>6 mph</td></tr>
-          <tr><td>Base</td><td>21°F</td><td>0 mph</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- COLUMN 2: Tram & Lift Status -->
-    <div class="mtn-status-col">
-      <div class="tram-status">
-        <span class="tram-icon"></span>
-        <span class="tram-label">Aerial Tram</span>
-        <span class="tram-open"><span class="tram-open-dot"></span> Open</span>
-      </div>
-
-      <div class="status-circle" data-ratio="1">
-        <svg viewBox="0 0 100 100">
-          <circle class="ring-bg" cx="50" cy="50" r="46" fill="none" stroke="#e0dcd7" stroke-width="4"/>
-          <circle class="ring-fill" cx="50" cy="50" r="46" fill="none" stroke="#16a34a" stroke-width="4" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round" transform="rotate(-90 50 50)"/>
-        </svg>
-        <span class="sc-big">13/13</span>
-        <span class="sc-label">Lifts Open</span>
-      </div>
-
-      <div class="status-row">
-        <div class="status-circle" data-ratio="0.9">
-          <svg viewBox="0 0 100 100">
-            <circle class="ring-bg" cx="50" cy="50" r="46" fill="none" stroke="#e0dcd7" stroke-width="4"/>
-            <circle class="ring-fill" cx="50" cy="50" r="46" fill="none" stroke="#16a34a" stroke-width="4" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round" transform="rotate(-90 50 50)"/>
-          </svg>
-          <span class="sc-big">117/130</span>
-          <span class="sc-label">Trails Open</span>
-        </div>
-        <div class="status-circle" data-ratio="0.75">
-          <svg viewBox="0 0 100 100">
-            <circle class="ring-bg" cx="50" cy="50" r="46" fill="none" stroke="#e0dcd7" stroke-width="4"/>
-            <circle class="ring-fill" cx="50" cy="50" r="46" fill="none" stroke="#f59e0b" stroke-width="4" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round" transform="rotate(-90 50 50)"/>
-          </svg>
-          <span class="sc-big">3/4</span>
-          <span class="sc-label">Terrain Parks</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- COLUMN 3: Webcam Preview -->
-    <div>
-      <div class="mtn-section-title">Live Webcam</div>
-      <div class="dropdown-cam">
-        <img id="dropdownCam" src="https://cams.jacksonhole.com/webcam/codybowl.jpg" alt="Cody Bowl Live">
-        <div class="cam-label">
-          <div class="cam-live-dot"></div>
-          <span>Cody Bowl</span>
-        </div>
-      </div>
-      <button class="dropdown-webcam-btn" onclick="document.getElementById('mountain-cams').scrollIntoView({behavior:'smooth'})">View All Webcams ↓</button>
+    <div class="mountain-drawing-text">
+      <p class="mountain-drawing-sub">Jackson Hole, Wyoming</p>
+      <h2 class="mountain-drawing-headline">An Experience<br>Unlike Any Other</h2>
+      <a href="stay.html" class="mountain-drawing-btn">Rental Inquiry</a>
     </div>
   </div>
-</div>
+</section>
 
-<!-- PANEL 1 — SPLIT LAYOUT -->
-<section class="panel-1">
-  <div class="panel-1-left">
-    <div class="panel-1-carousel" id="panel1Carousel">
-      <div class="panel-1-slide active">
-        <img src="images/panel1-left.jpg" alt="Hoback Club">
-      </div>
-      <div class="panel-1-slide">
-        <img src="images/panel1-middle.jpg" alt="Hoback Club Aerial">
-      </div>
+<!-- IMAGE GALLERY -->
+<script src="gallery-config.js"></script>
+<section class="img-carousel" id="imgGallery">
+  <div class="img-carousel__track" id="imgCarouselTrack"></div>
+</section>
+
+<!-- LIFE AT HOBACK -->
+<section class="showcase" id="showcase">
+  <div class="showcase__header"><span>Life at Hoback</span></div>
+
+  <!-- 01 — Ski Access -->
+  <div class="showcase__panel">
+    <div class="showcase__img-wrap">
+      <div class="showcase__img" style="background-image: url('images/hero-1.jpg')"></div>
     </div>
-    <div class="panel-1-dots" id="panel1Dots">
-      <span class="active" data-slide="0"></span>
-      <span data-slide="1"></span>
+    <div class="showcase__text">
+      <div class="showcase__number">01</div>
+      <div class="showcase__line"></div>
+      <h2 class="showcase__heading">Ski-In, Ski-Out Access Like No Other</h2>
+      <p class="showcase__desc">Step directly from your residence onto pristine corduroy. The most coveted slope-side position at Jackson Hole Mountain Resort, where powder days begin at your front door.</p>
     </div>
   </div>
-  <div class="panel-1-right">
-    <h4 class="panel-1-tagline">The Jackson Hole lifestyle is unlike any other. It's a place to retreat or reconnect, with breathtaking surroundings that both ground us and inspire.</h4>
-    <p class="panel-1-body">Once in a lifetime, an opportunity arises that elevates the way we escape and explore together. The Hoback Club is that opportunity. The embodiment of refined grandeur, this private club offers the pinnacle of amenities and service – not just in Jackson Hole, but in all the ski world.</p>
+
+  <!-- 02 — Wellness Spa -->
+  <div class="showcase__panel">
+    <div class="showcase__img-wrap">
+      <div class="showcase__img" style="background-image: url('images/hero-2.jpg')"></div>
+    </div>
+    <div class="showcase__text">
+      <div class="showcase__number">02</div>
+      <div class="showcase__line"></div>
+      <h2 class="showcase__heading">World-Class Wellness &amp; Recovery Spa</h2>
+      <p class="showcase__desc">Restore body and mind in our alpine sanctuary. From hydrotherapy pools to expert-guided recovery sessions, every detail is designed to rejuvenate after a day on the mountain.</p>
+    </div>
+  </div>
+
+  <!-- 03 — Dining -->
+  <div class="showcase__panel">
+    <div class="showcase__img-wrap">
+      <div class="showcase__img" style="background-image: url('images/card-discover.jpg')"></div>
+    </div>
+    <div class="showcase__text">
+      <div class="showcase__number">03</div>
+      <div class="showcase__line"></div>
+      <h2 class="showcase__heading">Private Residence Dining, Locally Sourced</h2>
+      <p class="showcase__desc">Savor cuisine crafted by our culinary team from the finest regional ingredients. From intimate fireside dinners to curated tasting events, every meal becomes an occasion.</p>
+    </div>
+  </div>
+
+  <!-- 04 — Lounges -->
+  <div class="showcase__panel">
+    <div class="showcase__img-wrap">
+      <div class="showcase__img" style="background-image: url('https://www.travelandleisure.com/thmb/YiylyFMlqZz6kD-78-4g_dHdxHU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-deck-hoback-club-wyoming-HOBACKCLUB0126-16ecbcfb0dcf4eceb5f9cb6c44323a13.jpg')"></div>
+    </div>
+    <div class="showcase__text">
+      <div class="showcase__number">04</div>
+      <div class="showcase__line"></div>
+      <h2 class="showcase__heading">Indoor &amp; Outdoor Apr&egrave;s Ski Lounges</h2>
+      <p class="showcase__desc">Unwind fireside or beneath the stars. Thoughtfully designed gathering spaces that bring members together in effortless sophistication, from morning coffee to evening cocktails.</p>
+    </div>
+  </div>
+
+  <!-- 05 — Grand Teton -->
+  <div class="showcase__panel">
+    <div class="showcase__img-wrap">
+      <div class="showcase__img" style="background-image: url('images/card-summer.jpg')"></div>
+    </div>
+    <div class="showcase__text">
+      <div class="showcase__number">05</div>
+      <div class="showcase__line"></div>
+      <h2 class="showcase__heading">Direct Access to Grand Teton National Park</h2>
+      <p class="showcase__desc">Your gateway to one of America's most iconic landscapes. Miles of pristine trails, untouched wilderness, and crystal waters begin where your doorstep ends.</p>
+    </div>
   </div>
 </section>
 
@@ -1651,395 +1467,62 @@ footer {
   </div>
 </section>
 
-<!-- VIDEO SECTION -->
-<section class="video-section">
-  <video autoplay muted loop playsinline>
-    <source src="images/hoback-video.mp4" type="video/mp4">
-  </video>
-  <div class="video-overlay">
-    <h2>Experience World Class Skiing &amp; Amenities</h2>
+<!-- SEASONS -->
+<section class="seasons-section">
+  <div class="seasons-header">
+    <span class="seasons-header-sub">Jackson Hole, Wyoming</span>
+    <h2 class="seasons-header-title">Four Seasons of Extraordinary Living</h2>
   </div>
-</section>
-
-<!-- LIVE CAM SPOTLIGHT -->
-<section class="live-cam-spotlight">
-  <div class="webcam-section-type" style="margin-top:0">
-    <h3>Single Cam</h3>
-    <p>Featured live feed</p>
-  </div>
-  <h2>Live From Cody Bowl</h2>
-  <div class="spotlight-cam">
-    <img id="codybowlSpotlight" src="https://cams.jacksonhole.com/webcam/codybowl.jpg" alt="Cody Bowl Live">
-    <div class="cam-label">
-      <div class="cam-live-dot"></div>
-      <span>Cody Bowl — Live</span>
-    </div>
-  </div>
-  <a href="#mountain-cams" class="btn-view-cams" onclick="document.getElementById('mountain-cams').scrollIntoView({behavior:'smooth'});return false;">View All Webcams ↓</a>
-</section>
-
-<!-- MOUNTAIN CAMS -->
-<section class="mountain-cams" id="mountain-cams">
-  <div class="webcam-section-type" style="margin-top:0">
-    <h3>Camera Gallery</h3>
-    <p>Browse all mountain views</p>
-  </div>
-  <div class="cams-header">
-    <h2>Live From the Mountain</h2>
-    <p>Real-time views from Jackson Hole Mountain Resort</p>
-  </div>
-
-  <div class="cams-section-label">Live Streams</div>
-  <div class="cams-livestream">
-    <div class="cam-card">
-      <iframe src="https://www.youtube.com/embed/9kK7RfM3eSc?autoplay=1&mute=1&loop=1&playlist=9kK7RfM3eSc&controls=0&modestbranding=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
-      <div class="cam-label">
-        <div class="cam-live-dot"></div>
-        <span>Corbet's Couloir</span>
+  <ul class="seasons-grid">
+    <li class="seasons-item">
+      <img class="seasons-img" style="--pos-x: .5; --pos-y: 0"
+           src="https://www.datocms-assets.com/50871/1680193117-skier-winter-promo-box-ajimmerson_powder_12-3-2022-1103-jpg.jpg"
+           alt="Winter in Jackson Hole" loading="lazy">
+      <div class="seasons-label">
+        <span class="seasons-name">Winter</span>
       </div>
-    </div>
-    <div class="cam-card">
-      <iframe src="https://www.youtube.com/embed/cOcHcIDbi1o?autoplay=1&mute=1&loop=1&playlist=cOcHcIDbi1o&controls=0&modestbranding=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
-      <div class="cam-label">
-        <div class="cam-live-dot"></div>
-        <span>Snow Stake</span>
+    </li>
+    <li class="seasons-item">
+      <img class="seasons-img" style="--pos-x: -.7; --pos-y: 0"
+           src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100077"
+           alt="Spring in Jackson Hole" loading="lazy">
+      <div class="seasons-label">
+        <span class="seasons-name">Spring</span>
       </div>
-    </div>
-  </div>
-
-  <div class="cams-section-label">Panoramic Views</div>
-  <div class="cams-pano">
-    <div class="pano-card">
-      <img src="https://backend.roundshot.com/cams/12a4b2c24cd515e0a115d4a0f59ef7f8/default" alt="Summit Panorama" class="pano-img cam-fade" data-cam="summit">
-      <div class="cam-label"><span>Summit Panorama</span></div>
-    </div>
-    <div class="pano-card">
-      <img src="https://backend.roundshot.com/cams/6f7dc91857e22fe329e8bdeef5ee5750/default" alt="Rendezvous Lodge" class="pano-img cam-fade" data-cam="rendezvous">
-      <div class="cam-label"><span>Rendezvous Lodge</span></div>
-    </div>
-  </div>
-
-  <div class="cams-section-label">Mountain Cameras</div>
-  <div class="cams-static">
-    <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/corbetscouloir.jpg" alt="Corbet's Couloir" class="static-img cam-fade">
-      <div class="cam-label"><span>Corbet's Couloir</span></div>
-    </div>
-    <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/codybowl.jpg" alt="Cody Bowl" class="static-img cam-fade">
-      <div class="cam-label"><span>Cody Bowl</span></div>
-    </div>
-    <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/guncam.jpg" alt="Sublette Base" class="static-img cam-fade">
-      <div class="cam-label"><span>Sublette Base</span></div>
-    </div>
-    <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/commons.jpg" alt="Tram Cam" class="static-img cam-fade">
-      <div class="cam-label"><span>Tram Cam</span></div>
-    </div>
-    <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/SouthHoback.jpg" alt="Mountain View" class="static-img cam-fade">
-      <div class="cam-label"><span>Mountain View</span></div>
-    </div>
-    <div class="static-cam">
-      <img src="https://cams.jacksonhole.com/webcam/casperchair.jpg" alt="Casper Chair" class="static-img cam-fade">
-      <div class="cam-label"><span>Casper Chair</span></div>
-    </div>
-  </div>
-
-  <!-- WEBCAM CAROUSEL -->
-  <div class="webcam-section-type">
-    <h3>Camera Carousel</h3>
-    <p>Click through or expand any view</p>
-  </div>
-  <div class="cam-carousel-section">
-    <div class="cam-carousel-title">Webcam Carousel</div>
-    <div class="cam-carousel-wrap" id="camCarousel">
-      <div class="cam-carousel-main" id="carouselMain"></div>
-      <button class="cam-carousel-arrow prev" id="carouselPrev">‹</button>
-      <button class="cam-carousel-arrow next" id="carouselNext">›</button>
-    </div>
-    <div class="cam-carousel-thumbs" id="carouselThumbs"></div>
-  </div>
-</section>
-
-<!-- LIGHTBOX -->
-<div class="cam-lightbox" id="camLightbox">
-  <div class="cam-lightbox-content" id="lightboxContent">
-    <button class="cam-lightbox-close" id="lightboxClose">✕</button>
-  </div>
-</div>
-
-<!-- ===== MAP LIBRARIES ===== -->
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.js"></script>
-<script src="https://unpkg.com/osmtogeojson@3.0.0-beta.5/osmtogeojson.js"></script>
-<style>
-.map-section { background: #f7f5f2; padding: 60px 0 0; }
-.map-section-header { text-align: center; padding: 0 30px 30px; }
-.map-section-header h2 { font-family: 'Lato', sans-serif; color: #1e2d3a; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
-.map-section-header p { color: #5a6d7a; font-size: 0.9rem; letter-spacing: 0.05em; }
-.map-container { width: 100%; height: 600px; position: relative; }
-.map-container .mapboxgl-popup-content { font-family: 'Lato', sans-serif; padding: 14px 18px; border-radius: 4px; }
-.map-container .mapboxgl-popup-content h3 { font-size: 0.95rem; color: #1e2d3a; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.08em; }
-.map-container .mapboxgl-popup-content p { font-size: 0.85rem; color: #555; margin: 0; }
-.map-marker { width: 28px; height: 28px; background: #1e2d3a; border: 3px solid #fff; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: transform 0.2s; }
-.map-marker:hover { transform: scale(1.2); }
-@media (max-width: 768px) { .map-container { height: 450px; } .map-section-header h2 { font-size: 1.6rem; } }
-</style>
-
-<!-- TRAIL MAP (removed — replaced by Trail Explorer below) -->
-<style>
-@keyframes spin { to { transform: rotate(360deg); } }
-.mapboxgl-popup-content .trail-popup { font-family: 'Lato', sans-serif; }
-.trail-popup h3 { display:flex; align-items:center; gap:8px; font-size:1rem; color:#1e2d3a; margin:0 0 6px; }
-.trail-popup .trail-badge { display:inline-block; }
-.trail-popup .detail { font-size:0.8rem; color:#555; margin:2px 0; }
-.trail-popup .ref-badge { display:inline-block; background:#eee; border-radius:3px; padding:0 5px; font-size:0.75rem; font-weight:600; margin-right:4px; color:#333; }
-.trail-popup .diff-label { font-size:0.82rem; font-weight:600; margin-top:2px; }
-</style>
-
-<!-- TRAIL EXPLORER (OpenSkiData enriched) -->
-<style>
-.map-integrations-intro { background:#f7f5f2; padding:84px 24px 24px; text-align:center; }
-.map-integrations-intro h2 { font-family:'Lato',sans-serif; color:#1e2d3a; font-size:3rem; font-weight:300; text-transform:uppercase; letter-spacing:0.16em; margin-bottom:10px; }
-.map-integrations-intro p { color:#5a6d7a; font-size:0.95rem; letter-spacing:0.08em; text-transform:uppercase; }
-.map-example-kicker { display:inline-block; margin-bottom:10px; padding:6px 12px; border-radius:999px; background:#e6ecef; color:#2d4457; font-size:0.7rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; }
-.map-section-spacer { height:72px; background:#fff; }
-.trail-explorer-section { background: #f7f5f2; padding: 60px 0 0; }
-.trail-explorer-header { text-align: center; padding: 0 30px 30px; }
-.trail-explorer-header h2 { font-family: 'Lato', sans-serif; color: #1e2d3a; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
-.trail-explorer-header p { color: #5a6d7a; font-size: 0.9rem; letter-spacing: 0.05em; }
-.trail-explorer-map { width: 100%; height: 700px; position: relative; }
-#trailExplorerSpinner { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;background:rgba(30,45,58,0.85);color:#fff;padding:16px 28px;border-radius:6px;font-family:'Lato',sans-serif;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:10px; }
-#trailExplorerLegend { position:absolute;bottom:30px;right:10px;z-index:5;background:rgba(255,255,255,0.94);backdrop-filter:blur(6px);border-radius:8px;padding:14px 18px;font-family:'Lato',sans-serif;font-size:0.75rem;box-shadow:0 2px 12px rgba(0,0,0,0.2);display:none; }
-#trailExplorerLegend .legend-title { font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;color:#1e2d3a;font-size:0.7rem; }
-#trailExplorerLegend .legend-row { display:flex;align-items:center;gap:8px;margin-bottom:6px;color:#333; }
-.te-popup { font-family:'Lato',sans-serif; max-width:300px; }
-.te-popup h3 { display:flex;align-items:center;gap:8px;font-size:1.05rem;color:#1e2d3a;margin:0 0 4px;line-height:1.3; }
-.te-popup .te-diff { font-size:0.82rem;font-weight:600;margin:2px 0 8px; }
-.te-popup .te-stats { display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-bottom:8px; }
-.te-popup .te-stat { font-size:0.78rem;color:#555; }
-.te-popup .te-stat strong { color:#1e2d3a; }
-.te-popup .te-ref { display:inline-block;background:#eee;border-radius:3px;padding:0 5px;font-size:0.75rem;font-weight:600;color:#333; }
-.te-popup .te-flags { display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:0.75rem; }
-.te-popup .te-flag { background:#f0f0f0;border-radius:3px;padding:2px 6px; }
-.te-popup .te-elev-chart { margin-top:8px; }
-.te-popup .te-lift-type { font-size:0.85rem;color:#555;text-transform:capitalize;margin:2px 0 8px; }
-@media (max-width: 768px) {
-  .map-integrations-intro { padding:64px 16px 18px; }
-  .map-integrations-intro h2 { font-size:2rem; letter-spacing:0.12em; }
-  .map-section-spacer { height:52px; }
-  .trail-explorer-map { height: 500px; }
-  .trail-explorer-header h2 { font-size: 1.6rem; }
-}
-</style>
-<section class="map-integrations-intro" id="mapIntegrationsSection">
-  <h2>Map Integrations</h2>
-  <p>Examples of integrated map and flyover experiences</p>
-</section>
-<section class="trail-explorer-section" id="trailExplorerSection">
-  <div class="trail-explorer-header">
-    <div class="map-example-kicker">Example 1 · Interactive Map</div>
-    <h2>Interactive Jackson Trail Map</h2>
-    <p>Enriched trail data with elevation profiles powered by OpenSkiData</p>
-  </div>
-  <div style="position:relative;">
-    <div class="trail-explorer-map" id="trailExplorerMap"></div>
-    <div id="mapInteractBlocker" style="position:absolute;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);cursor:default;transition:opacity 0.3s;">
-      <button id="mapInteractBtn" style="padding:14px 32px;background:#1e2d3a;color:#fff;border:2px solid #fff;border-radius:6px;font-family:'Lato',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:all 0.2s;">
-        Interact with Map
-      </button>
-    </div>
-    <div id="trailExplorerSpinner">
-      <span style="display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;"></span>
-      Loading enriched trail data…
-    </div>
-    <div id="trailExplorerLegend">
-      <div class="legend-title">Trail Difficulty</div>
-      <div class="legend-row"><svg width="18" height="18"><circle cx="9" cy="9" r="7" fill="hsl(125,100%,33%)"/></svg> Easy / Novice</div>
-      <div class="legend-row"><svg width="18" height="18"><rect x="2" y="2" width="14" height="14" fill="hsl(208,100%,33%)"/></svg> Intermediate</div>
-      <div class="legend-row"><svg width="18" height="18"><polygon points="9,2 16,9 9,16 2,9" fill="#000"/></svg> Advanced / Expert</div>
-      <div class="legend-row"><svg width="18" height="18"><polygon points="9,2 16,9 9,16 2,9" fill="hsl(34,100%,50%)" stroke="#fff" stroke-width="0.5"/></svg> Freeride</div>
-      <div class="legend-row" style="margin-top:4px;"><span style="width:20px;height:0;border-top:2px dashed #555;display:inline-block;"></span> Lift</div>
-    </div>
-  </div>
-</section>
-<div class="map-section-spacer"></div>
-
-<!-- MAP 1: Explore the Valley — 50/50 Panel + Map -->
-<style>
-.valley-explorer { background: #f7f5f2; min-height: 700px; padding: 60px 0 0; }
-.valley-explorer-header { text-align: center; padding: 0 30px 30px; }
-.valley-explorer-header h2 { font-family: 'Lato', sans-serif; color: #1e2d3a; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
-.valley-explorer-header p { color: #5a6d7a; font-size: 0.9rem; letter-spacing: 0.05em; }
-.valley-explorer-body { display: flex; min-height: 600px; }
-.valley-panel { flex: 0 0 50%; background: #f7f5f2; overflow-y: auto; max-height: 700px; }
-.valley-map-wrap { flex: 0 0 50%; position: relative; min-height: 600px; }
-.valley-map-wrap #map1 { width: 100%; height: 100%; position: absolute; inset: 0; }
-.valley-loc { border-bottom: 1px solid #e8e4df; cursor: pointer; transition: background 0.3s; }
-.valley-loc:hover { background: #edeae6; }
-.valley-loc-head { padding: 20px 28px; display: flex; align-items: center; gap: 14px; }
-.valley-loc-num { width: 28px; height: 28px; border-radius: 50%; background: #1e2d3a; color: #fff; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.valley-loc-info { flex: 1; }
-.valley-loc-name { font-size: 1rem; font-weight: 700; color: #1e2d3a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
-.valley-loc-preview { font-size: 0.82rem; color: #5a6d7a; line-height: 1.4; }
-.valley-loc-expand { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1); }
-.valley-loc.active .valley-loc-expand { max-height: 500px; }
-.valley-loc.active { background: #fff; }
-.valley-loc-detail { padding: 0 28px 24px; }
-.valley-loc-detail img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-bottom: 14px; }
-.valley-loc-detail p { font-size: 0.9rem; color: #3a4f5e; line-height: 1.7; }
-@media (max-width: 768px) {
-  .valley-explorer-body { flex-direction: column; }
-  .valley-panel { max-height: none; }
-  .valley-map-wrap { flex: none; height: 450px; position: relative; min-height: 0; }
-  .valley-map-wrap #map1 { position: absolute; }
-}
-</style>
-<section class="valley-explorer" id="map1Section">
-  <div class="valley-explorer-header">
-    <div class="map-example-kicker">Example 2 · Locked Location Map</div>
-    <h2>Explore Jackson Hole</h2>
-    <p>Discover key destinations without direct map interaction</p>
-  </div>
-  <div class="valley-explorer-body">
-    <div class="valley-panel" id="valleyPanel">
-      <div class="valley-loc" data-idx="0">
-        <div class="valley-loc-head">
-          <div class="valley-loc-num">1</div>
-          <div class="valley-loc-info">
-            <div class="valley-loc-name">Grand Teton National Park</div>
-            <div class="valley-loc-preview">Iconic peaks rising to 13,775 feet</div>
-          </div>
-        </div>
-        <div class="valley-loc-expand"><div class="valley-loc-detail">
-          <img src="https://outdoorbeginner.com/wp-content/uploads/2019/01/beginners-guide-to-grand-teton-hiking-itinerary-e1599526796664.jpg" alt="Grand Teton">
-          <p>Iconic peaks rising to 13,775 feet. World-class mountaineering, hiking, and wildlife viewing in one of America's most dramatic landscapes.</p>
-        </div></div>
+    </li>
+    <li class="seasons-item">
+      <img class="seasons-img" style="--pos-x: .4; --pos-y: 0"
+           src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100120"
+           alt="Summer in Jackson Hole" loading="lazy">
+      <div class="seasons-label">
+        <span class="seasons-name">Summer</span>
       </div>
-      <div class="valley-loc" data-idx="1">
-        <div class="valley-loc-head">
-          <div class="valley-loc-num">2</div>
-          <div class="valley-loc-info">
-            <div class="valley-loc-name">Hoback Club</div>
-            <div class="valley-loc-preview">An exclusive mountain retreat</div>
-          </div>
-        </div>
-        <div class="valley-loc-expand"><div class="valley-loc-detail">
-          <img src="images/card-discover.jpg" alt="Hoback Club">
-          <p>An exclusive mountain retreat nestled at the base of Jackson Hole Mountain Resort. Private ski-in/ski-out access with luxury amenities.</p>
-        </div></div>
+    </li>
+    <li class="seasons-item">
+      <img class="seasons-img" style="--pos-x: 0; --pos-y: 0"
+           src="https://realestate.theclearcreekgroup.com/wp-content/uploads/sites/2/2016/09/Fall-Colors-Jackson-Hole-1030x579.jpg"
+           alt="Fall in Jackson Hole" loading="lazy">
+      <div class="seasons-label">
+        <span class="seasons-name">Fall</span>
       </div>
-      <div class="valley-loc" data-idx="2">
-        <div class="valley-loc-head">
-          <div class="valley-loc-num">3</div>
-          <div class="valley-loc-info">
-            <div class="valley-loc-name">Snake River</div>
-            <div class="valley-loc-preview">Blue-ribbon trout fishing</div>
-          </div>
-        </div>
-        <div class="valley-loc-expand"><div class="valley-loc-detail">
-          <img src="https://hatchetresort.com/wp-content/uploads/2021/10/Snake-fishing-2245.jpeg" alt="Snake River">
-          <p>Blue-ribbon trout fishing through pristine canyon waters. Scenic float trips beneath the Tetons with opportunities to spot bald eagles, moose, and otters.</p>
-        </div></div>
-      </div>
-      <div class="valley-loc" data-idx="3">
-        <div class="valley-loc-head">
-          <div class="valley-loc-num">4</div>
-          <div class="valley-loc-info">
-            <div class="valley-loc-name">Jackson Hole Town</div>
-            <div class="valley-loc-preview">Vibrant mountain town culture</div>
-          </div>
-        </div>
-        <div class="valley-loc-expand"><div class="valley-loc-detail">
-          <img src="https://live.staticflickr.com/1150/1235648564_ddef24e34f_b.jpg" alt="Jackson Hole Town">
-          <p>A vibrant mountain town centered around the iconic elk antler arches of Town Square. Fine dining, western galleries, and après-ski culture.</p>
-        </div></div>
-      </div>
-      <div class="valley-loc" data-idx="4">
-        <div class="valley-loc-head">
-          <div class="valley-loc-num">5</div>
-          <div class="valley-loc-info">
-            <div class="valley-loc-name">Yellowstone National Park</div>
-            <div class="valley-loc-preview">The world's first national park</div>
-          </div>
-        </div>
-        <div class="valley-loc-expand"><div class="valley-loc-detail">
-          <img src="https://www.nps.gov/yell/learn/nature/images/Wolf_1.jpg" alt="Yellowstone">
-          <p>The world's first national park, just an hour north. Old Faithful, Grand Prismatic Spring, and the largest concentration of wildlife in the lower 48.</p>
-        </div></div>
-      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- RESERVE YOUR STAY -->
+<section class="mountain-drawing-section mountain-drawing-reversed">
+  <div class="mountain-drawing-inner">
+    <div class="mountain-drawing-img">
+      <img src="images/hoback_drawing1.png" alt="Teton Mountains Sketch">
     </div>
-    <div class="valley-map-wrap">
-      <div id="map1"></div>
+    <div class="mountain-drawing-text">
+      <p class="mountain-drawing-sub">Jackson Hole, Wyoming</p>
+      <h2 class="mountain-drawing-headline">Reserve<br>Your Stay</h2>
+      <a href="stay.html" class="mountain-drawing-btn">Inquire About a Stay</a>
     </div>
   </div>
 </section>
-<div class="map-section-spacer"></div>
 
-<!-- MAP 3: Jackson Hole Village — Scroll-triggered Zoom -->
-<style>
-.village-scroll-section { position: relative; background: #000; }
-.village-scroll-video { width: 100%; height: 85vh; object-fit: cover; object-position: center top; display: block; }
-.village-scroll-header { position: absolute; top: 0; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; padding: 30px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 70%, transparent 100%); }
-.village-scroll-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
-.village-scroll-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; letter-spacing: 0.05em; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
-/* map3 removed — replaced by flyover video */
-</style>
-<section class="village-scroll-section" id="flyoverSection">
-  <div style="position:relative;">
-    <div class="village-scroll-header">
-      <div class="map-example-kicker" style="background:rgba(255,255,255,0.18);color:#fff;">Example 3 · Video</div>
-      <h2>Jackson Flyover to Hoback</h2>
-    </div>
-    <video class="village-scroll-video" id="flyoverVideo" src="images/flyover-hq.mp4" muted playsinline preload="auto" loop></video>
-  </div>
-</section>
-
-<!-- SPACER -->
-<div class="map-section-spacer"></div>
-
-<!-- LIVE 3D FLYTHROUGH -->
-<style>
-.live-flythrough-section { --live-fly-header-offset: 72px; background: #000; position: relative; height: 260vh; }
-.live-flythrough-sticky { position: sticky; top: var(--live-fly-header-offset); height: calc(100vh - var(--live-fly-header-offset)); height: calc(100svh - var(--live-fly-header-offset)); overflow: hidden; }
-.live-flythrough-header { position: absolute; top: 0; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; padding: 30px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 70%, transparent 100%); }
-.live-flythrough-header h2 { font-family: 'Lato', sans-serif; color: #fff; font-size: 2.4rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
-.live-flythrough-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; letter-spacing: 0.05em; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
-#liveMap { width: 100%; height: 100%; }
-@media (max-width: 768px) {
-  .live-flythrough-section { height: 240vh; --live-fly-header-offset: 56px; }
-  .live-flythrough-header h2 { font-size: 1.6rem; }
-}
-</style>
-<section class="live-flythrough-section" id="liveFlySection">
-  <div class="live-flythrough-sticky">
-    <div class="live-flythrough-header">
-      <div class="map-example-kicker" style="background:rgba(255,255,255,0.18);color:#fff;">Example 4 · Interactive Scroll</div>
-      <h2>Jackson Flyover to Hoback</h2>
-      <p>Interactive Scroll</p>
-    </div>
-    <div id="liveMap"></div>
-  </div>
-</section>
-
-<!-- SPACER -->
-<div style="height: 80px; background: #f7f5f2;"></div>
-
-<!-- MEMBERSHIP PANEL -->
-<section class="panel-2">
-  <div class="panel-2-bg" style="background-image: url('images/panel2-bg.jpg')"></div>
-  <div class="panel-2-overlay">
-    <div class="panel-2-left">
-      <h2>Reserve Your Stay</h2>
-      <a href="stay.html" class="btn-outline">Inquire About a Stay</a>
-    </div>
-    <div class="panel-2-right">
-      <img src="images/panel2-image.jpg" alt="Hoback Club Membership">
-    </div>
-  </div>
-</section>
 
 <!-- FOOTER -->
 <footer>
@@ -2081,21 +1564,68 @@ footer {
   window.addEventListener('scroll', checkScroll, { passive: true });
   checkScroll();
 })();
-// Hero slideshow
+// Image Gallery — built from gallery-config.js
 (function() {
-  const slides = document.querySelectorAll('.hero-slide');
-  let current = 0;
-  setInterval(() => {
-    slides[current].classList.remove('active');
-    current = (current + 1) % slides.length;
-    slides[current].classList.add('active');
-  }, 6000);
+  var track = document.getElementById('imgCarouselTrack');
+  if (!track || typeof GALLERY_IMAGES === 'undefined') return;
+
+  var BASE_WIDTH = 220; // px at scale 1.0
+
+  GALLERY_IMAGES.forEach(function(item) {
+    var w = Math.round(BASE_WIDTH * (item.scale || 1));
+    var slide = document.createElement('div');
+    slide.className = 'img-carousel__slide';
+    slide.style.width = w + 'px';
+    slide.style.height = Math.round(w * (item.aspect || 0.75)) + 'px';
+
+    var img = document.createElement('img');
+    img.src = item.src;
+    img.alt = item.alt || '';
+    img.loading = 'lazy';
+    slide.appendChild(img);
+    track.appendChild(slide);
+  });
+
+  // Center the middle image on load
+  var container = document.getElementById('imgGallery');
+  var slides = track.querySelectorAll('.img-carousel__slide');
+  var midIndex = Math.floor(slides.length / 2);
+  var midSlide = slides[midIndex];
+  if (midSlide && container) {
+    var scrollPos = midSlide.offsetLeft - (container.offsetWidth / 2) + (midSlide.offsetWidth / 2);
+    container.scrollLeft = scrollPos;
+  }
 })();
 
-// Header scroll effect
-window.addEventListener('scroll', () => {
-  document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 100);
-});
+// Showcase panels — scroll-triggered reveal
+(function() {
+  var panels = document.querySelectorAll('.showcase__panel');
+  if (!panels.length) return;
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-revealed');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  panels.forEach(function(p) { observer.observe(p); });
+})();
+
+// Seasons scroll-in reveal
+(function() {
+  var items = document.querySelectorAll('.seasons-item');
+  if (!items.length) return;
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  items.forEach(function(item) { observer.observe(item); });
+})();
 
 // Card carousel with swipe support
 (function() {
@@ -2162,994 +1692,30 @@ window.addEventListener('scroll', () => {
   });
 })();
 
-// Auto-refresh static cams every 30 seconds
-setInterval(() => {
-  document.querySelectorAll('.static-img').forEach(img => {
-    const base = img.src.split('?')[0];
-    img.src = base + '?t=' + Date.now();
-  });
-}, 30000);
-
-// Auto-refresh dropdown cam every 30 seconds
-setInterval(() => {
-  const dc = document.getElementById('dropdownCam');
-  if (dc) dc.src = 'https://cams.jacksonhole.com/webcam/codybowl.jpg?t=' + Date.now();
-}, 30000);
-
-// Auto-refresh Cody Bowl spotlight every 30 seconds
-setInterval(() => {
-  const spotlight = document.getElementById('codybowlSpotlight');
-  if (spotlight) spotlight.src = 'https://cams.jacksonhole.com/webcam/codybowl.jpg?t=' + Date.now();
-}, 30000);
-
-// Auto-refresh panoramic cams every 60 seconds
-setInterval(() => {
-  document.querySelectorAll('.pano-img').forEach(img => {
-    const base = img.src.split('?')[0];
-    img.src = base + '?t=' + Date.now();
-  });
-}, 60000);
-
-// ===== SKI CONDITIONS EXPAND/COLLAPSE =====
+// ===== CURTAIN REVEAL HERO ANIMATION =====
 (function() {
-  const btn = document.getElementById('skiConditionsBtn');
-  const panel = document.getElementById('mtnReport');
-  let isOpen = false;
-  let countersAnimated = false;
+  var mask = document.getElementById('heroMask');
+  var heroText = document.getElementById('heroText');
+  var scrollDown = document.getElementById('scrollDown');
+  if (!mask) return;
 
-  btn.addEventListener('click', () => {
-    isOpen = !isOpen;
-    panel.classList.toggle('open', isOpen);
-    btn.classList.toggle('open', isOpen);
+  // Short delay so the background image is visible first, then curtain opens
+  setTimeout(function() {
+    mask.classList.add('open');
+  }, 300);
 
-    if (isOpen && !countersAnimated) {
-      countersAnimated = true;
-      animateCounters();
-      animateRings();
-    }
-  });
+  // Text fades in after curtain finishes (0.8s)
+  setTimeout(function() {
+    heroText.classList.add('visible');
+  }, 1100);
 
-  function animateCounters() {
-    document.querySelectorAll('[data-count]').forEach(td => {
-      const target = parseInt(td.dataset.count);
-      if (target === 0) { td.textContent = '0"'; return; }
-      const duration = 1200;
-      const start = performance.now();
-      function tick(now) {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        // ease out cubic
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const val = Math.round(eased * target);
-        td.textContent = val + '"';
-        if (progress < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    });
-  }
-
-  function animateRings() {
-    document.querySelectorAll('.status-circle[data-ratio]').forEach(circle => {
-      const ratio = parseFloat(circle.dataset.ratio);
-      const fill = circle.querySelector('.ring-fill');
-      if (!fill) return;
-      const circumference = 289;
-      const offset = circumference * (1 - ratio);
-      // Trigger animation after a frame
-      requestAnimationFrame(() => {
-        fill.style.strokeDashoffset = offset;
-      });
-    });
-  }
+  // Scroll indicator after text
+  setTimeout(function() {
+    scrollDown.classList.add('visible');
+  }, 1600);
 })();
 
-// ===== PANEL 1 IMAGE CAROUSEL =====
-(function() {
-  const slides = document.querySelectorAll('.panel-1-slide');
-  const dots = document.querySelectorAll('#panel1Dots span');
-  let current = 0;
-  let autoTimer;
 
-  function goTo(idx) {
-    slides[current].classList.remove('active');
-    slides[current].classList.add('exit-left');
-    setTimeout(() => slides[current === 0 ? 0 : current].classList.remove('exit-left'), 800);
-    const prev = current;
-    current = idx;
-    slides[current].classList.add('active');
-    dots.forEach((d, i) => d.classList.toggle('active', i === current));
-    // clean up exit class after transition
-    setTimeout(() => slides[prev].classList.remove('exit-left'), 850);
-  }
-
-  dots.forEach(d => d.addEventListener('click', () => {
-    const idx = parseInt(d.dataset.slide);
-    if (idx !== current) { goTo(idx); resetAuto(); }
-  }));
-
-  function advance() { goTo((current + 1) % slides.length); }
-  function resetAuto() { clearInterval(autoTimer); autoTimer = setInterval(advance, 5000); }
-  resetAuto();
-})();
-
-// ===== FADE IN IMAGES ON LOAD =====
-document.querySelectorAll('.cam-fade').forEach(img => {
-  if (img.complete) {
-    img.classList.add('loaded');
-  } else {
-    img.addEventListener('load', () => img.classList.add('loaded'));
-  }
-});
-
-// ===== WEBCAM CAROUSEL (NO AUTO-ADVANCE) =====
-(function() {
-  const cams = [
-    { name: "Corbet's Couloir", type: 'youtube', id: '9kK7RfM3eSc', live: true, thumb: 'https://img.youtube.com/vi/9kK7RfM3eSc/mqdefault.jpg' },
-    { name: 'Snow Stake', type: 'youtube', id: 'cOcHcIDbi1o', live: true, thumb: 'https://img.youtube.com/vi/cOcHcIDbi1o/mqdefault.jpg' },
-    { name: 'Summit Panorama', type: 'img', src: 'https://backend.roundshot.com/cams/12a4b2c24cd515e0a115d4a0f59ef7f8/default', live: false },
-    { name: 'Rendezvous Lodge', type: 'img', src: 'https://backend.roundshot.com/cams/6f7dc91857e22fe329e8bdeef5ee5750/default', live: false },
-    { name: "Corbet's Couloir Cam", type: 'img', src: 'https://cams.jacksonhole.com/webcam/corbetscouloir.jpg', live: false },
-    { name: 'Cody Bowl', type: 'img', src: 'https://cams.jacksonhole.com/webcam/codybowl.jpg', live: false },
-    { name: 'Sublette Base', type: 'img', src: 'https://cams.jacksonhole.com/webcam/guncam.jpg', live: false },
-    { name: 'Tram Cam', type: 'img', src: 'https://cams.jacksonhole.com/webcam/commons.jpg', live: false },
-    { name: 'South Hoback', type: 'img', src: 'https://cams.jacksonhole.com/webcam/SouthHoback.jpg', live: false },
-    { name: 'Casper Chair', type: 'img', src: 'https://cams.jacksonhole.com/webcam/casperchair.jpg', live: false },
-  ];
-
-  let current = 0;
-  const mainEl = document.getElementById('carouselMain');
-  const thumbsEl = document.getElementById('carouselThumbs');
-  const lightbox = document.getElementById('camLightbox');
-  const lbContent = document.getElementById('lightboxContent');
-
-  function renderMain(i) {
-    const cam = cams[i];
-    let html = '';
-    if (cam.type === 'youtube') {
-      html = `<iframe src="https://www.youtube.com/embed/${cam.id}?autoplay=1&mute=1&loop=1&playlist=${cam.id}&controls=0&modestbranding=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen style="opacity:0;transition:opacity 0.5s ease;" onload="this.style.opacity=1"></iframe>`;
-    } else {
-      html = `<img src="${cam.src}?t=${Date.now()}" alt="${cam.name}" style="opacity:0;transition:opacity 0.5s ease;" onload="this.style.opacity=1">`;
-    }
-    html += `<div class="cam-carousel-label">${cam.live ? '<span class="cam-carousel-live">LIVE</span>' : ''}<span>${cam.name}</span></div>`;
-    mainEl.innerHTML = html;
-    thumbsEl.querySelectorAll('.cam-carousel-thumb').forEach((t, idx) => t.classList.toggle('active', idx === i));
-    current = i;
-  }
-
-  // Build thumbs
-  cams.forEach((cam, i) => {
-    const div = document.createElement('div');
-    div.className = 'cam-carousel-thumb' + (i === 0 ? ' active' : '');
-    const thumbSrc = cam.thumb || cam.src;
-    div.innerHTML = `<img src="${thumbSrc}" alt="${cam.name}">`;
-    div.addEventListener('click', () => renderMain(i));
-    thumbsEl.appendChild(div);
-  });
-
-  renderMain(0);
-
-  document.getElementById('carouselNext').addEventListener('click', () => renderMain((current + 1) % cams.length));
-  document.getElementById('carouselPrev').addEventListener('click', () => renderMain((current - 1 + cams.length) % cams.length));
-
-  // Lightbox
-  mainEl.addEventListener('click', () => {
-    const cam = cams[current];
-    let html = '<button class="cam-lightbox-close" onclick="document.getElementById(\'camLightbox\').classList.remove(\'open\')">✕</button>';
-    if (cam.type === 'youtube') {
-      html += `<iframe src="https://www.youtube.com/embed/${cam.id}?autoplay=1&mute=0&controls=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-    } else {
-      html += `<img src="${cam.src}?t=${Date.now()}" alt="${cam.name}">`;
-    }
-    lbContent.innerHTML = html;
-    lightbox.classList.add('open');
-  });
-
-  document.getElementById('lightboxClose')?.addEventListener('click', () => lightbox.classList.remove('open'));
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
-})();
-
-// ===== 3D MAPS =====
-(function() {
-  const MAPBOX_TOKEN = ['pk.eyJ1IjoicXR5cm','VlIiwiYSI6ImNtaHl5','eHNmeDBoY3oybXEwNT','IxNGgxYmsifQ.VqoAK','KHQxQX-lNNPwVKHmw'].join('');
-
-  const LOCATIONS = [
-    { name: 'Grand Teton National Park', lat: 43.7904, lng: -110.6818, zoom: 11 },
-    { name: 'Hoback Club', lat: 43.5877, lng: -110.8279, zoom: 14 },
-    { name: 'Snake River', lat: 43.859167, lng: -110.546227, zoom: 12 },
-    { name: 'Jackson Hole Town', lat: 43.4799, lng: -110.7624, zoom: 14 },
-    { name: 'Yellowstone National Park', lat: 44.4280, lng: -110.5885, zoom: 9 }
-  ];
-
-  // MAP 1: Valley Explorer with Panel
-  mapboxgl.accessToken = MAPBOX_TOKEN;
-  const map1 = new mapboxgl.Map({
-    container: 'map1',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: [-110.75, 43.65],
-    zoom: 9,
-    pitch: 40,
-    bearing: 0,
-    antialias: true,
-    interactive: false
-  });
-  map1.on('style.load', () => {
-    map1.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
-    map1.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
-    map1.setFog({ color: 'rgba(186,210,235,0.4)', 'high-color': 'rgba(36,92,223,0.3)', 'horizon-blend': 0.02, 'space-color': 'rgba(11,11,25,1)', 'star-intensity': 0.1 });
-  });
-
-  // Valley panel accordion + flyTo
-  const panel = document.getElementById('valleyPanel');
-  const locs = panel.querySelectorAll('.valley-loc');
-  locs.forEach(loc => {
-    loc.addEventListener('click', () => {
-      const idx = parseInt(loc.dataset.idx);
-      const wasActive = loc.classList.contains('active');
-      locs.forEach(l => l.classList.remove('active'));
-      if (!wasActive) {
-        loc.classList.add('active');
-        const dest = LOCATIONS[idx];
-        map1.flyTo({ center: [dest.lng, dest.lat], zoom: dest.zoom, pitch: 55, duration: 2500 });
-      } else {
-        map1.flyTo({ center: [-110.75, 43.65], zoom: 9, pitch: 40, duration: 2000 });
-      }
-    });
-  });
-
-  // FLYOVER VIDEO — auto-play when visible, 2s pause between loops
-  (function() {
-    const video = document.getElementById('flyoverVideo');
-    video.loop = false; // we handle looping manually
-    video.pause();
-    video.currentTime = 0;
-    let playing = false;
-
-    video.addEventListener('ended', () => {
-      setTimeout(() => {
-        video.currentTime = 0;
-        video.play();
-      }, 2000);
-    });
-
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !playing) {
-          playing = true;
-          video.currentTime = 0;
-          video.play();
-        } else if (!entry.isIntersecting && playing) {
-          playing = false;
-          video.pause();
-        }
-      });
-    }, { threshold: 0.3 });
-    obs.observe(document.getElementById('flyoverSection'));
-  })();
-})();
-
-// (Old Explore the Mountain trail map removed — replaced by Trail Explorer)
-
-// ===== TRAIL EXPLORER (OpenSkiData enriched) =====
-(function() {
-  const TE_COLORS = { easy:'hsl(125,100%,33%)',intermediate:'hsl(208,100%,33%)',advanced:'hsl(0,0%,0%)',expert:'hsl(0,0%,0%)',freeride:'hsl(34,100%,50%)' };
-  const TE_LABELS = { easy:'Easy',intermediate:'Intermediate',advanced:'Advanced',expert:'Expert',freeride:'Freeride' };
-
-  function teBadge(diff) {
-    const c = TE_COLORS[diff] || '#888';
-    if (diff === 'easy') return '<svg width="18" height="18"><circle cx="9" cy="9" r="7" fill="'+c+'"/></svg>';
-    if (diff === 'intermediate') return '<svg width="18" height="18"><rect x="2" y="2" width="14" height="14" fill="'+c+'"/></svg>';
-    if (diff === 'advanced' || diff === 'expert') return '<svg width="18" height="18"><polygon points="9,2 16,9 9,16 2,9" fill="'+c+'"/></svg>';
-    if (diff === 'freeride') return '<svg width="18" height="18"><polygon points="9,2 16,9 9,16 2,9" fill="'+c+'" stroke="#fff" stroke-width="0.5"/></svg>';
-    return '<svg width="18" height="18"><circle cx="9" cy="9" r="7" fill="#888"/></svg>';
-  }
-
-  function elevChart(heights, diff) {
-    if (!heights || heights.length < 2) return '';
-    const W = 200, H = 80, pad = 2;
-    const mn = Math.min(...heights), mx = Math.max(...heights);
-    const range = mx - mn || 1;
-    const pts = heights.map((h, i) => {
-      const x = pad + (i / (heights.length - 1)) * (W - pad * 2);
-      const y = H - pad - ((h - mn) / range) * (H - pad * 2);
-      return x + ',' + y;
-    });
-    const fillPts = pts.join(' ') + ' ' + (W - pad) + ',' + (H - pad) + ' ' + pad + ',' + (H - pad);
-    const c = TE_COLORS[diff] || '#888';
-    const fc = diff === 'advanced' || diff === 'expert' ? 'rgba(100,100,100,0.2)' : c.replace(')', ',0.2)').replace('hsl', 'hsla');
-    return '<div class="te-elev-chart"><svg width="'+W+'" height="'+H+'" style="display:block;border-radius:4px;background:#fafafa;">' +
-      '<polygon points="'+fillPts+'" fill="'+fc+'"/>' +
-      '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+c+'" stroke-width="2"/>' +
-      '<text x="4" y="12" font-size="9" fill="#888">'+mx.toFixed(0)+'m</text>' +
-      '<text x="4" y="'+(H-4)+'" font-size="9" fill="#888">'+mn.toFixed(0)+'m</text>' +
-      '</svg></div>';
-  }
-
-  const teMap = new mapboxgl.Map({
-    container: 'trailExplorerMap',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: [-110.849, 43.588],
-    zoom: 13.5,
-    pitch: 60,
-    bearing: -30,
-    maxPitch: 85,
-    antialias: true,
-    interactive: false
-  });
-  teMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-  // Interact button — enables map interaction
-  document.getElementById('mapInteractBtn').addEventListener('click', () => {
-    teMap.scrollZoom.enable();
-    teMap.boxZoom.enable();
-    teMap.dragRotate.enable();
-    teMap.dragPan.enable();
-    teMap.keyboard.enable();
-    teMap.doubleClickZoom.enable();
-    teMap.touchZoomRotate.enable();
-    teMap.touchPitch.enable();
-    const blocker = document.getElementById('mapInteractBlocker');
-    blocker.style.opacity = '0';
-    setTimeout(() => blocker.style.display = 'none', 300);
-  });
-
-  teMap.on('style.load', () => {
-    teMap.addSource('mapbox-dem-te', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
-    teMap.setTerrain({ source: 'mapbox-dem-te', exaggeration: 1.5 });
-    teMap.setFog({ color: 'rgba(186,210,235,0.4)', 'high-color': 'rgba(36,92,223,0.3)', 'horizon-blend': 0.02, 'space-color': 'rgba(11,11,25,1)', 'star-intensity': 0.1 });
-
-    Promise.all([
-      fetch('data/jh-runs.geojson').then(r => r.json()),
-      fetch('data/jh-lifts.geojson').then(r => r.json())
-    ]).then(([runs, lifts]) => {
-      document.getElementById('trailExplorerSpinner').style.display = 'none';
-      document.getElementById('trailExplorerLegend').style.display = 'block';
-
-      teMap.addSource('te-runs', { type: 'geojson', data: runs });
-      teMap.addSource('te-lifts', { type: 'geojson', data: lifts });
-
-      const diffColor = ['match', ['get', 'difficulty'],
-        'easy', 'hsl(125,100%,33%)',
-        'intermediate', 'hsl(208,100%,33%)',
-        'advanced', 'hsl(0,0%,0%)', 'expert', 'hsl(0,0%,0%)',
-        'freeride', 'hsl(34,100%,50%)',
-        'hsl(208,100%,33%)'
-      ];
-
-      teMap.addLayer({ id: 'te-runs-casing', type: 'line', source: 'te-runs', paint: { 'line-color': '#000', 'line-width': 5, 'line-opacity': 0.35 } });
-      teMap.addLayer({ id: 'te-runs-line', type: 'line', source: 'te-runs', paint: { 'line-color': diffColor, 'line-width': 3 } });
-      teMap.addLayer({ id: 'te-lifts-line', type: 'line', source: 'te-lifts', paint: { 'line-color': '#555', 'line-width': 2, 'line-dasharray': [4, 3] } });
-      teMap.addLayer({ id: 'te-runs-label', type: 'symbol', source: 'te-runs', layout: { 'symbol-placement': 'line', 'text-field': ['get', 'name'], 'text-size': 11, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-allow-overlap': false }, paint: { 'text-color': '#fff', 'text-halo-color': 'rgba(0,0,0,0.7)', 'text-halo-width': 1.5 } });
-      teMap.addLayer({ id: 'te-lifts-label', type: 'symbol', source: 'te-lifts', layout: { 'symbol-placement': 'line', 'text-field': ['get', 'name'], 'text-size': 11, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-allow-overlap': false }, paint: { 'text-color': '#ddd', 'text-halo-color': 'rgba(0,0,0,0.7)', 'text-halo-width': 1.5 } });
-
-      // Run popups
-      teMap.on('click', 'te-runs-line', (e) => {
-        const p = e.features[0].properties;
-        const diff = p.difficulty || 'intermediate';
-        const name = p.name || 'Unnamed Run';
-        const ref = p.ref ? '<span class="te-ref">' + p.ref + '</span> ' : '';
-        const diffLabel = TE_LABELS[diff] || diff;
-        const c = TE_COLORS[diff] || '#888';
-
-        let html = '<div class="te-popup"><h3>' + teBadge(diff) + ' ' + ref + name + '</h3>';
-        html += '<div class="te-diff" style="color:' + c + '">' + diffLabel + '</div>';
-        html += '<div class="te-stats">';
-        if (p.distance) html += '<div class="te-stat"><strong>Distance:</strong> ' + (p.distance >= 1000 ? (p.distance/1000).toFixed(1) + ' km' : p.distance + ' m') + '</div>';
-        if (p.descent) html += '<div class="te-stat"><strong>Descent:</strong> ' + p.descent + 'm vertical</div>';
-        if (p.avgSlope) html += '<div class="te-stat"><strong>Avg slope:</strong> ' + p.avgSlope + '°</div>';
-        if (p.maxSlope) html += '<div class="te-stat"><strong>Max slope:</strong> ' + p.maxSlope + '°</div>';
-        if (p.maxElevation) html += '<div class="te-stat"><strong>Summit:</strong> ' + p.maxElevation + 'm</div>';
-        if (p.minElevation) html += '<div class="te-stat"><strong>Base:</strong> ' + p.minElevation + 'm</div>';
-        html += '</div>';
-
-        // Elevation chart
-        let ep = p.elevationProfile;
-        if (typeof ep === 'string') try { ep = JSON.parse(ep); } catch(e) {}
-        if (ep && ep.heights) html += elevChart(ep.heights, diff);
-
-        // Flags
-        const flags = [];
-        if (p.grooming) flags.push('Mountain: ' + (typeof p.grooming === 'string' ? p.grooming.replace(/_/g,' ') : 'Groomed'));
-        if (p.snowmaking === true || p.snowmaking === 'yes') flags.push('Snowmaking');
-        if (p.lit === true || p.lit === 'yes') flags.push('💡 Night skiing');
-        if (p.gladed === true || p.gladed === 'yes') flags.push('Gladed');
-        if (flags.length) html += '<div class="te-flags">' + flags.map(f => '<span class="te-flag">' + f + '</span>').join('') + '</div>';
-
-        html += '</div>';
-        new mapboxgl.Popup({ offset: 14, maxWidth: '320px' }).setLngLat(e.lngLat).setHTML(html).addTo(teMap);
-      });
-
-      // Lift popups
-      teMap.on('click', 'te-lifts-line', (e) => {
-        const p = e.features[0].properties;
-        const liftType = (p.liftType || '').replace(/_/g, ' ');
-        let html = '<div class="te-popup"><h3> ' + (p.name || 'Unnamed Lift') + '</h3>';
-        if (liftType) html += '<div class="te-lift-type">' + liftType + '</div>';
-        html += '<div class="te-stats">';
-        if (p.distance) html += '<div class="te-stat"><strong>Length:</strong> ' + (p.distance >= 1000 ? (p.distance/1000).toFixed(1) + ' km' : p.distance + ' m') + '</div>';
-        if (p.occupancy) html += '<div class="te-stat"><strong>Occupancy:</strong> ' + p.occupancy + '</div>';
-        if (p.capacity) html += '<div class="te-stat"><strong>Capacity:</strong> ' + p.capacity + '/hr</div>';
-        if (p.duration) html += '<div class="te-stat"><strong>Ride time:</strong> ' + Math.round(p.duration/60) + ' min</div>';
-        html += '</div>';
-        const flags = [];
-        if (p.heating) flags.push('Heated');
-        if (p.bubble) flags.push('🫧 Bubble');
-        if (flags.length) html += '<div class="te-flags">' + flags.map(f => '<span class="te-flag">' + f + '</span>').join('') + '</div>';
-        html += '</div>';
-        new mapboxgl.Popup({ offset: 14, maxWidth: '300px' }).setLngLat(e.lngLat).setHTML(html).addTo(teMap);
-      });
-
-      // Cursor
-      ['te-runs-line', 'te-lifts-line'].forEach(layer => {
-        teMap.on('mouseenter', layer, () => teMap.getCanvas().style.cursor = 'pointer');
-        teMap.on('mouseleave', layer, () => teMap.getCanvas().style.cursor = '');
-      });
-
-    }).catch(err => {
-      console.error('Trail Explorer data error:', err);
-      document.getElementById('trailExplorerSpinner').innerHTML = '⚠ Failed to load enriched trail data';
-    });
-  });
-})();
-
-// ===== LIVE 3D FLYTHROUGH — Free Camera + Scroll-driven =====
-(function() {
-  mapboxgl.prewarm();
-
-  const ROUTE_POINTS = [
-    { center: [-110.75599, 43.72594], zoom: 12.54, pitch: 79.0, bearing: -145.7 },
-    { center: [-110.83213, 43.58540], zoom: 14.41, pitch: 77.5, bearing: -99.3 },
-    { center: [-110.83477, 43.59359], zoom: 15.19, pitch: 84.0, bearing: -51.3 }
-  ];
-  const SEGMENT_DURATIONS_MS = [5400, 3000];
-  const TARGET_POI_NAME = 'hoback club';
-  const TARGET_BUILDING_ID = 1473477932;
-  const BUILDINGS_GEOJSON_URL = 'data/hoback_buildings_new.geojson';
-  const TARGET_BUILDING_HEIGHT_SCALE = 4.5;
-  const ROOF_CAP_M = 0;
-  const TARGET_ROOF_TILE_STEP_LNG = 0.00002;
-  const TARGET_ROOF_TILE_STEP_LAT = 0.00002;
-  const MIDDLE_APPROACH_DECEL_BLEND = 0.05;
-  const TURN_ROUNDING_FACTOR = 0.3;
-
-  let keyframes = [];
-  let positionTangents = [];
-  let segmentTimings = [];
-  let totalDurationMs = 0;
-  let ready = false;
-  let scrollRafPending = false;
-  const poiBaseFilters = {};
-  const section = document.getElementById('liveFlySection');
-  const sticky = section.querySelector('.live-flythrough-sticky');
-
-  const liveMap = new mapboxgl.Map({
-    container: 'liveMap',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: ROUTE_POINTS[0].center,
-    zoom: ROUTE_POINTS[0].zoom,
-    pitch: ROUTE_POINTS[0].pitch,
-    bearing: ROUTE_POINTS[0].bearing,
-    maxPitch: 85,
-    antialias: true,
-    fadeDuration: 0,
-    interactive: false
-  });
-
-  function waitForIdle() {
-    return new Promise((resolve) => liveMap.once('idle', resolve));
-  }
-
-  function waitOneFrame() {
-    return new Promise((resolve) => requestAnimationFrame(resolve));
-  }
-
-  function lerp(a, b, t) {
-    return a + (b - a) * t;
-  }
-
-  function easeOutQuad(t) {
-    const x = Math.max(0, Math.min(1, t));
-    return 1 - (1 - x) * (1 - x);
-  }
-
-  function blendLinearWithEase(linearT, easedT, blend) {
-    const w = Math.max(0, Math.min(1, blend));
-    return lerp(linearT, easedT, w);
-  }
-
-  function dotQuat(a, b) {
-    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
-  }
-
-  function normalizeQuat(q) {
-    const len = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
-    return [q[0] / len, q[1] / len, q[2] / len, q[3] / len];
-  }
-
-  function slerpQuat(a, b, t) {
-    let qa = normalizeQuat(a);
-    let qb = normalizeQuat(b);
-    let cosTheta = dotQuat(qa, qb);
-    if (cosTheta < 0) {
-      qb = [-qb[0], -qb[1], -qb[2], -qb[3]];
-      cosTheta = -cosTheta;
-    }
-    if (cosTheta > 0.9995) {
-      return normalizeQuat([
-        lerp(qa[0], qb[0], t),
-        lerp(qa[1], qb[1], t),
-        lerp(qa[2], qb[2], t),
-        lerp(qa[3], qb[3], t)
-      ]);
-    }
-    const theta = Math.acos(cosTheta);
-    const sinTheta = Math.sin(theta);
-    const w1 = Math.sin((1 - t) * theta) / sinTheta;
-    const w2 = Math.sin(t * theta) / sinTheta;
-    return [
-      qa[0] * w1 + qb[0] * w2,
-      qa[1] * w1 + qb[1] * w2,
-      qa[2] * w1 + qb[2] * w2,
-      qa[3] * w1 + qb[3] * w2
-    ];
-  }
-
-  function readOrientation(orientation) {
-    if (Array.isArray(orientation)) return orientation.slice(0, 4);
-    if (orientation && typeof orientation.length === 'number') {
-      return [orientation[0], orientation[1], orientation[2], orientation[3]];
-    }
-    return [orientation.x, orientation.y, orientation.z, orientation.w];
-  }
-
-  function captureKeyframe() {
-    const cam = liveMap.getFreeCameraOptions();
-    return {
-      pos: [cam.position.x, cam.position.y, cam.position.z],
-      quat: normalizeQuat(readOrientation(cam.orientation))
-    };
-  }
-
-  function buildSegmentTimings() {
-    segmentTimings = [];
-    let offset = 0;
-    for (let i = 0; i < ROUTE_POINTS.length - 1; i += 1) {
-      const durationMs = Math.max(1, SEGMENT_DURATIONS_MS[i] || 1000);
-      segmentTimings.push({ index: i, startMs: offset, endMs: offset + durationMs, durationMs });
-      offset += durationMs;
-    }
-    totalDurationMs = offset;
-  }
-
-  function buildPositionTangents() {
-    positionTangents = [];
-    const n = keyframes.length;
-    if (n < 2) return;
-    for (let i = 0; i < n; i += 1) {
-      const prev = keyframes[Math.max(0, i - 1)].pos;
-      const next = keyframes[Math.min(n - 1, i + 1)].pos;
-      const scale = (i === 0 || i === n - 1) ? 0.65 : 0.5 * TURN_ROUNDING_FACTOR;
-      positionTangents.push([
-        (next[0] - prev[0]) * scale,
-        (next[1] - prev[1]) * scale,
-        (next[2] - prev[2]) * scale
-      ]);
-    }
-  }
-
-  function hermiteVec3(p0, p1, m0, m1, t) {
-    const t2 = t * t;
-    const t3 = t2 * t;
-    const h00 = 2 * t3 - 3 * t2 + 1;
-    const h10 = t3 - 2 * t2 + t;
-    const h01 = -2 * t3 + 3 * t2;
-    const h11 = t3 - t2;
-    return [
-      h00 * p0[0] + h10 * m0[0] + h01 * p1[0] + h11 * m1[0],
-      h00 * p0[1] + h10 * m0[1] + h01 * p1[1] + h11 * m1[1],
-      h00 * p0[2] + h10 * m0[2] + h01 * p1[2] + h11 * m1[2]
-    ];
-  }
-
-  function getSegmentAt(elapsed) {
-    const clamped = Math.max(0, Math.min(elapsed, totalDurationMs));
-    for (let i = 0; i < segmentTimings.length; i += 1) {
-      if (clamped <= segmentTimings[i].endMs) return segmentTimings[i];
-    }
-    return segmentTimings[segmentTimings.length - 1];
-  }
-
-  function setCameraAtElapsed(elapsed) {
-    const seg = getSegmentAt(elapsed);
-    const tRaw = Math.max(0, Math.min(1, (elapsed - seg.startMs) / seg.durationMs));
-    const t = seg.index === 0 ? blendLinearWithEase(tRaw, easeOutQuad(tRaw), MIDDLE_APPROACH_DECEL_BLEND) : tRaw;
-    const k0 = keyframes[seg.index];
-    const k1 = keyframes[seg.index + 1];
-    const m0 = positionTangents[seg.index];
-    const m1 = positionTangents[seg.index + 1];
-    const pos = (m0 && m1)
-      ? hermiteVec3(k0.pos, k1.pos, m0, m1, t)
-      : [lerp(k0.pos[0], k1.pos[0], t), lerp(k0.pos[1], k1.pos[1], t), lerp(k0.pos[2], k1.pos[2], t)];
-    const quat = slerpQuat(k0.quat, k1.quat, t);
-    const cam = liveMap.getFreeCameraOptions();
-    cam.position.x = pos[0];
-    cam.position.y = pos[1];
-    cam.position.z = pos[2];
-    cam.orientation = quat;
-    liveMap.setFreeCameraOptions(cam);
-  }
-
-  function pointInRing(point, ring) {
-    let inside = false;
-    for (let i = 0, j = ring.length - 1; i < ring.length; j = i, i += 1) {
-      const xi = ring[i][0];
-      const yi = ring[i][1];
-      const xj = ring[j][0];
-      const yj = ring[j][1];
-      const intersects = ((yi > point[1]) !== (yj > point[1])) &&
-        (point[0] < (xj - xi) * (point[1] - yi) / ((yj - yi) || 1e-12) + xi);
-      if (intersects) inside = !inside;
-    }
-    return inside;
-  }
-
-  function pointInPolygonWithHoles(point, polygonCoords) {
-    if (!polygonCoords || !polygonCoords.length) return false;
-    if (!pointInRing(point, polygonCoords[0])) return false;
-    for (let i = 1; i < polygonCoords.length; i += 1) {
-      if (pointInRing(point, polygonCoords[i])) return false;
-    }
-    return true;
-  }
-
-  function geometryToPolygonsForTiles(geometry) {
-    if (!geometry || !geometry.type || !geometry.coordinates) return [];
-    if (geometry.type === 'Polygon') return [geometry.coordinates];
-    if (geometry.type === 'MultiPolygon') return geometry.coordinates.slice();
-    return [];
-  }
-
-  function ringBounds(ring) {
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
-    for (const point of ring) {
-      minX = Math.min(minX, point[0]);
-      minY = Math.min(minY, point[1]);
-      maxX = Math.max(maxX, point[0]);
-      maxY = Math.max(maxY, point[1]);
-    }
-    return { minX, minY, maxX, maxY };
-  }
-
-  function buildTargetRoofTiles(targetFeature) {
-    const tiles = [];
-    const polys = geometryToPolygonsForTiles(targetFeature.geometry);
-    const rawHeight = Number(targetFeature.properties && targetFeature.properties.height);
-    const height = Number.isFinite(rawHeight) ? rawHeight : 8;
-    const roofTop = height * TARGET_BUILDING_HEIGHT_SCALE;
-    const tileBase = Math.max(roofTop - 0.11, 0);
-    const tileTop = roofTop + 0.03;
-    let tileCount = 0;
-
-    for (const poly of polys) {
-      if (!poly || !poly.length) continue;
-      const bounds = ringBounds(poly[0]);
-      for (let x = bounds.minX; x <= bounds.maxX - TARGET_ROOF_TILE_STEP_LNG; x += TARGET_ROOF_TILE_STEP_LNG) {
-        for (let y = bounds.minY; y <= bounds.maxY - TARGET_ROOF_TILE_STEP_LAT; y += TARGET_ROOF_TILE_STEP_LAT) {
-          const c1 = [x, y];
-          const c2 = [x + TARGET_ROOF_TILE_STEP_LNG, y];
-          const c3 = [x + TARGET_ROOF_TILE_STEP_LNG, y + TARGET_ROOF_TILE_STEP_LAT];
-          const c4 = [x, y + TARGET_ROOF_TILE_STEP_LAT];
-          const inside = pointInPolygonWithHoles(c1, poly) &&
-            pointInPolygonWithHoles(c2, poly) &&
-            pointInPolygonWithHoles(c3, poly) &&
-            pointInPolygonWithHoles(c4, poly);
-          if (!inside) continue;
-          tiles.push({
-            type: 'Feature',
-            properties: {
-              base: tileBase,
-              top: tileTop,
-              shade: (Math.floor((x - bounds.minX) / TARGET_ROOF_TILE_STEP_LNG) + Math.floor((y - bounds.minY) / TARGET_ROOF_TILE_STEP_LAT)) % 2
-            },
-            geometry: { type: 'Polygon', coordinates: [[c1, c2, c3, c4, c1]] }
-          });
-          tileCount += 1;
-          if (tileCount > 2000) break;
-        }
-        if (tileCount > 2000) break;
-      }
-      if (tileCount > 2000) break;
-    }
-
-    return { type: 'FeatureCollection', features: tiles };
-  }
-
-  async function ensureTargetRoofTilesLayer(labelLayer) {
-    if (liveMap.getLayer('buildings-target-roof-tiles')) return;
-
-    let data = null;
-    try {
-      const resp = await fetch(BUILDINGS_GEOJSON_URL, { cache: 'no-store' });
-      data = await resp.json();
-    } catch (err) {
-      console.warn('Could not load buildings GeoJSON for roof tiles', err);
-      return;
-    }
-    if (!data || !Array.isArray(data.features)) return;
-
-    const target = data.features.find((feature) => String(feature.id) === String(TARGET_BUILDING_ID));
-    if (!target || !target.geometry) return;
-    const tileData = buildTargetRoofTiles(target);
-    if (!tileData.features.length) return;
-
-    if (!liveMap.getSource('target-roof-tiles')) {
-      liveMap.addSource('target-roof-tiles', { type: 'geojson', data: tileData });
-    }
-
-    liveMap.addLayer({
-      id: 'buildings-target-roof-tiles',
-      source: 'target-roof-tiles',
-      type: 'fill-extrusion',
-      minzoom: 9,
-      paint: {
-        'fill-extrusion-color': ['match', ['get', 'shade'], 0, '#7f5a3f', '#6b4934'],
-        'fill-extrusion-height': ['get', 'top'],
-        'fill-extrusion-base': ['get', 'base'],
-        'fill-extrusion-opacity': 0.88
-      }
-    }, labelLayer ? labelLayer.id : undefined);
-  }
-
-  async function ensure3DBuildingsLayer() {
-    if (
-      liveMap.getLayer('buildings-all') &&
-      liveMap.getLayer('buildings-all-roof') &&
-      liveMap.getLayer('buildings-target') &&
-      liveMap.getLayer('buildings-target-roof') &&
-      liveMap.getLayer('buildings-target-roof-grain') &&
-      liveMap.getLayer('buildings-target-roof-tiles') &&
-      liveMap.getLayer('buildings-edges')
-    ) {
-      return;
-    }
-
-    const style = liveMap.getStyle();
-    if (!style || !style.layers) return;
-
-    if (!liveMap.getSource('buildings-local')) {
-      liveMap.addSource('buildings-local', { type: 'geojson', data: BUILDINGS_GEOJSON_URL });
-    }
-
-    for (const layer of style.layers) {
-      const sourceLayer = ((layer['source-layer']) || '').toLowerCase();
-      if (
-        layer.type === 'fill-extrusion' &&
-        sourceLayer.includes('building') &&
-        layer.id !== 'buildings-all' &&
-        layer.id !== 'buildings-all-roof' &&
-        layer.id !== 'buildings-target' &&
-        layer.id !== 'buildings-target-roof' &&
-        layer.id !== 'buildings-target-roof-grain' &&
-        layer.id !== 'buildings-target-roof-tiles'
-      ) {
-        liveMap.setLayoutProperty(layer.id, 'visibility', 'none');
-      }
-    }
-
-    const labelLayer = style.layers.find((layer) => layer.type === 'symbol');
-    const baseHeightExpr = ['coalesce', ['get', 'height'], 8];
-    const baseMinHeightExpr = ['coalesce', ['get', 'min_height'], 0];
-    const targetHeightExpr = ['*', baseHeightExpr, TARGET_BUILDING_HEIGHT_SCALE];
-    const targetBaseExpr = ['*', baseMinHeightExpr, TARGET_BUILDING_HEIGHT_SCALE];
-    const allColorExpr = ['match', ['%', ['to-number', ['id'], 0], 5], 0, '#3a3a3a', 1, '#404040', 2, '#353535', 3, '#474747', '#3f3f3f'];
-
-    liveMap.addLayer({
-      id: 'buildings-all',
-      source: 'buildings-local',
-      filter: ['==', ['to-string', ['get', 'extrude']], 'true'],
-      type: 'fill-extrusion',
-      minzoom: 8,
-      paint: {
-        'fill-extrusion-color': allColorExpr,
-        'fill-extrusion-height': baseHeightExpr,
-        'fill-extrusion-base': baseMinHeightExpr,
-        'fill-extrusion-vertical-gradient': true,
-        'fill-extrusion-opacity': 0.95
-      }
-    }, labelLayer ? labelLayer.id : undefined);
-
-    liveMap.addLayer({
-      id: 'buildings-all-roof',
-      source: 'buildings-local',
-      filter: ['all', ['==', ['to-string', ['get', 'extrude']], 'true'], ['!=', ['id'], TARGET_BUILDING_ID]],
-      type: 'fill-extrusion',
-      minzoom: 9,
-      paint: {
-        'fill-extrusion-color': '#5a5a5a',
-        'fill-extrusion-height': baseHeightExpr,
-        'fill-extrusion-base': ['max', 0, ['-', baseHeightExpr, ROOF_CAP_M]],
-        'fill-extrusion-vertical-gradient': true,
-        'fill-extrusion-opacity': 0.9
-      }
-    }, labelLayer ? labelLayer.id : undefined);
-
-    liveMap.addLayer({
-      id: 'buildings-target',
-      source: 'buildings-local',
-      filter: ['all', ['==', ['to-string', ['get', 'extrude']], 'true'], ['==', ['id'], TARGET_BUILDING_ID]],
-      type: 'fill-extrusion',
-      minzoom: 8,
-      paint: {
-        'fill-extrusion-color': '#4a2e1f',
-        'fill-extrusion-height': targetHeightExpr,
-        'fill-extrusion-base': targetBaseExpr,
-        'fill-extrusion-vertical-gradient': true,
-        'fill-extrusion-opacity': 1
-      }
-    }, labelLayer ? labelLayer.id : undefined);
-
-    liveMap.addLayer({
-      id: 'buildings-target-roof',
-      source: 'buildings-local',
-      filter: ['all', ['==', ['to-string', ['get', 'extrude']], 'true'], ['==', ['id'], TARGET_BUILDING_ID]],
-      type: 'fill-extrusion',
-      minzoom: 9,
-      paint: {
-        'fill-extrusion-color': '#6a4630',
-        'fill-extrusion-height': targetHeightExpr,
-        'fill-extrusion-base': ['max', 0, ['-', targetHeightExpr, ROOF_CAP_M * TARGET_BUILDING_HEIGHT_SCALE]],
-        'fill-extrusion-vertical-gradient': true,
-        'fill-extrusion-opacity': 0.95
-      }
-    }, labelLayer ? labelLayer.id : undefined);
-
-    liveMap.addLayer({
-      id: 'buildings-target-roof-grain',
-      source: 'buildings-local',
-      filter: ['all', ['==', ['to-string', ['get', 'extrude']], 'true'], ['==', ['id'], TARGET_BUILDING_ID]],
-      type: 'fill-extrusion',
-      minzoom: 9,
-      paint: {
-        'fill-extrusion-color': '#8a664b',
-        'fill-extrusion-height': ['-', targetHeightExpr, 0.02],
-        'fill-extrusion-base': ['max', 0, ['-', targetHeightExpr, ROOF_CAP_M * TARGET_BUILDING_HEIGHT_SCALE * 0.45]],
-        'fill-extrusion-vertical-gradient': true,
-        'fill-extrusion-opacity': 0.55
-      }
-    }, labelLayer ? labelLayer.id : undefined);
-
-    liveMap.addLayer({
-      id: 'buildings-edges',
-      source: 'buildings-local',
-      filter: ['==', ['to-string', ['get', 'extrude']], 'true'],
-      type: 'line',
-      minzoom: 8,
-      paint: {
-        'line-color': 'rgba(18,18,18,0.65)',
-        'line-width': ['interpolate', ['linear'], ['zoom'], 8, 0.35, 14, 0.9],
-        'line-opacity': 0.55
-      }
-    }, labelLayer ? labelLayer.id : undefined);
-
-    await ensureTargetRoofTilesLayer(labelLayer);
-  }
-
-  function applyPoiLabelFilter() {
-    const style = liveMap.getStyle();
-    if (!style || !style.layers) return;
-
-    const poiNameFilter = [
-      'any',
-      ['==', ['downcase', ['coalesce', ['get', 'name_en'], ['get', 'name'], '']], TARGET_POI_NAME],
-      ['==', ['downcase', ['coalesce', ['get', 'name'], ['get', 'name_en'], '']], TARGET_POI_NAME]
-    ];
-
-    for (const layer of style.layers) {
-      if (layer.type !== 'symbol') continue;
-
-      const id = layer.id;
-      const idLower = (id || '').toLowerCase();
-      const sourceLower = ((layer['source-layer']) || '').toLowerCase();
-      const isPoi = /poi|landmark|point[-_]?of[-_]?interest/.test(idLower) || /poi|landmark|point[-_]?of[-_]?interest/.test(sourceLower);
-
-      if (isPoi) {
-        liveMap.setLayoutProperty(id, 'visibility', 'visible');
-        if (!(id in poiBaseFilters)) {
-          poiBaseFilters[id] = liveMap.getFilter(id) || null;
-        }
-        const base = poiBaseFilters[id];
-        liveMap.setFilter(id, base ? ['all', base, poiNameFilter] : poiNameFilter);
-      } else {
-        liveMap.setLayoutProperty(id, 'visibility', 'none');
-      }
-    }
-  }
-
-  function getHeaderOffsetPx() {
-    const header = document.getElementById('mainHeader');
-    if (!header) return 0;
-    const rect = header.getBoundingClientRect();
-    return Math.max(0, Math.ceil(rect.height));
-  }
-
-  function updateStickyOffset() {
-    const offset = getHeaderOffsetPx();
-    section.style.setProperty('--live-fly-header-offset', `${offset}px`);
-  }
-
-  function getSectionProgress() {
-    const rect = section.getBoundingClientRect();
-    const stickyHeight = sticky.getBoundingClientRect().height || window.innerHeight;
-    const scrollEnd = Math.max(1, section.offsetHeight - stickyHeight);
-    return Math.max(0, Math.min(1, -rect.top / scrollEnd));
-  }
-
-  function updateCameraFromScroll() {
-    scrollRafPending = false;
-    if (!ready || !keyframes.length) return;
-    setCameraAtElapsed(getSectionProgress() * totalDurationMs);
-  }
-
-  function queueScrollUpdate() {
-    updateStickyOffset();
-    if (scrollRafPending) return;
-    scrollRafPending = true;
-    requestAnimationFrame(updateCameraFromScroll);
-  }
-
-  async function prepareFlight() {
-    keyframes = [];
-    positionTangents = [];
-    buildSegmentTimings();
-
-    for (const point of ROUTE_POINTS) {
-      liveMap.jumpTo({ center: point.center, zoom: point.zoom, pitch: point.pitch, bearing: point.bearing });
-      await waitForIdle();
-      await waitOneFrame();
-      keyframes.push(captureKeyframe());
-    }
-
-    buildPositionTangents();
-
-    for (const point of ROUTE_POINTS) {
-      liveMap.jumpTo({ center: point.center, zoom: point.zoom, pitch: point.pitch, bearing: point.bearing });
-      await waitForIdle();
-    }
-
-    setCameraAtElapsed(0);
-    await waitOneFrame();
-  }
-
-  liveMap.on('style.load', async () => {
-    if (!liveMap.getSource('mapbox-dem-live')) {
-      liveMap.addSource('mapbox-dem-live', {
-        type: 'raster-dem',
-        url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
-        tileSize: 512,
-        maxzoom: 14
-      });
-    }
-
-    liveMap.setTerrain({ source: 'mapbox-dem-live', exaggeration: 1.5 });
-    await ensure3DBuildingsLayer();
-    applyPoiLabelFilter();
-    await prepareFlight();
-
-    ready = true;
-    queueScrollUpdate();
-  });
-
-  window.addEventListener('scroll', queueScrollUpdate, { passive: true });
-  window.addEventListener('resize', () => {
-    updateStickyOffset();
-    liveMap.resize();
-    queueScrollUpdate();
-  }, { passive: true });
-
-  updateStickyOffset();
-})();
 </script>
 
 </body>
