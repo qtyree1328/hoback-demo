@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concierge - Hoback Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  color: #272f36;
+  background: #fff;
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ===== NAVIGATION ===== */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  transition: background 0.3s;
+}
+
+header.scrolled { background: #1e2d3a; }
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 50px;
+  background: transparent;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+
+header.scrolled nav {
+  background: rgba(30, 45, 58, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.nav-left, .nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  flex: 1;
+}
+
+nav a {
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: opacity 0.3s;
+  cursor: pointer;
+}
+
+nav a:hover { opacity: 0.7; }
+nav a.active { border-bottom: 2px solid #fff; padding-bottom: 2px; }
+
+.nav-logo { margin: 0 40px; flex-shrink: 0; }
+
+.nav-logo-shield { height: 80px; width: auto; transition: opacity 0.4s; }
+.nav-logo-text-img { height: 30px; width: auto; display: none; }
+
+header.scrolled .nav-logo-shield { display: none; }
+header.scrolled .nav-logo-text-img { display: block; }
+
+.hamburger {
+  display: none;
+  background: none; border: none; color: #fff;
+  font-size: 1.4rem; cursor: pointer; padding: 6px;
+  line-height: 1; position: absolute; right: 20px;
+  top: 50%; transform: translateY(-50%); z-index: 10;
+}
+
+.nav-collapsed .nav-left,
+.nav-collapsed .nav-right { display: none; }
+.nav-collapsed .hamburger { display: block; }
+.nav-collapsed nav { padding: 15px 20px; }
+
+.mobile-menu {
+  display: none; position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30,45,58,0.97);
+  backdrop-filter: blur(8px); z-index: 999;
+  flex-direction: column; align-items: center;
+  justify-content: center; gap: 0;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  color: #fff; font-size: 1rem; font-weight: 400;
+  text-transform: uppercase; letter-spacing: 0.2em;
+  padding: 16px 0; transition: opacity 0.3s;
+}
+.mobile-menu a:hover { opacity: 0.6; }
+.mobile-menu-close {
+  position: absolute; top: 22px; right: 22px;
+  background: none; border: none; color: #fff;
+  font-size: 1.6rem; cursor: pointer; padding: 6px; line-height: 1;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  height: 35vh;
+  min-height: 260px;
+  background: linear-gradient(135deg, #1e2d3a 0%, #0d1a24 60%, #162330 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('images/hero-2.jpg') center/cover no-repeat;
+  opacity: 0.2;
+}
+
+.hero h1 {
+  position: relative; z-index: 2;
+  color: #fff;
+  font-size: 2.8rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.hero p {
+  position: relative; z-index: 2;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+/* ===== MESSAGE BOX ===== */
+.message-section {
+  background: #f7f5f2;
+  padding: 60px 80px;
+}
+
+.message-section h2 {
+  font-size: 1.6rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #1e2d3a;
+  margin-bottom: 8px;
+}
+
+.message-section .section-desc {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 30px;
+}
+
+.message-form {
+  max-width: 700px;
+}
+
+.msg-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.msg-row.full { flex-direction: column; }
+
+.msg-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-field label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #1e2d3a;
+  margin-bottom: 6px;
+}
+
+.msg-field input,
+.msg-field select,
+.msg-field textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background: #fff;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  color: #333;
+  transition: border-color 0.3s;
+}
+
+.msg-field input:focus,
+.msg-field select:focus,
+.msg-field textarea:focus {
+  outline: none;
+  border-color: #1e2d3a;
+}
+
+.msg-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.msg-submit {
+  display: inline-block;
+  padding: 14px 40px;
+  background: #1e2d3a;
+  color: #fff;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 8px;
+}
+
+.msg-submit:hover { background: #365e75; }
+
+.msg-success {
+  display: none;
+  padding: 16px 20px;
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 4px;
+  color: #2e7d32;
+  font-size: 0.85rem;
+  margin-top: 16px;
+}
+
+.msg-success.show { display: block; }
+
+/* ===== CONTACTS DIRECTORY ===== */
+.contacts-section {
+  padding: 70px 80px;
+  background: #fff;
+}
+
+.contacts-section h2 {
+  font-size: 1.8rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #1e2d3a;
+  margin-bottom: 8px;
+}
+
+.contacts-section .section-desc {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.contacts-updated {
+  font-size: 0.7rem;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 40px;
+}
+
+.main-line {
+  background: #1e2d3a;
+  color: #fff;
+  padding: 24px 30px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.main-line .label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.main-line .phone {
+  font-size: 1.4rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+.main-line a { color: #fff; }
+
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.contact-card {
+  border: 1px solid #e8e4df;
+  border-radius: 6px;
+  padding: 24px 28px;
+  transition: box-shadow 0.3s;
+}
+
+.contact-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.contact-card h3 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #1e2d3a;
+  margin-bottom: 4px;
+  border-bottom: 2px solid #1e2d3a;
+  padding-bottom: 8px;
+}
+
+.contact-card .contact-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #272f36;
+  margin-top: 10px;
+  margin-bottom: 8px;
+}
+
+.contact-card .contact-detail {
+  font-size: 0.82rem;
+  color: #555;
+  line-height: 1.7;
+}
+
+.contact-card .contact-detail a {
+  color: #2a6496;
+  transition: color 0.2s;
+}
+
+.contact-card .contact-detail a:hover { color: #1e2d3a; }
+
+.contact-card .contact-hours {
+  font-size: 0.75rem;
+  color: #888;
+  font-style: italic;
+  margin-top: 6px;
+}
+
+.contact-card .contact-note {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 6px;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: #1e2d3a;
+  padding: 60px;
+  color: #fff;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 50px;
+}
+
+.footer-logo img { height: 90px; width: auto; opacity: 0.9; }
+.footer-info { flex: 1; }
+
+.footer-info-top {
+  display: flex;
+  gap: 60px;
+  margin-bottom: 30px;
+}
+
+.footer-contact strong {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 10px;
+}
+
+.footer-contact a {
+  display: block;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  transition: color 0.3s;
+}
+
+.footer-contact a:hover { color: #fff; }
+
+.footer-links a {
+  display: block;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  line-height: 2.5;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover { color: #fff; }
+
+.footer-social { display: flex; gap: 15px; }
+
+.footer-social a {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.footer-social a:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: #fff;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.back-to-top {
+  width: 40px; height: 40px;
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.3s;
+  color: #fff; font-size: 1.2rem; background: none;
+}
+
+.back-to-top:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: #fff;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .contacts-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 12px 20px; }
+  .nav-left, .nav-right { display: none; }
+  .hamburger { display: block; position: absolute; right: 20px; top: 22px; }
+  .hero h1 { font-size: 1.6rem; }
+  .message-section { padding: 40px 30px; }
+  .msg-row { flex-direction: column; }
+  .contacts-section { padding: 50px 30px; }
+  .contacts-grid { grid-template-columns: 1fr; }
+  .main-line { flex-direction: column; gap: 10px; text-align: center; }
+  footer { padding: 40px 30px; }
+  .footer-inner { flex-direction: column; }
+  .footer-info-top { flex-direction: column; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<header id="mainHeader">
+<nav>
+  <div class="nav-left">
+    <a href="#">My Club</a>
+    <a href="#">Dining</a>
+    <a href="#">Spa</a>
+    <a href="concierge.html" class="active">Concierge</a>
+  </div>
+  <div class="nav-logo">
+    <a href="member.html">
+      <img src="images/logo-footer.svg" alt="Hoback Club" class="nav-logo-shield">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
+    </a>
+  </div>
+  <div class="nav-right">
+    <a href="#">Lifestyle</a>
+    <a href="#">Rental Program</a>
+    <a href="mountain.html">Mountain</a>
+    <a href="login.html">Logout</a>
+  </div>
+  <button class="hamburger" id="hamburgerBtn">&#9776;</button>
+</nav>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="mobileClose">&#10005;</button>
+  <a href="#">My Club</a>
+  <a href="#">Dining</a>
+  <a href="#">Spa</a>
+  <a href="concierge.html">Concierge</a>
+  <a href="#">Lifestyle</a>
+  <a href="#">Rental Program</a>
+  <a href="mountain.html">Mountain</a>
+  <a href="login.html">Logout</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Concierge</h1>
+  <p>Your personal connection to Hoback Club services</p>
+</section>
+
+<!-- MESSAGE CONCIERGE -->
+<section class="message-section">
+  <h2>Message the Concierge</h2>
+  <p class="section-desc">Send a direct message and our concierge team will respond promptly.</p>
+  <form class="message-form" id="conciergeForm" onsubmit="event.preventDefault(); sendMessage();">
+    <div class="msg-row">
+      <div class="msg-field">
+        <label>Your Name</label>
+        <input type="text" placeholder="Full name" required>
+      </div>
+      <div class="msg-field">
+        <label>Email</label>
+        <input type="email" placeholder="your@email.com" required>
+      </div>
+    </div>
+    <div class="msg-row">
+      <div class="msg-field">
+        <label>Subject</label>
+        <select>
+          <option>General Inquiry</option>
+          <option>Dining Reservation</option>
+          <option>Spa Appointment</option>
+          <option>Room Reservation</option>
+          <option>Ski &amp; Valet</option>
+          <option>Event Planning</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="msg-field">
+        <label>Phone (optional)</label>
+        <input type="tel" placeholder="(307) 000-0000">
+      </div>
+    </div>
+    <div class="msg-row full">
+      <div class="msg-field">
+        <label>Message</label>
+        <textarea placeholder="How can we assist you?"></textarea>
+      </div>
+    </div>
+    <button type="submit" class="msg-submit">Send Message</button>
+    <div class="msg-success" id="msgSuccess">Your message has been sent. Our concierge team will respond shortly.</div>
+  </form>
+</section>
+
+<!-- CONTACT DIRECTORY -->
+<section class="contacts-section">
+  <h2>Useful Contact Information</h2>
+  <p class="section-desc">Direct lines to every department at Hoback Club</p>
+  <p class="contacts-updated">Last updated 2/5/26</p>
+
+  <div class="main-line">
+    <span class="label">Main Line</span>
+    <a href="tel:+13072491000" class="phone">(307) 249-1000</a>
+  </div>
+
+  <div class="contacts-grid">
+
+    <div class="contact-card">
+      <h3>All Inquiries &amp; Concierge</h3>
+      <div class="contact-name">Mel Toye</div>
+      <div class="contact-detail">
+        Email: <a href="mailto:Concierge@hobackclub.com">Concierge@hobackclub.com</a><br>
+        Phone: <a href="tel:+13072495913">(307) 249-5913</a><br>
+        Internal: 5913
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Member &amp; Guest Services</h3>
+      <div class="contact-name">Cassidy Ballard</div>
+      <div class="contact-detail">
+        Email: <a href="mailto:Cassidy.Ballard@hobackclub.com">Cassidy.Ballard@hobackclub.com</a><br>
+        Phone: <a href="tel:+13072495903">(307) 249-5903</a><br>
+        Internal: 5903
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Room Reservations</h3>
+      <div class="contact-name">Kristen Carelas</div>
+      <div class="contact-detail">
+        Email: <a href="mailto:Kristen.Carelas@hobackclub.com">Kristen.Carelas@hobackclub.com</a><br>
+        or <a href="mailto:Reservations@hobackclub.com">Reservations@hobackclub.com</a><br>
+        Phone: <a href="tel:+13072495914">(307) 249-5914</a><br>
+        Internal: 5914
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Dining Reservations / Host Stand</h3>
+      <div class="contact-name">Vanessa Flory</div>
+      <div class="contact-detail">
+        Email: <a href="mailto:dining@hobackclub.com">dining@hobackclub.com</a><br>
+        Phone: <a href="tel:+13072495943">(307) 249-5943</a><br>
+        Internal: 5943
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Bar</h3>
+      <div class="contact-name">Dee Bloomquist</div>
+      <div class="contact-detail">
+        Phone: <a href="tel:+13072495940">(307) 249-5940</a>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Director of Food &amp; Beverage</h3>
+      <div class="contact-name">Nelson Veiga</div>
+      <div class="contact-detail">
+        Phone: <a href="tel:+13072495940">(307) 249-5940</a>
+      </div>
+      <div class="contact-note">For Banquet &amp; Party Reservations</div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Ski &amp; Parking Valet</h3>
+      <div class="contact-name">Mike Quintiliani</div>
+      <div class="contact-detail">
+        Email: <a href="mailto:Mike.Quintiliani@hobackclub.com">Mike.Quintiliani@hobackclub.com</a><br>
+        Phone: <a href="tel:+13072495920">(307) 249-5920</a><br>
+        Internal: 5920
+      </div>
+      <div class="contact-hours">Hours: 7 AM to 10 PM</div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Reservations &amp; Spa Reception</h3>
+      <div class="contact-detail">
+        Email: <a href="mailto:Spa@hobackclub.com">Spa@hobackclub.com</a><br>
+        Phone: <a href="tel:+13072495930">(307) 249-5930</a>
+      </div>
+      <div class="contact-note">If no Spa response, call Massage Artistry Dispatch at <a href="tel:+13857431350" style="color:#2a6496;">(385) 743-1350</a></div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Property Manager (Rooms)</h3>
+      <div class="contact-name">Megan McClintock</div>
+      <div class="contact-detail">
+        Email: <a href="mailto:Megan.Mcclintock@hobackclub.com">Megan.Mcclintock@hobackclub.com</a><br>
+        Phone: <a href="tel:+13072495951">(307) 249-5951</a><br>
+        Main Club Line <a href="tel:+13072491000">(307) 249-1000</a> Option 4
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Night Security / Emergency Night Maintenance</h3>
+      <div class="contact-name">Rob Hymas</div>
+      <div class="contact-detail">
+        Phone: <a href="tel:+13072495963">(307) 249-5963</a>
+      </div>
+      <div class="contact-hours">Hours: 10 PM to 7 AM</div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Receiving &amp; Day Security</h3>
+      <div class="contact-name">Mike Blawn / Dani Pevy</div>
+      <div class="contact-detail">
+        Email: <a href="mailto:Receiving@hobackclub.com">Receiving@hobackclub.com</a><br>
+        Phone: <a href="tel:+13072495962">(307) 249-5962</a>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <h3>General Manager</h3>
+      <div class="contact-name">John R. Newman</div>
+      <div class="contact-detail">
+        Email: <a href="mailto:John.Newman@hobackclub.com">John.Newman@hobackclub.com</a><br>
+        Phone: <a href="tel:+13072495901">(307) 249-5901</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="images/logo-footer.svg" alt="Hoback Club">
+    </div>
+    <div class="footer-info">
+      <div class="footer-info-top">
+        <div class="footer-contact">
+          <strong>Contact Us</strong>
+          <a href="#">P.O. Box 158, Teton Village, WY 83025</a>
+          <a href="tel:+13072491000">(307) 249-1000</a>
+        </div>
+        <div class="footer-links">
+          <a href="#">Employment Opportunities</a>
+          <a href="#">Membership Inquiries</a>
+        </div>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">ig</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color: rgba(255,255,255,0.5);">Clubessential</a></span>
+        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== NAVBAR SCROLL EFFECT =====
+(function() {
+  const header = document.getElementById('mainHeader');
+  function checkScroll() {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  }
+  window.addEventListener('scroll', checkScroll, { passive: true });
+  checkScroll();
+})();
+
+// ===== NAV COLLAPSE =====
+(function() {
+  const header = document.getElementById('mainHeader');
+  function checkWidth() {
+    header.classList.toggle('nav-collapsed', window.innerWidth < 1100);
+  }
+  window.addEventListener('resize', checkWidth);
+  checkWidth();
+})();
+
+// ===== MOBILE MENU =====
+document.getElementById('hamburgerBtn').addEventListener('click', function() {
+  document.getElementById('mobileMenu').classList.add('open');
+});
+document.getElementById('mobileClose').addEventListener('click', function() {
+  document.getElementById('mobileMenu').classList.remove('open');
+});
+
+// ===== SEND MESSAGE (demo) =====
+function sendMessage() {
+  document.getElementById('msgSuccess').classList.add('show');
+  document.getElementById('conciergeForm').reset();
+  setTimeout(function() {
+    document.getElementById('msgSuccess').classList.remove('show');
+  }, 5000);
+}
+</script>
+
+</body>
+</html>

@@ -1033,32 +1033,18 @@ footer {
   inset: 0;
   background-size: cover;
   background-position: center;
-  transform: scale(1.15);
-  transition: transform 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Wipe reveal on the image */
-.showcase__img-wrap::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: #ede9e1;
-  transform-origin: left;
-  transform: scaleX(1);
-  transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1) 0.1s;
-  z-index: 2;
+/* Simple fade-in for entire panel */
+.showcase__img-wrap {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.showcase__panel:nth-child(even) .showcase__img-wrap::after {
-  transform-origin: right;
-}
-
-.showcase__panel.is-revealed .showcase__img-wrap::after {
-  transform: scaleX(0);
-}
-
-.showcase__panel.is-revealed .showcase__img {
-  transform: scale(1);
+.showcase__panel.is-revealed .showcase__img-wrap {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Text side */
@@ -1082,29 +1068,29 @@ footer {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.7);
+  transform: translate(-50%, -50%);
   opacity: 0;
-  transition: opacity 1s ease 0.2s, transform 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+  transition: opacity 0.8s ease 0.15s;
   pointer-events: none;
   white-space: nowrap;
 }
 
 .showcase__panel.is-revealed .showcase__number {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
 }
 
 /* Accent line */
 .showcase__line {
-  width: 0;
+  width: 70px;
   height: 1px;
   background: linear-gradient(90deg, rgba(30,45,58,0.35), rgba(30,45,58,0));
   margin-bottom: 28px;
-  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.2s;
 }
 
 .showcase__panel.is-revealed .showcase__line {
-  width: 70px;
+  opacity: 1;
 }
 
 /* Headline */
@@ -1117,12 +1103,14 @@ footer {
   color: #1e2d3a;
   position: relative;
   z-index: 2;
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 1s cubic-bezier(0.22, 1, 0.36, 1) 0.4s;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
 }
 
 .showcase__panel.is-revealed .showcase__heading {
-  clip-path: inset(0 0% 0 0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Description */
@@ -1136,8 +1124,8 @@ footer {
   position: relative;
   z-index: 2;
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.8s ease 0.8s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.8s;
+  transform: translateY(15px);
+  transition: opacity 0.7s ease 0.35s, transform 0.7s ease 0.35s;
 }
 
 .showcase__panel.is-revealed .showcase__desc {
@@ -1219,19 +1207,7 @@ footer {
   width: 25%;
   overflow: hidden;
   cursor: pointer;
-  opacity: 0;
-  transform: translateY(80px);
-  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
-.seasons-item.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.seasons-item:nth-child(2) { transition-delay: 0.12s; }
-.seasons-item:nth-child(3) { transition-delay: 0.24s; }
-.seasons-item:nth-child(4) { transition-delay: 0.36s; }
 
 .seasons-item::before {
   content: "";
@@ -1316,8 +1292,6 @@ footer {
   .mountain-drawing-reversed .mountain-drawing-img img { max-height: 250px; max-width: 100%; }
   .mountain-drawing-reversed .mountain-drawing-text { text-align: center; padding: 0 30px; }
   .seasons-item { width: 50%; }
-  .seasons-item:nth-child(3) { transition-delay: 0s; }
-  .seasons-item:nth-child(4) { transition-delay: 0.12s; }
   .seasons-item::before { padding-top: 80%; }
 }
 </style>
@@ -1383,29 +1357,29 @@ footer {
   <h3>Weather This Week</h3>
   <div class="forecast">
     <div class="forecast-day">
-      <div class="day">Mon</div>
-      <div class="date">23</div>
-      <div class="temp">23º F</div>
-    </div>
-    <div class="forecast-day">
-      <div class="day">Tue</div>
-      <div class="date">24</div>
-      <div class="temp">19º F</div>
-    </div>
-    <div class="forecast-day">
-      <div class="day">Wed</div>
-      <div class="date">25</div>
-      <div class="temp">16 F</div>
-    </div>
-    <div class="forecast-day">
       <div class="day">Thu</div>
-      <div class="date">26</div>
-      <div class="temp">22º F</div>
+      <div class="date">5</div>
+      <div class="temp">28&ordm; F</div>
     </div>
     <div class="forecast-day">
       <div class="day">Fri</div>
-      <div class="date">27</div>
-      <div class="temp">28º F</div>
+      <div class="date">6</div>
+      <div class="temp">24&ordm; F</div>
+    </div>
+    <div class="forecast-day">
+      <div class="day">Sat</div>
+      <div class="date">7</div>
+      <div class="temp">30&ordm; F</div>
+    </div>
+    <div class="forecast-day">
+      <div class="day">Sun</div>
+      <div class="date">8</div>
+      <div class="temp">35&ordm; F</div>
+    </div>
+    <div class="forecast-day">
+      <div class="day">Mon</div>
+      <div class="date">9</div>
+      <div class="temp">32&ordm; F</div>
     </div>
   </div>
   <div class="weather-bar-btns">
@@ -1741,20 +1715,6 @@ footer {
   panels.forEach(function(p) { observer.observe(p); });
 })();
 
-// Seasons scroll-in reveal
-(function() {
-  var items = document.querySelectorAll('.seasons-item');
-  if (!items.length) return;
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) {
-        e.target.classList.add('is-visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  items.forEach(function(item) { observer.observe(item); });
-})();
 
 // Card carousel with swipe support
 (function() {
