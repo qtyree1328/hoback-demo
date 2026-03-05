@@ -1283,9 +1283,9 @@ footer {
   .video-section { min-height: 300px; }
   .video-section video { min-height: 300px; }
   .mountain-drawing-section { padding: 50px 0; }
-  .mountain-drawing-inner { flex-direction: column; }
-  .mountain-drawing-img { flex: none; margin-left: -30px; margin-bottom: 30px; }
-  .mountain-drawing-text { padding: 0 30px; }
+  .mountain-drawing-inner { flex-direction: column; align-items: flex-end; }
+  .mountain-drawing-img { flex: none; margin-left: -30px; margin-bottom: 30px; width: calc(100% + 30px); }
+  .mountain-drawing-text { padding: 0 30px; text-align: right; }
   .mountain-drawing-headline { font-size: 2.2rem; }
   .mountain-drawing-reversed .mountain-drawing-inner { flex-direction: column; }
   .mountain-drawing-reversed .mountain-drawing-img { flex: none; margin-right: -30px; margin-left: 0; margin-bottom: 30px; }
@@ -1721,32 +1721,58 @@ footer {
   const track = document.getElementById('cardsTrack');
   const dots = document.querySelectorAll('.callouts-dots span');
   const cards = track.querySelectorAll('.card');
+  const container = document.querySelector('.callouts-right');
   let pos = 0;
-  const maxPos = cards.length;
 
   function getCardWidth() { return cards[0].offsetWidth + 20; }
 
-  function updateCarousel() {
-    track.style.transform = `translateX(-${pos * getCardWidth()}px)`;
-    dots.forEach((d, i) => d.classList.toggle('active', i === pos));
+  function getMaxPos() {
+    var containerW = container.offsetWidth;
+    var cardW = getCardWidth();
+    var max = Math.ceil((track.scrollWidth - containerW) / cardW);
+    return Math.max(0, max);
   }
 
-  window.addEventListener('resize', updateCarousel);
+  function updateCarousel() {
+    var maxTranslate = Math.max(0, track.scrollWidth - container.offsetWidth);
+    var desired = pos * getCardWidth();
+    var clamped = Math.min(desired, maxTranslate);
+    track.style.transform = 'translateX(-' + Math.max(0, clamped) + 'px)';
+    dots.forEach(function(d, i) { d.classList.toggle('active', i === pos); });
+  }
 
-  function next() { pos = (pos + 1) % maxPos; updateCarousel(); }
-  function prev() { pos = pos <= 0 ? maxPos - 1 : pos - 1; updateCarousel(); }
+  window.addEventListener('resize', function() {
+    var max = getMaxPos();
+    if (pos > max) pos = max;
+    updateCarousel();
+  });
+
+  function next() {
+    var max = getMaxPos();
+    pos = pos >= max ? 0 : pos + 1;
+    updateCarousel();
+  }
+
+  function prev() {
+    var max = getMaxPos();
+    pos = pos <= 0 ? max : pos - 1;
+    updateCarousel();
+  }
 
   document.getElementById('nextCard').addEventListener('click', next);
   document.getElementById('prevCard').addEventListener('click', prev);
 
-  dots.forEach(d => d.addEventListener('click', () => {
-    pos = parseInt(d.dataset.index);
-    updateCarousel();
-  }));
+  dots.forEach(function(d) {
+    d.addEventListener('click', function() {
+      pos = parseInt(d.dataset.index);
+      var max = getMaxPos();
+      if (pos > max) pos = max;
+      updateCarousel();
+    });
+  });
 
   // Touch/swipe support
   let startX = 0, startY = 0, isDragging = false;
-  const container = document.querySelector('.callouts-right');
 
   container.addEventListener('touchstart', (e) => {
     startX = e.touches[0].clientX;
