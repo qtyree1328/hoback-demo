@@ -1217,7 +1217,7 @@ footer {
 
 <div class="section-spacer"></div>
 
-<!-- LIVE 3D FLYTHROUGH -->
+<!-- LIVE 3D FLYTHROUGH (hidden for now)
 <section class="live-flythrough-section" id="liveFlySection">
   <div class="live-flythrough-sticky">
     <div class="live-flythrough-header">
@@ -1227,6 +1227,7 @@ footer {
     <div id="liveMap"></div>
   </div>
 </section>
+-->
 
 <div style="height: 80px; background: #f7f5f2;"></div>
 
@@ -1723,8 +1724,8 @@ document.querySelectorAll('.cam-fade').forEach(img => {
     obs.observe(document.getElementById('flyoverSection'));
   })();
 
-  // ===== LIVE 3D FLYTHROUGH =====
-  (function() {
+  // ===== LIVE 3D FLYTHROUGH (hidden for now) =====
+  if (document.getElementById('liveFlySection')) { (function() {
     mapboxgl.prewarm();
 
     var ROUTE_POINTS = [
@@ -2214,6 +2215,7 @@ document.querySelectorAll('.cam-fade').forEach(img => {
 
     updateStickyOffset();
   })();
+  } // end liveFlySection guard
 })();
 
 // ===== VALLEY EXPLORER MAP =====

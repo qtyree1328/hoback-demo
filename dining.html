@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dining - Hoback Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  color: #272f36;
+  background: #fff;
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ===== NAVIGATION ===== */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  transition: background 0.3s;
+}
+
+header.scrolled { background: #1e2d3a; }
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 50px;
+  background: transparent;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+
+header.scrolled nav {
+  background: rgba(30, 45, 58, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.nav-left, .nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  flex: 1;
+}
+
+nav a {
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: opacity 0.3s;
+  cursor: pointer;
+}
+
+nav a:hover { opacity: 0.7; }
+nav a.active { border-bottom: 2px solid #fff; padding-bottom: 2px; }
+
+.nav-logo { margin: 0 40px; flex-shrink: 0; }
+
+.nav-logo-shield { height: 80px; width: auto; transition: opacity 0.4s; }
+.nav-logo-text-img { height: 30px; width: auto; display: none; }
+
+header.scrolled .nav-logo-shield { display: none; }
+header.scrolled .nav-logo-text-img { display: block; }
+
+.hamburger {
+  display: none;
+  background: none; border: none; color: #fff;
+  font-size: 1.4rem; cursor: pointer; padding: 6px;
+  line-height: 1; position: absolute; right: 20px;
+  top: 50%; transform: translateY(-50%); z-index: 10;
+}
+
+.nav-collapsed .nav-left,
+.nav-collapsed .nav-right { display: none; }
+.nav-collapsed .hamburger { display: block; }
+.nav-collapsed nav { padding: 15px 20px; }
+
+.mobile-menu {
+  display: none; position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30,45,58,0.97);
+  backdrop-filter: blur(8px); z-index: 999;
+  flex-direction: column; align-items: center;
+  justify-content: center; gap: 0;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  color: #fff; font-size: 1rem; font-weight: 400;
+  text-transform: uppercase; letter-spacing: 0.2em;
+  padding: 16px 0; transition: opacity 0.3s;
+}
+.mobile-menu a:hover { opacity: 0.6; }
+.mobile-menu-close {
+  position: absolute; top: 22px; right: 22px;
+  background: none; border: none; color: #fff;
+  font-size: 1.6rem; cursor: pointer; padding: 6px; line-height: 1;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  height: 40vh;
+  min-height: 300px;
+  background: linear-gradient(135deg, #1e2d3a 0%, #0d1a24 60%, #162330 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://hobackclub.com/images/dynamic/getImage.gif?ID=100091') center/cover no-repeat;
+  opacity: 0.25;
+}
+
+.hero h1 {
+  position: relative; z-index: 2;
+  color: #fff;
+  font-size: 2.8rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.hero p {
+  position: relative; z-index: 2;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+/* ===== MENU TOGGLE ===== */
+.menu-toggle-section {
+  text-align: center;
+  padding: 50px 40px 10px;
+  background: #f7f5f2;
+}
+
+.menu-toggle {
+  display: inline-flex;
+  border-radius: 40px;
+  overflow: hidden;
+  border: 2px solid #1e2d3a;
+}
+
+.menu-toggle-btn {
+  padding: 14px 50px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  border: none;
+  background: transparent;
+  color: #1e2d3a;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.menu-toggle-btn.active {
+  background: #1e2d3a;
+  color: #fff;
+}
+
+.menu-toggle-btn:hover:not(.active) {
+  background: rgba(30,45,58,0.08);
+}
+
+/* ===== MENU CONTENT ===== */
+.menu-content {
+  background: #f7f5f2;
+  padding: 40px 0 80px;
+}
+
+.menu-tab {
+  display: none;
+  animation: fadeUp 0.5s ease forwards;
+}
+
+.menu-tab.active { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.menu-intro {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 50px;
+  padding: 0 30px;
+}
+
+.menu-intro h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.6rem;
+  font-weight: 300;
+  color: #1e2d3a;
+  margin-bottom: 10px;
+}
+
+.menu-intro p {
+  font-size: 0.9rem;
+  color: #7a8d98;
+  letter-spacing: 0.05em;
+  line-height: 1.7;
+}
+
+/* ===== MENU CATEGORY ===== */
+.menu-category {
+  max-width: 900px;
+  margin: 0 auto 50px;
+  padding: 0 30px;
+}
+
+.menu-category-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #1e2d3a;
+  border-bottom: 2px solid #1e2d3a;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+
+/* ===== MENU ITEM ===== */
+.menu-item {
+  display: flex;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid #e8e4df;
+  align-items: flex-start;
+}
+
+.menu-item:last-child { border-bottom: none; }
+
+.menu-item-img {
+  flex: 0 0 140px;
+  height: 100px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #e0dcd7;
+}
+
+.menu-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.menu-item-info {
+  flex: 1;
+}
+
+.menu-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 6px;
+}
+
+.menu-item-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e2d3a;
+}
+
+.menu-item-price {
+  font-size: 1rem;
+  font-weight: 300;
+  color: #1e2d3a;
+  white-space: nowrap;
+}
+
+.menu-item-desc {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Items without photos */
+.menu-item.no-photo {
+  gap: 0;
+}
+
+/* ===== SIDES GRID ===== */
+.sides-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 30px;
+}
+
+.side-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #e8e4df;
+  font-size: 0.95rem;
+  color: #272f36;
+}
+
+/* ===== PROTEINS ROW ===== */
+.proteins-row {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.protein-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e8e4df;
+  flex: 1;
+  min-width: 180px;
+}
+
+.protein-item span:first-child {
+  font-size: 0.95rem;
+  color: #272f36;
+}
+
+.protein-item span:last-child {
+  font-size: 0.95rem;
+  color: #888;
+  font-weight: 300;
+}
+
+/* ===== SOURCING NOTE ===== */
+.sourcing-note {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 30px 0;
+  text-align: center;
+}
+
+.sourcing-note p {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #999;
+  line-height: 1.7;
+}
+
+/* ===== RESERVATION CTA ===== */
+.reservation-cta {
+  max-width: 900px;
+  margin: 40px auto 0;
+  padding: 0 30px;
+  text-align: center;
+}
+
+.reservation-cta-btn {
+  display: inline-block;
+  padding: 16px 44px;
+  background: #1e2d3a;
+  color: #fff;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.reservation-cta-btn:hover { background: #365e75; }
+
+/* ===== FOOTER ===== */
+footer {
+  background: #1e2d3a;
+  padding: 60px;
+  color: #fff;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 50px;
+}
+
+.footer-logo img { height: 90px; width: auto; opacity: 0.9; }
+.footer-info { flex: 1; }
+
+.footer-info-top {
+  display: flex;
+  gap: 60px;
+  margin-bottom: 30px;
+}
+
+.footer-contact strong {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 10px;
+}
+
+.footer-contact a {
+  display: block;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  transition: color 0.3s;
+}
+
+.footer-contact a:hover { color: #fff; }
+
+.footer-links a {
+  display: block;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  line-height: 2.5;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover { color: #fff; }
+
+.footer-social { display: flex; gap: 15px; }
+
+.footer-social a {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.footer-social a:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: #fff;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.back-to-top {
+  width: 40px; height: 40px;
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.3s;
+  color: #fff; font-size: 1.2rem; background: none;
+}
+
+.back-to-top:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: #fff;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  nav { padding: 12px 20px; }
+  .nav-left, .nav-right { display: none; }
+  .hamburger { display: block; position: absolute; right: 20px; top: 22px; }
+  .hero h1 { font-size: 1.8rem; }
+  .menu-toggle-btn { padding: 12px 30px; font-size: 0.7rem; }
+  .menu-item { flex-direction: column; gap: 14px; }
+  .menu-item-img { flex: none; width: 100%; height: 180px; }
+  .sides-grid { grid-template-columns: 1fr; }
+  .proteins-row { flex-direction: column; gap: 0; }
+  footer { padding: 40px 30px; }
+  .footer-inner { flex-direction: column; }
+  .footer-info-top { flex-direction: column; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<header id="mainHeader">
+<nav>
+  <div class="nav-left">
+    <a href="#">My Club</a>
+    <a href="dining.html" class="active">Dining</a>
+    <a href="#">Spa</a>
+    <a href="concierge.html">Concierge</a>
+  </div>
+  <div class="nav-logo">
+    <a href="member.html">
+      <img src="images/logo-footer.svg" alt="Hoback Club" class="nav-logo-shield">
+      <img src="images/logo-nav.svg" alt="Hoback Club" class="nav-logo-text-img">
+    </a>
+  </div>
+  <div class="nav-right">
+    <a href="#">Lifestyle</a>
+    <a href="#">Rental Program</a>
+    <a href="mountain.html">Mountain</a>
+    <a href="login.html">Logout</a>
+  </div>
+  <button class="hamburger" id="hamburgerBtn">&#9776;</button>
+</nav>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="mobileClose">&#10005;</button>
+  <a href="#">My Club</a>
+  <a href="dining.html">Dining</a>
+  <a href="#">Spa</a>
+  <a href="concierge.html">Concierge</a>
+  <a href="#">Lifestyle</a>
+  <a href="#">Rental Program</a>
+  <a href="mountain.html">Mountain</a>
+  <a href="login.html">Logout</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Dining</h1>
+  <p>The Great Hall &mdash; Curated by Chef Jean-Louis Dumonet</p>
+</section>
+
+<!-- MENU TOGGLE -->
+<div class="menu-toggle-section">
+  <div class="menu-toggle">
+    <button class="menu-toggle-btn active" data-tab="dinner">Dinner</button>
+    <button class="menu-toggle-btn" data-tab="lunch">Lunch</button>
+  </div>
+</div>
+
+<!-- MENU CONTENT -->
+<div class="menu-content">
+
+  <!-- ===== DINNER TAB ===== -->
+  <div class="menu-tab active" id="dinner">
+    <div class="menu-intro">
+      <h2>Dinner Menu</h2>
+      <p>An exquisite evening dining experience featuring locally sourced ingredients, wild-caught fish, and organic produce curated by our Michelin Star Chef.</p>
+    </div>
+
+    <!-- APPETIZERS -->
+    <div class="menu-category">
+      <div class="menu-category-title">Appetizers</div>
+
+      <div class="menu-item">
+        <div class="menu-item-img">
+          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100133" alt="French Onion Soup">
+        </div>
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Parisian Onion Soup "Au Gratin"</span>
+            <span class="menu-item-price">16</span>
+          </div>
+          <div class="menu-item-desc">Gratin&eacute;e with Baguette, Comt&eacute;, Gruyere</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-img">
+          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100091" alt="Brussels Sprouts Salad">
+        </div>
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Grilled Brussels Sprouts Salad</span>
+            <span class="menu-item-price">21</span>
+          </div>
+          <div class="menu-item-desc">Endive, Pear, Rogue Creamery Blue Cheese, Organic Oregon Hazelnuts, Cranberries, Raisins, Sherry Vinaigrette</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Hoback Club Wedge</span>
+            <span class="menu-item-price">19</span>
+          </div>
+          <div class="menu-item-desc">Baby Iceberg, Applewood Bacon Crumble, Cherry Tomatoes, Boiled Egg, Blue Cheese Dressing</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Wild Mushroom Risotto</span>
+            <span class="menu-item-price">19</span>
+          </div>
+          <div class="menu-item-desc">Shaved Parmesan</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-img">
+          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100092" alt="Hamachi Crudo">
+        </div>
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Hamachi Crudo*</span>
+            <span class="menu-item-price">21</span>
+          </div>
+          <div class="menu-item-desc">Sushi Rice, Coconut Milk, Fresno Chili, Soy-Yuzu Dressing, Micro Cilantro</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Island Creek Oysters (6)*</span>
+            <span class="menu-item-price">28</span>
+          </div>
+          <div class="menu-item-desc">Cocktail Sauce, Mignonette, Lemons</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Prime Beef Tartare*</span>
+            <span class="menu-item-price">25</span>
+          </div>
+          <div class="menu-item-desc">Romesco, Scallions, Dijon, Quail Egg, House Made Potato Chips</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENTREES -->
+    <div class="menu-category">
+      <div class="menu-category-title">Entr&eacute;es</div>
+
+      <div class="menu-item">
+        <div class="menu-item-img">
+          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100093" alt="Arctic Salmon">
+        </div>
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Arctic Salmon*</span>
+            <span class="menu-item-price">39</span>
+          </div>
+          <div class="menu-item-desc">Caramelized Saffron Fennel, Citrus-Clam Broth, Guanciale &amp; Orange Relish</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Winter Vegetable &amp; Preserved Lemon Tagine</span>
+            <span class="menu-item-price">29</span>
+          </div>
+          <div class="menu-item-desc">Couscous, Cilantro, Confit Onions, Raisins, Almonds, Harissa Broth</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-img">
+          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100094" alt="Chicken Schnitzel">
+        </div>
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Organic Free Range Pasture Chicken Schnitzel</span>
+            <span class="menu-item-price">39</span>
+          </div>
+          <div class="menu-item-desc">Wilted Coleslaw, Fingerling Potatoes, Caper &amp; Lemon Sauce</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-img">
+          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100096" alt="Elk Tenderloin">
+        </div>
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">North American Elk Tenderloin*</span>
+            <span class="menu-item-price">61</span>
+          </div>
+          <div class="menu-item-desc">Parmesan Polenta, Swiss Chard, Cippolini Onion, Rosemary Elk Sauce</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">House-Made Semolina Carrot Pasta Creste di Bruco</span>
+            <span class="menu-item-price">39</span>
+          </div>
+          <div class="menu-item-desc">Braised Lamb Shank, Local Mushrooms, Pomegranate, Pine Nut, Burrata</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Veal Scallopini</span>
+            <span class="menu-item-price">55</span>
+          </div>
+          <div class="menu-item-desc">Brown Butter Herb Spaetzle, Spinach, Morel Sauce</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Daily Butchers Cut</span>
+            <span class="menu-item-price">MP</span>
+          </div>
+          <div class="menu-item-desc">Ask your server for today's selection</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DINNER SIDES -->
+    <div class="menu-category">
+      <div class="menu-category-title">Sides &mdash; 11</div>
+      <div class="sides-grid">
+        <div class="side-item">Carrot Pasta, Vermont Butter</div>
+        <div class="side-item">Sauteed Spinach</div>
+        <div class="side-item">Mushroom Casserole</div>
+        <div class="side-item">Pan Seared Herbed Spaetzle</div>
+        <div class="side-item">Classical French Fries</div>
+        <div class="side-item">Charred Brussels Sprouts</div>
+      </div>
+    </div>
+
+    <div class="sourcing-note">
+      <p>We strive to collaborate extensively with local suppliers.<br>Our fish is not farm-raised. Additionally, most of our products are organic.</p>
+      <p style="margin-top: 10px; font-size: 0.7rem;">*Consuming raw or undercooked meats, poultry, seafood, shellfish, or eggs may increase your risk of food borne illness.</p>
+    </div>
+  </div>
+
+  <!-- ===== LUNCH TAB ===== -->
+  <div class="menu-tab" id="lunch">
+    <div class="menu-intro">
+      <h2>Lunch Menu</h2>
+      <p>Refined midday dining in The Great Hall, featuring lighter fare and hearty main dishes made with locally sourced, organic ingredients.</p>
+    </div>
+
+    <!-- LIGHTER FARE -->
+    <div class="menu-category">
+      <div class="menu-category-title">Lighter Fare</div>
+
+      <div class="menu-item">
+        <div class="menu-item-img">
+          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100133" alt="Tomato Soup">
+        </div>
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Roasted Red Pepper &amp; Tomato Soup</span>
+            <span class="menu-item-price">17</span>
+          </div>
+          <div class="menu-item-desc">Gruyere Grilled Cheese</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Prime Beef Chili Bowl</span>
+            <span class="menu-item-price">17</span>
+          </div>
+          <div class="menu-item-desc">Cheddar Cheese, Scallions, Sour Cream</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Endive &amp; Beet Salad</span>
+            <span class="menu-item-price">20</span>
+          </div>
+          <div class="menu-item-desc">Idaho Goat Cheese, Green Apple, Caramelized Walnuts, Sherry Vinaigrette</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Hoback Cobb</span>
+            <span class="menu-item-price">19</span>
+          </div>
+          <div class="menu-item-desc">Mixed Lettuces, Grape Tomato, Endive, Bacon, Hard Boiled Egg, Cucumber, Balsamic Vinaigrette</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Caesar Salad</span>
+            <span class="menu-item-price">19</span>
+          </div>
+          <div class="menu-item-desc">Romaine, Garlic-Anchovy Dressing, Focaccia Croutons, Shaved Parmesan</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-img">
+          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100092" alt="Poke Bowl">
+        </div>
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Poke Bowl</span>
+            <span class="menu-item-price">28</span>
+          </div>
+          <div class="menu-item-desc">Marinated Ahi Tuna, Coconut Milk, Sushi Rice, Avocado, Cucumber, Butternut Squash, Radishes, Pear, Ponzu Sauce</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Farm Eggs Omelet</span>
+            <span class="menu-item-price">19</span>
+          </div>
+          <div class="menu-item-desc">SRF Ham, Fingerling Potato, Swiss Cheese, Green Salad</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SALAD PROTEINS -->
+    <div class="menu-category">
+      <div class="menu-category-title">Salad Proteins</div>
+      <div class="proteins-row">
+        <div class="protein-item">
+          <span>Grilled Chicken</span>
+          <span>12</span>
+        </div>
+        <div class="protein-item">
+          <span>Grilled Shrimp</span>
+          <span>17</span>
+        </div>
+        <div class="protein-item">
+          <span>Grilled Salmon</span>
+          <span>19</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN DISHES -->
+    <div class="menu-category">
+      <div class="menu-category-title">Main Dishes</div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Reminisce Ranch Angus Beef Tenderloin Carpaccio</span>
+            <span class="menu-item-price">25</span>
+          </div>
+          <div class="menu-item-desc">Baby Arugula, Shaved Grana Padano</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Snake River Farms Ham &amp; Swiss Cheese Panini</span>
+            <span class="menu-item-price">19</span>
+          </div>
+          <div class="menu-item-desc">460 Ciabatta, Dijonnaise, Arugula, French Fries</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-img">
+          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100097" alt="Hoback Smash Burger">
+        </div>
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Hoback Smash Burger</span>
+            <span class="menu-item-price">19 | 34</span>
+          </div>
+          <div class="menu-item-desc">Lazy T Ranch Beef (5oz or 10oz), Lettuce, Pickle, Bacon, Comeback Sauce, Cheddar Cheese Brioche Roll, French Fries</div>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-img">
+          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100093" alt="Idaho Trout">
+        </div>
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Idaho Trout</span>
+            <span class="menu-item-price">38</span>
+          </div>
+          <div class="menu-item-desc">Boiled Potatoes, Sauteed Spinach, Roasted Cauliflower, Lemon Gremolata</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Winter Pear &amp; Gorgonzola Ravioli</span>
+            <span class="menu-item-price">25</span>
+          </div>
+          <div class="menu-item-desc">Peppercorn Pasta Dough, Spinach, Gorgonzola Sauce, Almonds</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Alaskan Cod Fish and Chips</span>
+            <span class="menu-item-price">27</span>
+          </div>
+          <div class="menu-item-desc">Tempura Batter, Tartar Sauce, Lemon</div>
+        </div>
+      </div>
+
+      <div class="menu-item no-photo">
+        <div class="menu-item-info">
+          <div class="menu-item-header">
+            <span class="menu-item-name">Hanger Steak Frites</span>
+            <span class="menu-item-price">25</span>
+          </div>
+          <div class="menu-item-desc">Marinated Steak, Side Salad, French Fries</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LUNCH SIDES -->
+    <div class="menu-category">
+      <div class="menu-category-title">Sides &mdash; 11</div>
+      <div class="sides-grid">
+        <div class="side-item">Charred Brussels Sprouts</div>
+        <div class="side-item">Classical French Fries</div>
+        <div class="side-item">Sauteed Spinach</div>
+        <div class="side-item">Mixed Green Salad</div>
+      </div>
+    </div>
+
+    <div class="sourcing-note">
+      <p>We strive to collaborate extensively with local suppliers.<br>Our fish is wild caught. Additionally, most of our products are organic.</p>
+      <p style="margin-top: 10px; font-size: 0.7rem;">*Consuming raw or undercooked meats, poultry, seafood, shellfish, or eggs may increase your risk of food borne illness.</p>
+    </div>
+  </div>
+
+  <!-- RESERVATION CTA (shared) -->
+  <div class="reservation-cta">
+    <button class="reservation-cta-btn" onclick="alert('Dining reservations coming soon. Contact the concierge at (307) 249-5943.')">Make a Reservation</button>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="images/logo-footer.svg" alt="Hoback Club">
+    </div>
+    <div class="footer-info">
+      <div class="footer-info-top">
+        <div class="footer-contact">
+          <strong>Contact Us</strong>
+          <a href="#">P.O. Box 158, Teton Village, WY 83025</a>
+          <a href="tel:+13072491000">(307) 249-1000</a>
+        </div>
+        <div class="footer-links">
+          <a href="#">Employment Opportunities</a>
+          <a href="#">Membership Inquiries</a>
+        </div>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">ig</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Hoback Club. All Rights Reserved. &nbsp;|&nbsp; Site by <a href="https://clubessential.com" target="_blank" style="color: rgba(255,255,255,0.5);">Clubessential</a></span>
+        <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== NAVBAR SCROLL EFFECT =====
+(function() {
+  var header = document.getElementById('mainHeader');
+  function checkScroll() {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  }
+  window.addEventListener('scroll', checkScroll, { passive: true });
+  checkScroll();
+})();
+
+// ===== NAV COLLAPSE =====
+(function() {
+  var header = document.getElementById('mainHeader');
+  function checkWidth() {
+    header.classList.toggle('nav-collapsed', window.innerWidth < 1100);
+  }
+  window.addEventListener('resize', checkWidth);
+  checkWidth();
+})();
+
+// ===== MOBILE MENU =====
+document.getElementById('hamburgerBtn').addEventListener('click', function() {
+  document.getElementById('mobileMenu').classList.add('open');
+});
+document.getElementById('mobileClose').addEventListener('click', function() {
+  document.getElementById('mobileMenu').classList.remove('open');
+});
+
+// ===== MENU TAB TOGGLE =====
+document.querySelectorAll('.menu-toggle-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.menu-toggle-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    var target = btn.dataset.tab;
+    document.querySelectorAll('.menu-tab').forEach(function(tab) {
+      tab.classList.remove('active');
+      tab.style.animation = 'none';
+    });
+    var el = document.getElementById(target);
+    el.classList.add('active');
+    el.offsetHeight;
+    el.style.animation = '';
+    window.scrollTo({ top: document.querySelector('.menu-toggle-section').offsetTop - 80, behavior: 'smooth' });
+  });
+});
+</script>
+
+</body>
+</html>
