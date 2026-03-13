@@ -244,32 +244,11 @@ header.scrolled .nav-logo-text-img { display: block; }
 
 /* ===== MENU ITEM ===== */
 .menu-item {
-  display: flex;
-  gap: 24px;
   padding: 24px 0;
   border-bottom: 1px solid #e8e4df;
-  align-items: flex-start;
 }
 
 .menu-item:last-child { border-bottom: none; }
-
-.menu-item-img {
-  flex: 0 0 140px;
-  height: 100px;
-  border-radius: 6px;
-  overflow: hidden;
-  background: #e0dcd7;
-}
-
-.menu-item-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.menu-item-info {
-  flex: 1;
-}
 
 .menu-item-header {
   display: flex;
@@ -298,9 +277,17 @@ header.scrolled .nav-logo-text-img { display: block; }
   line-height: 1.6;
 }
 
-/* Items without photos */
-.menu-item.no-photo {
-  gap: 0;
+.menu-item-img {
+  margin-top: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 280px;
+}
+
+.menu-item-img img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
 }
 
 /* ===== SIDES GRID ===== */
@@ -484,8 +471,8 @@ footer {
   .hamburger { display: block; position: absolute; right: 20px; top: 22px; }
   .hero h1 { font-size: 1.8rem; }
   .menu-toggle-btn { padding: 12px 30px; font-size: 0.7rem; }
-  .menu-item { flex-direction: column; gap: 14px; }
-  .menu-item-img { flex: none; width: 100%; height: 180px; }
+  .menu-item-img { max-height: 220px; }
+  .menu-item-img img { height: 220px; }
   .sides-grid { grid-template-columns: 1fr; }
   .proteins-row { flex-direction: column; gap: 0; }
   footer { padding: 40px 30px; }
@@ -563,82 +550,62 @@ footer {
       <div class="menu-category-title">Appetizers</div>
 
       <div class="menu-item">
-        <div class="menu-item-img">
-          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100133" alt="French Onion Soup">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Parisian Onion Soup "Au Gratin"</span>
+          <span class="menu-item-price">16</span>
         </div>
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Parisian Onion Soup "Au Gratin"</span>
-            <span class="menu-item-price">16</span>
-          </div>
-          <div class="menu-item-desc">Gratin&eacute;e with Baguette, Comt&eacute;, Gruyere</div>
+        <div class="menu-item-desc">Gratin&eacute;e with Baguette, Comt&eacute;, Gruyere</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Grilled Brussels Sprouts Salad</span>
+          <span class="menu-item-price">21</span>
+        </div>
+        <div class="menu-item-desc">Endive, Pear, Rogue Creamery Blue Cheese, Organic Oregon Hazelnuts, Cranberries, Raisins, Sherry Vinaigrette</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Hoback Club Wedge</span>
+          <span class="menu-item-price">19</span>
+        </div>
+        <div class="menu-item-desc">Baby Iceberg, Applewood Bacon Crumble, Cherry Tomatoes, Boiled Egg, Blue Cheese Dressing</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Wild Mushroom Risotto</span>
+          <span class="menu-item-price">19</span>
+        </div>
+        <div class="menu-item-desc">Shaved Parmesan</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Hamachi Crudo*</span>
+          <span class="menu-item-price">21</span>
+        </div>
+        <div class="menu-item-desc">Sushi Rice, Coconut Milk, Fresno Chili, Soy-Yuzu Dressing, Micro Cilantro</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Island Creek Oysters (6)*</span>
+          <span class="menu-item-price">28</span>
+        </div>
+        <div class="menu-item-desc">Cocktail Sauce, Mignonette, Lemons</div>
+        <div class="menu-item-img">
+          <img src="https://images.squarespace-cdn.com/content/v1/5c6060230490797f225942e3/1551923830277-065ESPBY4YS3K949LFEU/InAHalfShell-2012-OystersAtHome-4.jpg" alt="Island Creek Oysters">
         </div>
       </div>
 
       <div class="menu-item">
-        <div class="menu-item-img">
-          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100091" alt="Brussels Sprouts Salad">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Prime Beef Tartare*</span>
+          <span class="menu-item-price">25</span>
         </div>
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Grilled Brussels Sprouts Salad</span>
-            <span class="menu-item-price">21</span>
-          </div>
-          <div class="menu-item-desc">Endive, Pear, Rogue Creamery Blue Cheese, Organic Oregon Hazelnuts, Cranberries, Raisins, Sherry Vinaigrette</div>
-        </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Hoback Club Wedge</span>
-            <span class="menu-item-price">19</span>
-          </div>
-          <div class="menu-item-desc">Baby Iceberg, Applewood Bacon Crumble, Cherry Tomatoes, Boiled Egg, Blue Cheese Dressing</div>
-        </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Wild Mushroom Risotto</span>
-            <span class="menu-item-price">19</span>
-          </div>
-          <div class="menu-item-desc">Shaved Parmesan</div>
-        </div>
-      </div>
-
-      <div class="menu-item">
-        <div class="menu-item-img">
-          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100092" alt="Hamachi Crudo">
-        </div>
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Hamachi Crudo*</span>
-            <span class="menu-item-price">21</span>
-          </div>
-          <div class="menu-item-desc">Sushi Rice, Coconut Milk, Fresno Chili, Soy-Yuzu Dressing, Micro Cilantro</div>
-        </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Island Creek Oysters (6)*</span>
-            <span class="menu-item-price">28</span>
-          </div>
-          <div class="menu-item-desc">Cocktail Sauce, Mignonette, Lemons</div>
-        </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Prime Beef Tartare*</span>
-            <span class="menu-item-price">25</span>
-          </div>
-          <div class="menu-item-desc">Romesco, Scallions, Dijon, Quail Egg, House Made Potato Chips</div>
-        </div>
+        <div class="menu-item-desc">Romesco, Scallions, Dijon, Quail Egg, House Made Potato Chips</div>
       </div>
     </div>
 
@@ -647,82 +614,62 @@ footer {
       <div class="menu-category-title">Entr&eacute;es</div>
 
       <div class="menu-item">
-        <div class="menu-item-img">
-          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100093" alt="Arctic Salmon">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Arctic Salmon*</span>
+          <span class="menu-item-price">39</span>
         </div>
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Arctic Salmon*</span>
-            <span class="menu-item-price">39</span>
-          </div>
-          <div class="menu-item-desc">Caramelized Saffron Fennel, Citrus-Clam Broth, Guanciale &amp; Orange Relish</div>
-        </div>
+        <div class="menu-item-desc">Caramelized Saffron Fennel, Citrus-Clam Broth, Guanciale &amp; Orange Relish</div>
       </div>
 
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Winter Vegetable &amp; Preserved Lemon Tagine</span>
-            <span class="menu-item-price">29</span>
-          </div>
-          <div class="menu-item-desc">Couscous, Cilantro, Confit Onions, Raisins, Almonds, Harissa Broth</div>
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Winter Vegetable &amp; Preserved Lemon Tagine</span>
+          <span class="menu-item-price">29</span>
+        </div>
+        <div class="menu-item-desc">Couscous, Cilantro, Confit Onions, Raisins, Almonds, Harissa Broth</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Organic Free Range Pasture Chicken Schnitzel</span>
+          <span class="menu-item-price">39</span>
+        </div>
+        <div class="menu-item-desc">Wilted Coleslaw, Fingerling Potatoes, Caper &amp; Lemon Sauce</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">North American Elk Tenderloin*</span>
+          <span class="menu-item-price">61</span>
+        </div>
+        <div class="menu-item-desc">Parmesan Polenta, Swiss Chard, Cippolini Onion, Rosemary Elk Sauce</div>
+        <div class="menu-item-img">
+          <img src="https://cdn-ilbdein.nitrocdn.com/qkShIANPFbpxPxJgBxbDTPbtLAOnqaCy/assets/images/optimized/rev-76372eb/thehonestbison.com/wp-content/uploads/Elk_Filet_Mignon_1-1.jpg" alt="Elk Tenderloin">
         </div>
       </div>
 
       <div class="menu-item">
-        <div class="menu-item-img">
-          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100094" alt="Chicken Schnitzel">
+        <div class="menu-item-header">
+          <span class="menu-item-name">House-Made Semolina Carrot Pasta Creste di Bruco</span>
+          <span class="menu-item-price">39</span>
         </div>
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Organic Free Range Pasture Chicken Schnitzel</span>
-            <span class="menu-item-price">39</span>
-          </div>
-          <div class="menu-item-desc">Wilted Coleslaw, Fingerling Potatoes, Caper &amp; Lemon Sauce</div>
-        </div>
+        <div class="menu-item-desc">Braised Lamb Shank, Local Mushrooms, Pomegranate, Pine Nut, Burrata</div>
       </div>
 
       <div class="menu-item">
-        <div class="menu-item-img">
-          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100096" alt="Elk Tenderloin">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Veal Scallopini</span>
+          <span class="menu-item-price">55</span>
         </div>
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">North American Elk Tenderloin*</span>
-            <span class="menu-item-price">61</span>
-          </div>
-          <div class="menu-item-desc">Parmesan Polenta, Swiss Chard, Cippolini Onion, Rosemary Elk Sauce</div>
-        </div>
+        <div class="menu-item-desc">Brown Butter Herb Spaetzle, Spinach, Morel Sauce</div>
       </div>
 
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">House-Made Semolina Carrot Pasta Creste di Bruco</span>
-            <span class="menu-item-price">39</span>
-          </div>
-          <div class="menu-item-desc">Braised Lamb Shank, Local Mushrooms, Pomegranate, Pine Nut, Burrata</div>
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Daily Butchers Cut</span>
+          <span class="menu-item-price">MP</span>
         </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Veal Scallopini</span>
-            <span class="menu-item-price">55</span>
-          </div>
-          <div class="menu-item-desc">Brown Butter Herb Spaetzle, Spinach, Morel Sauce</div>
-        </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Daily Butchers Cut</span>
-            <span class="menu-item-price">MP</span>
-          </div>
-          <div class="menu-item-desc">Ask your server for today's selection</div>
-        </div>
+        <div class="menu-item-desc">Ask your server for today's selection</div>
       </div>
     </div>
 
@@ -757,79 +704,62 @@ footer {
       <div class="menu-category-title">Lighter Fare</div>
 
       <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Roasted Red Pepper &amp; Tomato Soup</span>
+          <span class="menu-item-price">17</span>
+        </div>
+        <div class="menu-item-desc">Gruyere Grilled Cheese</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Prime Beef Chili Bowl</span>
+          <span class="menu-item-price">17</span>
+        </div>
+        <div class="menu-item-desc">Cheddar Cheese, Scallions, Sour Cream</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Endive &amp; Beet Salad</span>
+          <span class="menu-item-price">20</span>
+        </div>
+        <div class="menu-item-desc">Idaho Goat Cheese, Green Apple, Caramelized Walnuts, Sherry Vinaigrette</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Hoback Cobb</span>
+          <span class="menu-item-price">19</span>
+        </div>
+        <div class="menu-item-desc">Mixed Lettuces, Grape Tomato, Endive, Bacon, Hard Boiled Egg, Cucumber, Balsamic Vinaigrette</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Caesar Salad</span>
+          <span class="menu-item-price">19</span>
+        </div>
+        <div class="menu-item-desc">Romaine, Garlic-Anchovy Dressing, Focaccia Croutons, Shaved Parmesan</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Poke Bowl</span>
+          <span class="menu-item-price">28</span>
+        </div>
+        <div class="menu-item-desc">Marinated Ahi Tuna, Coconut Milk, Sushi Rice, Avocado, Cucumber, Butternut Squash, Radishes, Pear, Ponzu Sauce</div>
         <div class="menu-item-img">
-          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100133" alt="Tomato Soup">
-        </div>
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Roasted Red Pepper &amp; Tomato Soup</span>
-            <span class="menu-item-price">17</span>
-          </div>
-          <div class="menu-item-desc">Gruyere Grilled Cheese</div>
-        </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Prime Beef Chili Bowl</span>
-            <span class="menu-item-price">17</span>
-          </div>
-          <div class="menu-item-desc">Cheddar Cheese, Scallions, Sour Cream</div>
-        </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Endive &amp; Beet Salad</span>
-            <span class="menu-item-price">20</span>
-          </div>
-          <div class="menu-item-desc">Idaho Goat Cheese, Green Apple, Caramelized Walnuts, Sherry Vinaigrette</div>
-        </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Hoback Cobb</span>
-            <span class="menu-item-price">19</span>
-          </div>
-          <div class="menu-item-desc">Mixed Lettuces, Grape Tomato, Endive, Bacon, Hard Boiled Egg, Cucumber, Balsamic Vinaigrette</div>
-        </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Caesar Salad</span>
-            <span class="menu-item-price">19</span>
-          </div>
-          <div class="menu-item-desc">Romaine, Garlic-Anchovy Dressing, Focaccia Croutons, Shaved Parmesan</div>
+          <img src="https://res.cloudinary.com/kraft-heinz-whats-cooking-ca/image/upload/f_auto/q_auto/c_limit,w_3840/v1/dxp-images/brands/Recipes/global-recipes-heinz-nz/%5Bseriously%5D-good-salmon-poke-bowl/generated/%5Bseriously%5D-good-salmon-poke-bowl-498120?_a=BAVMn6ID0" alt="Poke Bowl">
         </div>
       </div>
 
       <div class="menu-item">
-        <div class="menu-item-img">
-          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100092" alt="Poke Bowl">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Farm Eggs Omelet</span>
+          <span class="menu-item-price">19</span>
         </div>
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Poke Bowl</span>
-            <span class="menu-item-price">28</span>
-          </div>
-          <div class="menu-item-desc">Marinated Ahi Tuna, Coconut Milk, Sushi Rice, Avocado, Cucumber, Butternut Squash, Radishes, Pear, Ponzu Sauce</div>
-        </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Farm Eggs Omelet</span>
-            <span class="menu-item-price">19</span>
-          </div>
-          <div class="menu-item-desc">SRF Ham, Fingerling Potato, Swiss Cheese, Green Salad</div>
-        </div>
+        <div class="menu-item-desc">SRF Ham, Fingerling Potato, Swiss Cheese, Green Salad</div>
       </div>
     </div>
 
@@ -856,80 +786,63 @@ footer {
     <div class="menu-category">
       <div class="menu-category-title">Main Dishes</div>
 
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Reminisce Ranch Angus Beef Tenderloin Carpaccio</span>
-            <span class="menu-item-price">25</span>
-          </div>
-          <div class="menu-item-desc">Baby Arugula, Shaved Grana Padano</div>
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Reminisce Ranch Angus Beef Tenderloin Carpaccio</span>
+          <span class="menu-item-price">25</span>
         </div>
+        <div class="menu-item-desc">Baby Arugula, Shaved Grana Padano</div>
       </div>
 
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Snake River Farms Ham &amp; Swiss Cheese Panini</span>
-            <span class="menu-item-price">19</span>
-          </div>
-          <div class="menu-item-desc">460 Ciabatta, Dijonnaise, Arugula, French Fries</div>
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Snake River Farms Ham &amp; Swiss Cheese Panini</span>
+          <span class="menu-item-price">19</span>
+        </div>
+        <div class="menu-item-desc">460 Ciabatta, Dijonnaise, Arugula, French Fries</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Hoback Smash Burger</span>
+          <span class="menu-item-price">19 | 34</span>
+        </div>
+        <div class="menu-item-desc">Lazy T Ranch Beef (5oz or 10oz), Lettuce, Pickle, Bacon, Comeback Sauce, Cheddar Cheese Brioche Roll, French Fries</div>
+        <div class="menu-item-img">
+          <img src="https://www.foodandwine.com/thmb/XE8ubzwObCIgMw7qJ9CsqUZocNM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/MSG-Smash-Burger-FT-RECIPE0124-d9682401f3554ef683e24311abdf342b.jpg" alt="Hoback Smash Burger">
         </div>
       </div>
 
       <div class="menu-item">
-        <div class="menu-item-img">
-          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100097" alt="Hoback Smash Burger">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Idaho Trout</span>
+          <span class="menu-item-price">38</span>
         </div>
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Hoback Smash Burger</span>
-            <span class="menu-item-price">19 | 34</span>
-          </div>
-          <div class="menu-item-desc">Lazy T Ranch Beef (5oz or 10oz), Lettuce, Pickle, Bacon, Comeback Sauce, Cheddar Cheese Brioche Roll, French Fries</div>
-        </div>
+        <div class="menu-item-desc">Boiled Potatoes, Sauteed Spinach, Roasted Cauliflower, Lemon Gremolata</div>
       </div>
 
       <div class="menu-item">
-        <div class="menu-item-img">
-          <img src="https://hobackclub.com/images/dynamic/getImage.gif?ID=100093" alt="Idaho Trout">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Winter Pear &amp; Gorgonzola Ravioli</span>
+          <span class="menu-item-price">25</span>
         </div>
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Idaho Trout</span>
-            <span class="menu-item-price">38</span>
-          </div>
-          <div class="menu-item-desc">Boiled Potatoes, Sauteed Spinach, Roasted Cauliflower, Lemon Gremolata</div>
-        </div>
+        <div class="menu-item-desc">Peppercorn Pasta Dough, Spinach, Gorgonzola Sauce, Almonds</div>
       </div>
 
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Winter Pear &amp; Gorgonzola Ravioli</span>
-            <span class="menu-item-price">25</span>
-          </div>
-          <div class="menu-item-desc">Peppercorn Pasta Dough, Spinach, Gorgonzola Sauce, Almonds</div>
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Alaskan Cod Fish and Chips</span>
+          <span class="menu-item-price">27</span>
         </div>
+        <div class="menu-item-desc">Tempura Batter, Tartar Sauce, Lemon</div>
       </div>
 
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Alaskan Cod Fish and Chips</span>
-            <span class="menu-item-price">27</span>
-          </div>
-          <div class="menu-item-desc">Tempura Batter, Tartar Sauce, Lemon</div>
+      <div class="menu-item">
+        <div class="menu-item-header">
+          <span class="menu-item-name">Hanger Steak Frites</span>
+          <span class="menu-item-price">25</span>
         </div>
-      </div>
-
-      <div class="menu-item no-photo">
-        <div class="menu-item-info">
-          <div class="menu-item-header">
-            <span class="menu-item-name">Hanger Steak Frites</span>
-            <span class="menu-item-price">25</span>
-          </div>
-          <div class="menu-item-desc">Marinated Steak, Side Salad, French Fries</div>
-        </div>
+        <div class="menu-item-desc">Marinated Steak, Side Salad, French Fries</div>
       </div>
     </div>
 
